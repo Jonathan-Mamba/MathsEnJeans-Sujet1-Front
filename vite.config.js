@@ -15,4 +15,12 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        // This injects the file into every <style lang="scss"> block
+        additionalData: `@use "@/style.scss" as *;`
+      }
+    }
+  }
 })
