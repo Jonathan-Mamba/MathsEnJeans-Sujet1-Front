@@ -23,8 +23,8 @@
 
 <template>
 <div class="centered">
-  <div v-if="!connection">La connection avec le serveur n'a pas pu etre etablie.</div>
-  <div v-else-if="mode === EditMode.NONE">Pas de mode sélectionné</div>
+  <div v-if="!connection" class="option_menu v">La connection avec le serveur n'a pas pu etre etablie.</div>
+  <div v-else-if="mode === EditMode.NONE" class="option_menu v">Pas de mode sélectionné</div>
   <MapOption v-else-if="mode === EditMode.MAP"/>
   <RouteOption v-else-if="mode === EditMode.ROUTE"/>
   <CalendarOption v-else-if="mode === EditMode.CALENDAR"/>
@@ -33,9 +33,15 @@
 </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 div.centered {
   width: 40%;
   height: 100%;
+}
+div.v {
+  font-size: $rfsize;
+  justify-content: center;
+  font-style: italic;
+  text-decoration: underline;
 }
 </style>

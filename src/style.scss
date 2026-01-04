@@ -16,9 +16,33 @@ $gray9:#767680;
 $gray10:#81818c;
 $gray11:#8d8d99;
 $gray12:#9999a6;
-$blue:#3584e4
 
-@font-face{
-    font-family: 'icomoon';
+$blue:#3584e4;
+$lightblue:lighten($blue,10%);
+$darkblue:darken($blue,10%);
 
+$radius:5px; // standard border_radius
+
+$rfsize:19px; // standard regular text font size
+$stfsize:22px; // subtitle font size
+$tfsize:26px; // title font size
+
+$rfont:"Adwaita Sans"; // regular text font family
+$tfont:"Adwaita Sans"; // title font family
+$stfont:"Adwaita Sans"; // subtitle font family
+
+@font-face {
+    font-family: 'Adwaita Sans';
+    src: url('public/fonts/AdwaitaSans-Regular.ttf');
+    font-display: swap;
+}
+div.option_menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: $gray1;
+    height: 100%;
+    width: 100%;
+    color: white;
+    font-family: $rfont;
 }

@@ -16,15 +16,10 @@
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 div.container {
   display: flex;
   flex-direction: row;
   height: 99vh;
-  margin-bottom: 10px;
 }
-</style>
-
-<style>
-
 </style>
