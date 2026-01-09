@@ -1,0 +1,27 @@
+p.title {
+  text-align: center;
+  font-family: $stfont;
+  background-color: $gray2;
+  width: 70%;
+  border-radius: $radius;
+  padding: 10px;
+  font-weight: bold;
+  margin-top: 40%;
+  font-size: $stfsize;
+}
+* {
+  color: white
+}
+div.option_menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: $gray1;
+  height: 100%;
+  width: 100%;
+  color: white;
+  font-family: $rfont;
+  border-style: none solid none none;
+  border-width: 0 2px 0 0;
+  border-color: $partborder;
+}

@@ -27,7 +27,7 @@
       .then((res) => {
         if (day_number === modifiedDay.value) {
           modifiedDay.value = 0;
-        } else if (day_number > modifiedDay.value) {
+        } else if (day_number < modifiedDay.value) {
           modifiedDay.value--;
         }
       })
@@ -50,12 +50,13 @@
 
 <template>
   <div class="option_menu">
-    <p class="label">Calendrier</p>
+    <p class="title">Calendrier</p>
     <ul>
       <p v-if="calendar.length === 0" class="empty">Le calendrier est vide</p>
       <li v-for="[index, day] in calendar.entries()" :key="day">
-        {{index+1}} - <span>{{day}}</span>
-        <button class="edit">Edit</button>
+        <label>{{index+1}} - </label>
+        <span>{{day}}</span>
+        <button class="edit" @click="modifiedDay = index+1">Modifier</button>
         <button @click="removeDay(index+1)"><img src="/icons/trash-bin-red.png"></button>
       </li>
     </ul>
@@ -69,9 +70,7 @@
 </template>
 
 <style scoped lang="scss">
-* {
-  color: white;
-}
+@import "@/components/options/option_menu";
 ul {
   background-color: $gray3;
   border-radius: 5px;
@@ -81,18 +80,12 @@ ul {
   height: 25%;
   overflow-y: scroll;
 }
-p.label {
-  text-align: center;
-  font-family: $stfont;
-  text-decoration: underline;
-  background-color: $gray2;
-  width: 90%;
-  border-radius: $radius;
-  padding: 10px;
-  font-style: italic;
-  margin-top: 40%;
-  font-size: $stfsize;
+label {
+  width: 7%;
+  text-align: right;
+  margin-right: 5px;
 }
+
 p.empty {
   text-align: center;
   font-family: $rfont;
@@ -104,6 +97,8 @@ span {
   border-radius: 5px;
   font-family: $rfont;
   border: $gray3 solid 1px;
+  font-style: italic;
+  text-align: center;
   flex:1;
   font-size: $rfsize+2
 }
@@ -116,28 +111,9 @@ li {
   justify-content: space-between;
   font-size: $rfsize+2
 }
-span:hover {
-  background-color: $gray6;
-  border: $blue solid 1px;
-}
 img {
   height: 20px;
   margin-top: 3px;
-}
-button, select {
-  height: 100%;
-  background-color: $gray5;
-  border-radius: $radius;
-  border: 1px solid $gray3;
-  font-size: $rfsize;
-  margin-bottom: 0px;
-}
-button:hover, select:hover {
-  border: 1px solid $blue;
-  background-color: $gray6;
-}
-button:active, select:active {
-  background-color: $gray3;
 }
 div.selection {
   flex-direction: row;
@@ -152,7 +128,10 @@ div.selection > select {
 div.selection > button {
   border-radius: 0 $radius $radius 0;
   background-color: $gray3;
-  border: $gray3 solid 1px;
+  border: transparent solid 1px;
+}
+div.selection > button:active {
+  background-color: $gray2;
 }
 div.selection:hover {
   background-color: $blue;

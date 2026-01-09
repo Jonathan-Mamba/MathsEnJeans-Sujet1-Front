@@ -30,19 +30,23 @@ $tfsize:26px; // title font size
 $rfont:"Adwaita Sans"; // regular text font family
 $tfont:"Adwaita Sans"; // title font family
 $stfont:"Adwaita Sans"; // subtitle font family
+$partborder: $gray8;
 
 @font-face {
     font-family: 'Adwaita Sans';
-    src: url('public/fonts/AdwaitaSans-Regular.ttf');
+    src: url('/fonts/AdwaitaSans-Regular.ttf');
     font-display: swap;
 }
-div.option_menu {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: $gray1;
-    height: 100%;
-    width: 100%;
-    color: white;
-    font-family: $rfont;
+button, select {
+    background-color: $gray5;
+    border-radius: $radius;
+    border: 1px solid $gray3;
+    font-size: $rfsize;
+}
+button:hover, select:hover {
+    border: 1px solid $blue;
+    background-color: $gray6;
+}
+button:active, select:active {
+    background-color: $gray4;
 }

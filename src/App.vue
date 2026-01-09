@@ -20,6 +20,7 @@
 div.container {
   display: flex;
   flex-direction: row;
-  height: 99vh;
+  min-height: 100dvh;
+  flex: 1
 }
 </style>

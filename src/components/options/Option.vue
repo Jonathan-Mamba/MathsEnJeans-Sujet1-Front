@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import {EditMode, backendOrigin} from "@/util.ts";
+  import {EditMode, backendOrigin} from "@/util";
   import MapOption from "@/components/options/MapOption.vue";
   import RouteOption from "@/components/options/RouteOption.vue";
   import CalendarOption from "@/components/options/CalendarOption.vue";
@@ -12,7 +12,7 @@
     mode: EditMode
   }>();
 
-  const connection = ref(0);
+  const connection = ref(false);
 
   onMounted(() => {
     axios.get(backendOrigin)
@@ -23,7 +23,7 @@
 
 <template>
 <div class="centered">
-  <div v-if="!connection" class="option_menu v">La connection avec le serveur n'a pas pu etre etablie.</div>
+  <div v-if="!connection" class="option_menu v">La connection avec le serveur n'a pas pu être établie.</div>
   <div v-else-if="mode === EditMode.NONE" class="option_menu v">Pas de mode sélectionné</div>
   <MapOption v-else-if="mode === EditMode.MAP"/>
   <RouteOption v-else-if="mode === EditMode.ROUTE"/>
@@ -34,9 +34,10 @@
 </template>
 
 <style scoped lang="scss">
+@import "@/components/options/option_menu";
 div.centered {
   width: 40%;
-  height: 100%;
+  height: 100dvh;
 }
 div.v {
   font-size: $rfsize;

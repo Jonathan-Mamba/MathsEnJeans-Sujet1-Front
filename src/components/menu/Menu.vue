@@ -20,9 +20,9 @@ div.c {
   width: 10%;
   background-color: $gray1;
   border-style: none solid none none;
-  border-color: $gray10;
+  border-color: $partborder;
   border-width: 2px;
-  border-radius: $radius 0 0 $radius;
+  border-radius: 0;
 }
 button {
   height: 20%;
