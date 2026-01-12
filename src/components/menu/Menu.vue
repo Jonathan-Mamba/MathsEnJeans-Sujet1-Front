@@ -23,6 +23,7 @@ div.c {
   border-color: $partborder;
   border-width: 2px;
   border-radius: 0;
+  z-index: 1001;
 }
 button {
   height: 20%;
@@ -35,24 +36,24 @@ button {
   border: none;
   font-family: $tfont;
   font-size: $tfsize;
-}
-button:hover {
-  background-color: $gray4;
-  border: $blue solid 2px;
-}
-button:active {
-  background-color: $gray2;
-}
-button.play {
-  margin-bottom: 5px;
-  background-color: $blue;
-  font-style: italic;
-}
-button.play:hover {
-  background-color: $lightblue;
-  border: $blue solid 2px;
-}
-button.play:active {
-  background-color: $darkblue;
+  :hover {
+    background-color: $gray4;
+    border: $blue solid 2px;
+  }
+  :active {
+    background-color: $gray2;
+  }
+  &.play {
+    margin-bottom: 5px;
+    background-color: $blue;
+    font-style: italic;
+    &:hover {
+      background-color: $lightblue;
+      border: $blue solid 2px;
+    }
+    &:active {
+      background-color: $darkblue;
+    }
+  }
 }
 </style>

@@ -1,9 +1,5 @@
-div.centered {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
+@use "sass:color";
+
 $gray1:#18181a;
 $gray2:#232326;
 $gray3:#2f2f33;
@@ -18,8 +14,12 @@ $gray11:#8d8d99;
 $gray12:#9999a6;
 
 $blue:#3584e4;
-$lightblue:lighten($blue,10%);
-$darkblue:darken($blue,10%);
+$lightblue:color.adjust($blue, $lightness:+10%);
+$darkblue:color.adjust($blue, $lightness:-10%);
+
+$red: #b31010;
+$lightred:color.adjust($red, $lightness:+10%);
+$darkred:color.adjust($red, $lightness:-10%);
 
 $radius:5px; // standard border_radius
 
@@ -37,6 +37,12 @@ $partborder: $gray8;
     src: url('/fonts/AdwaitaSans-Regular.ttf');
     font-display: swap;
 }
+div.centered {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 button, select {
     background-color: $gray5;
     border-radius: $radius;
@@ -49,4 +55,26 @@ button:hover, select:hover {
 }
 button:active, select:active {
     background-color: $gray4;
+}
+button.blue {
+    background-color: $blue;
+    border: transparent solid 2px;
+    &:hover {
+        background-color: $lightblue;
+        border: $blue solid 2px;
+    }
+    &:active {
+        background-color: $darkblue;
+    }
+}
+button.red {
+    background-color: $red;
+    border: transparent solid 2px;
+    &:hover {
+        background-color: $lightred;
+        border: $red solid 2px;
+    }
+    &:active {
+        background-color: $darkred;
+    }
 }

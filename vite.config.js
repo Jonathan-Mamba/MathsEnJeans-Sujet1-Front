@@ -18,7 +18,6 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        // This injects the file into every <style lang="scss"> block
         additionalData: `@use "@/style.scss" as *;`
       }
     }

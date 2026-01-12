@@ -6,7 +6,6 @@ p.title {
   border-radius: $radius;
   padding: 10px;
   font-weight: bold;
-  margin-top: 40%;
   font-size: $stfsize;
 }
 * {
@@ -21,7 +20,27 @@ div.option_menu {
   width: 100%;
   color: white;
   font-family: $rfont;
-  border-style: none solid none none;
+  border: 0 solid $partborder;
   border-width: 0 2px 0 0;
-  border-color: $partborder;
+  box-sizing: border-box;
+}
+div.dialog {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: $gray2;
+  border: $lightblue solid 1px;
+  color: white;
+  font-family: $rfont;
+}
+.blurred {
+  filter: blur(4px);
+  pointer-events: none;
+  user-select: none;
+}
+div.dialog_parent {
+  z-index: 1000;
+  position: relative;
+  overflow: hidden;
 }
