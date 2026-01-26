@@ -58,10 +58,10 @@ button:active, select:active {
 }
 button.blue {
     background-color: $blue;
-    border: transparent solid 2px;
+    border: transparent solid 1px;
     &:hover {
         background-color: $lightblue;
-        border: $blue solid 2px;
+        border: $blue solid 1px;
     }
     &:active {
         background-color: $darkblue;
@@ -69,10 +69,10 @@ button.blue {
 }
 button.red {
     background-color: $red;
-    border: transparent solid 2px;
+    border: transparent solid 1px;
     &:hover {
         background-color: $lightred;
-        border: $red solid 2px;
+        border: $red solid 1px;
     }
     &:active {
         background-color: $darkred;

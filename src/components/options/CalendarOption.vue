@@ -18,7 +18,7 @@
     if (addedDayType.value === "") {
       return;
     }
-    axios.post(`${backendOrigin}/calendar?day_type=${addedDayType.value}`, )
+    axios.post(`${backendOrigin}/calendar?day_type=${addedDayType.value}`)
       .then((res) => {getCalendar()})
       .catch((err) => {console.log(err);})
   }
