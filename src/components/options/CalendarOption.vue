@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import axios from "axios";
   import {backendOrigin} from "@/util";
-  import {onMounted, Ref, ref} from "vue";
+  import {Ref, ref} from "vue";
 
   const addedDayType: Ref<string> = ref("");
   const modifiedDayType: Ref<string> = ref("");
@@ -36,24 +36,22 @@
         .catch((err) => {console.log(err);})
   }
   getCalendar()
-
-
 </script>
 
 <template>
   <div class="option_menu dialog_parent">
     <div :class="{'blurred': modifiedDay > 0, 'content': true, 'centered': true}">
       <p class="title">Calendrier</p>
-      <ul>
+      <ul class="data_list">
         <p v-if="calendar.length === 0" class="empty">Le calendrier est vide</p>
         <li v-for="[index, day] in calendar.entries()" :key="day">
           <label>{{index+1}} - </label>
           <span>{{day}}</span>
           <button class="edit" @click="modifiedDay = index+1">Modifier</button>
-          <button @click="removeDay(index+1)"><img src="/icons/trash-bin-red.png"></button>
+          <button @click="removeDay(index+1)"><img class="delete" src="/icons/trash-bin-red.png"></button>
         </li>
       </ul>
-      <div class="selection centered">
+      <div class="button_form_container centered">
         <select v-model="addedDayType">
           <option v-for="dayType in dayTypes" :value="dayType">{{dayType}}</option>
         </select>
@@ -78,16 +76,7 @@
 
 <style scoped lang="scss">
 @import "@/components/options/option_menu";
-ul {
-  background-color: $gray3;
-  border-radius: $radius;
-  padding: 10px;
-  width: 80%;
-  padding-left: 0px;
-  height: 25%;
-  overflow-y: scroll;
-}
-div.content label {
+li label {
   width: 7%;
   text-align: right;
   margin-right: 5px;
@@ -97,50 +86,9 @@ p.empty {
   font-family: $rfont;
   font-style: italic;
 }
-span {
-  background-color: $gray5;
-  padding-left: 10px;
-  border-radius: 5px;
-  font-family: $rfont;
-  border: $gray3 solid 1px;
-  font-style: italic;
-  text-align: center;
-  flex:1;
-  font-size: $rfsize+2
-}
-li {
-  list-style-type: none;
-  padding-left: 10px;
-  font-family: $rfont;
-  margin-top: 3px;
-  display: flex;
-  justify-content: space-between;
-  font-size: $rfsize+2
-}
-img {
+img.delete {
   height: 20px;
   margin-top: 3px;
-}
-div.selection {
-  flex-direction: row;
-  border: $gray3 solid 1px;
-  background-color: $gray3;
-  border-radius: $radius;
-  &:hover {
-    border: $blue solid 1px;
-  }
-  select {
-    border-radius: $radius 0 0 $radius;
-    border: $gray5 solid 1px;
-  }
-  button {
-    border-radius: 0 $radius $radius 0;
-    background-color: $gray3;
-    border: transparent solid 1px;
-    &:active {
-      background-color: $gray2;
-    }
-  }
 }
 div.dialog {
   min-width: 60%;

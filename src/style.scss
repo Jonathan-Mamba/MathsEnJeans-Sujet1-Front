@@ -37,11 +37,11 @@ $partborder: $gray8;
     src: url('/fonts/AdwaitaSans-Regular.ttf');
     font-display: swap;
 }
-div.centered {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.centered {
+	display: flex; 
+	flex-direction: column; 
+	justify-content: center; 
+	align-items: center;
 }
 button, select {
     background-color: $gray5;

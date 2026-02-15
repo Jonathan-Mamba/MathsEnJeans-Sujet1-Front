@@ -2,7 +2,7 @@
   import Option from "@/components/options/Option.vue";
   import Menu from "@/components/menu/Menu.vue";
   import Carte from "@/components/map/Carte.vue";
-  import { EditMode} from "@/util";
+  import {EditMode} from "@/util";
   import {ref} from "vue";
 
   const mode = ref(EditMode.NONE);
