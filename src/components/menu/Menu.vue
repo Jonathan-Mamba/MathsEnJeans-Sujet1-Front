@@ -19,10 +19,6 @@ div.c {
   flex-direction: column;
   width: 10%;
   background-color: $gray1;
-  border-style: none solid none none;
-  border-color: $partborder;
-  border-width: 2px;
-  border-radius: 0;
   z-index: 1001;
 }
 button {

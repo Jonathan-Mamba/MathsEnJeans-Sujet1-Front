@@ -45,6 +45,8 @@
 div.centered {
   width: 40%;
   height: 100dvh;
+  border-right: 3px solid #fff;
+  border-left: 1px solid #fff;
 }
 div.v {
   font-size: $rfsize;
