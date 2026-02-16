@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="option_menu"><p style="margin-top: 50%">GEPASFINI</p></div>
+<div class="option_menu"><img src="/icons/placeholder.png" alt="placeholder"></div>
 </template>
 
 <style scoped>

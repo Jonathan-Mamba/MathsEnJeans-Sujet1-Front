@@ -38,13 +38,20 @@
 <template>
   <div class="option_menu">
     <p class="title">Routes</p>
-    <ul class="data_list">
-      <p class="empty" v-if="routes.length === 0">Aucun itinéraire n'est défini pour le moment</p>
-      <li v-else v-for="route in routes" :key="route.first_end + route.second_end + route.type">
+    <ul class="data_list dashboard">
+      <li>
         <span>
-          <label>{{route.first_end}}</label>
-          <label>{{route.second_end}}</label>
-          <label>{{route.type}}</label>
+          <label class="first_row">Premier point</label>
+          <label class="first_row">Deuxième point</label>
+          <label class="first_row">Type de route</label>
+        </span>
+      </li>
+      <p class="empty" v-if="routes.length === 0">Aucune route n'est définie pour le moment</p>
+      <li v-for="route in routes" :key="route.first_end + route.second_end + route.type">
+        <span>
+          <label >{{route.first_end}}</label>
+          <label >{{route.second_end}}</label>
+          <label >{{route.type}}</label>
         </span>
         <button @click="deleteRoute(route)"><img src="/icons/trash-bin-red.png" class="delete"></button>
       </li>
@@ -74,33 +81,14 @@
 </template>
 
 <style scoped lang="scss">
+  @use "sass:color";
   @import "@/components/options/option_menu.scss";
-  div.option_menu {
-    justify-content: center;
-  }
-  ul.data_list {
-    overflow-x: scroll;
-    span {
-      display: flex;
-      flex-direction: row;
-      align-items:flex-start;
-      width: fit-content;
-      label {
-        padding: 3px 5px 3px 5px;
-        margin: 2px 2px 2px 2px;
-        flex:1;
-        text-align: center;
-        width: 200px;
-        background-color: $gray7;
-        border-radius: $radius;
-      }
-    }
-  }
+
   form {
     display: flex;
     flex-direction: column;
     width: 90%;
-    background-color: transparent;
+    background-color: $gray2;
     padding-top: 10px;
     padding-bottom: 10px;
     margin-top: 15px;
