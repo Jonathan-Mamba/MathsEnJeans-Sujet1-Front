@@ -72,7 +72,7 @@
       <div class="input_form_container centered">
         <label for="route_type">Type de route</label>
         <select name="route_type" id="route_type" v-model="addedRouteType">
-          <option v-for="type in routeTypes" :value="type">{{type}}</option>
+          <option v-for="type in Object.keys(routeTypes)" :value="type">{{type}}</option>
         </select>
       </div>
       <button type="submit">Ajouter la nouvelle route</button>

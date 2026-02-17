@@ -47,14 +47,15 @@
 </script>
 
 <template>
-  <div class="dialog_parent">
-    <div :class="{'blurred': modifiedPlayerId !== null, 'content': true, 'option_menu': true}">
+  <div :class="{dialog_parent: true}">
+    <div :class="{blurred: modifiedPlayerId !== null, content: true, option_menu: true}">
       <p class="title">Joueurs</p>
       <ul class="data_list dashboard">
          <li>
           <span>
             <label class="first_row">Nom du joueur</label>
             <label class="first_row">Position du joueur</label>
+            <label class="first_row">Couleur du joueur</label>
           </span>
         </li>
         <p class="empty" v-if="players.length === 0">Aucun joueur n'est défini pour le moment</p>
@@ -62,6 +63,7 @@
           <span>
             <label>{{player.name}}</label>
             <label>{{player.position}}</label>
+            <label :style="{backgroundColor: player.color}">{{ player.color }}</label>
           </span>
           <button @click="modifiedPlayerId = player.id">Modifier</button>
           <button @click="deletePlayer(player.id)"><img src="/icons/trash-bin-red.png" class="delete"></button>

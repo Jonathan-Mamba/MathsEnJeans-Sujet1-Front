@@ -27,9 +27,8 @@ p.empty {
   font-family: $rfont;
   font-style: italic;
 }
-
 .blurred {
-  filter: blur(4px);
+  filter: blur(2px);
   pointer-events: none;
   user-select: none;
 }
@@ -161,6 +160,7 @@ ul.dashboard {
       min-width: 240px;
       background-color: $gray7;
       border-radius: $radius;
+      text-overflow: ellipsis;
     }
     label.first_row {
       background-color: $gray6;

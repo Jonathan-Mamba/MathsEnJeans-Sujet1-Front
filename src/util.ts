@@ -14,10 +14,12 @@ export class Player {
   name: string;
   position: string;
   id: string;
-  constructor(name: string, position: string, id: string) {
+  color: string;
+  constructor(name: string, position: string, id: string, color: string) {
     this.name = name;
     this.position = position;
     this.id = id;
+    this.color = color;
   }
 }
 
@@ -35,7 +37,7 @@ export class Route {
 export const backendOrigin = "http://localhost:8000";
 
 export const dayTypes: Ref<Array<string>> = ref([])
-export const routeTypes: Ref<Array<string>> = ref([])
+export const routeTypes: Ref<Object> = ref({})
 export const squares: Ref<Array<string>> = ref([])
 
 export async function getDayTypes() {
@@ -52,6 +54,7 @@ export async function getSquares() {
 
 export async function getRouteTypes() {
   const response = await axios.get(backendOrigin + "/routes/types");
+  console.log(response.data);
   routeTypes.value = response.data;
   return response.data;
 }
