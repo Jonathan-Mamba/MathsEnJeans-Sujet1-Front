@@ -20,5 +20,7 @@ div.container_map {
   background-color: $gray5;
   max-height: 100dvh;
   overflow-y: scroll;
+  flex-shrink: 0;
+  flex-grow: 0;
 }
 </style>

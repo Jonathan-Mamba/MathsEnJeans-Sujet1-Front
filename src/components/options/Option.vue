@@ -27,10 +27,7 @@
 
 <template>
 <div class="centered">
-  <Dialog :is_open="!connection" title="Erreur de connection" confirm_text="Resayer" @confirm="connect()">
-    <p>Impossible de se connecter au serveur. Veuillez actualiser la page pour ressasyer.</p>
-  </Dialog>
-  <div v-if="!connection" class="option_menu v">La connection avec le serveur n'a pas pu être établie.</div>
+  <div v-if="!connection" class="option_menu v">La connection avec le serveur n'a pas pu être établie. Veuillez actualiser la page pour réessayer.</div>
   <div v-else-if="mode === EditMode.NONE" class="option_menu v">Pas de mode sélectionné</div>
   <MapOption v-else-if="mode === EditMode.MAP"/>
   <RouteOption v-else-if="mode === EditMode.ROUTE"/>
@@ -47,6 +44,7 @@ div.centered {
   height: 100dvh;
   border-right: 3px solid #fff;
   border-left: 1px solid #fff;
+  box-sizing: border-box;
 }
 div.v {
   font-size: $rfsize;

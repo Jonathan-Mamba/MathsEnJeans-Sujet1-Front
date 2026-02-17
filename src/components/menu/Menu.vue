@@ -20,6 +20,8 @@ div.c {
   width: 10%;
   background-color: $gray1;
   z-index: 1001;
+  flex-grow: 0;
+  flex-shrink: 0;
 }
 button {
   height: 20%;

@@ -1,24 +1,15 @@
 <script setup lang="ts">
   import axios from 'axios';
-  import {backendOrigin, Player, squares} from "@/util";
+  import {backendOrigin, Player, squares, getPlayers, players} from "@/util";
   import {ref} from "vue";
   import Dialog from '@/components/Dialog.vue';
 
-  const players = ref<Player[]>([]);
   const newPlayerName = ref<string>("");
   const newPlayerPosition = ref<string>("");
   const modifiedPlayerId = ref<string | null>(null);
   const modifiedPlayerName = ref<string>("");
   const modifiedPlayerPosition = ref<string>("");
 
-  async function getPlayers() {
-    try {
-      const res = await axios.get(`${backendOrigin}/players`);
-      players.value = res.data;
-    } catch (err) {
-      console.log(err);
-    }
-  }
   async function addPlayer() {
     try {
       await axios.post(`${backendOrigin}/players?name=${newPlayerName.value}&position=${newPlayerPosition.value}`);

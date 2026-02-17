@@ -64,4 +64,24 @@ export async function getData() {
   await getSquares();
   await getRouteTypes();
 }
+
+export const players = ref<Player[]>([]);
+export async function getPlayers() {
+    try {
+      const res = await axios.get(`${backendOrigin}/players`);
+      players.value = res.data;
+    } catch (err) {
+      console.log(err);
+    }
+  } 
+
+export const routes: Ref<Array<Route>> = ref([])
+export async function getRoutes() {
+  try {
+    const res = await axios.get(`${backendOrigin}/routes`);
+    routes.value = res.data.map((r: any) => new Route(r.first_end, r.second_end, r.type));
+  } catch (err) {
+    console.log(err);
+  }
+}
 getData();

@@ -21,6 +21,7 @@ div.container {
   display: flex;
   flex-direction: row;
   min-height: 100dvh;
-  flex: 1
+  flex: 1;
+  overflow: hidden;
 }
 </style>

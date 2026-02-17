@@ -1,21 +1,12 @@
 <script setup lang="ts">
   import axios from "axios";
-  import {backendOrigin, routeTypes, squares, Route} from "@/util";
+  import {backendOrigin, routeTypes, squares, Route, routes, getRoutes} from "@/util";
   import {Ref, ref} from "vue";
 
-  const routes: Ref<Array<Route>> = ref([])
   const addedRouteFirstEnd: Ref<string> = ref("");
   const addedRouteSecondEnd: Ref<string> = ref("");
   const addedRouteType: Ref<string> = ref("");
 
-  async function getRoutes() {
-    try {
-      const res = await axios.get(`${backendOrigin}/routes`);
-      routes.value = res.data.map((r: any) => new Route(r.first_end, r.second_end, r.type));
-    } catch (err) {
-      console.log(err);
-    }
-  }
   async function addRoute() {
     try {
       await axios.post(`${backendOrigin}/routes?first_end=${addedRouteFirstEnd.value}&second_end=${addedRouteSecondEnd.value}&route_type=${addedRouteType.value}`);
@@ -81,24 +72,24 @@
 </template>
 
 <style scoped lang="scss">
-  @use "sass:color";
-  @import "@/components/options/option_menu.scss";
+@use "sass:color";
+@import "@/components/options/option_menu.scss";
 
-  form {
-    display: flex;
-    flex-direction: column;
-    width: 90%;
-    background-color: $gray2;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    margin-top: 15px;
-    border-radius: $radius;
-    & .input_form_container {
-      margin-bottom: 5px;
-      min-width: 55%;
-    }
-    button {
-      width: 70%;
-    }
+form {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  background-color: $gray2;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 15px;
+  border-radius: $radius;
+  & .input_form_container {
+    margin-bottom: 5px;
+    min-width: 55%;
   }
+  button {
+    width: 70%;
+  }
+}
 </style>
