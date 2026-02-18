@@ -50,6 +50,7 @@ div.v {
   font-size: $rfsize;
   justify-content: center;
   font-style: italic;
+  text-align: center;
   text-decoration: underline;
 }
 </style>

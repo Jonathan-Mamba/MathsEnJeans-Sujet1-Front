@@ -45,9 +45,4 @@ div.legend-element {
     margin-left: 3px;
   }
 }
-img {
-  height: 90%;
-  aspect-ratio: 1 / 1;
-  margin: 8px;
-}
 </style>

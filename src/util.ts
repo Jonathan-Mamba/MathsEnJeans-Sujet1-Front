@@ -34,6 +34,55 @@ export class Route {
   }
 }
 
+export class Vector2 {
+  x: number;
+  y: number;
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
+  public add(other: Vector2): Vector2 {
+    return new Vector2(this.x + other.x, this.y + other.y);
+  } 
+  public sub(other: Vector2): Vector2 {
+    return new Vector2(this.x - other.x, this.y - other.y)
+  }
+  public toString(): string {
+    return `(${this.x}, ${this.y})`;
+  }
+  public rotate(angle: number): Vector2 {
+    const cos = Math.cos(angle);
+    const sin = Math.sin(angle);
+    return new Vector2(
+      this.x * cos - this.y * sin,
+      this.x * sin + this.y * cos
+    );
+  }
+  public copy(): Vector2 {
+    return new Vector2(this.x, this.y);
+  }
+  public isEqual(other: Vector2): boolean {
+    return this.x === other.x && this.y === other.y;
+  }
+}
+
+export class DrawnRoute {
+  first_end: Vector2;
+  second_end: Vector2;
+  color: string;
+  constructor(first_end: Vector2, second_end: Vector2, color: string) {
+    this.first_end = first_end;
+    this.second_end = second_end;
+    this.color = color;
+  }
+  public static fromRoute(route: Route, squarePositions: Vector2[]): DrawnRoute {
+    const first_end = squarePositions[squares.value.indexOf(route.first_end)];
+    const second_end = squarePositions[squares.value.indexOf(route.second_end)];
+    const color = routeTypes.value[route.type];
+    return new DrawnRoute(first_end, second_end, color);
+  }
+}
+
 export const backendOrigin = "http://localhost:8000";
 
 export const dayTypes: Ref<Array<string>> = ref([])
