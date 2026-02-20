@@ -17,7 +17,7 @@
   }
   async function deleteRoute(route: Route) {
     try {
-      await axios.delete(`${backendOrigin}/routes?first_end=${route.first_end}&second_end=${route.second_end}&route_type=${route.type}`);
+      await axios.delete(`${backendOrigin}/routes?first_end=${route.firstEnd}&second_end=${route.secondEnd}&route_type=${route.type}`);
       getRoutes();
     } catch (err) {
       console.log(err);
@@ -38,10 +38,10 @@
         </span>
       </li>
       <p class="empty" v-if="routes.length === 0">Aucune route n'est définie pour le moment</p>
-      <li v-for="route in routes" :key="route.first_end + route.second_end + route.type">
+      <li v-for="route in routes" :key="route.firstEnd + route.secondEnd + route.type">
         <span>
-          <label >{{route.first_end}}</label>
-          <label >{{route.second_end}}</label>
+          <label >{{route.firstEnd}}</label>
+          <label >{{route.secondEnd}}</label>
           <label >{{route.type}}</label>
         </span>
         <button @click="deleteRoute(route)"><img src="/icons/trash-bin-red.png" class="delete"></button>

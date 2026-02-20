@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Legend from './Legend.vue';
-import Map from './Map.vue';
+import Map from './GameMap.vue';
 </script>
 
 <template>
