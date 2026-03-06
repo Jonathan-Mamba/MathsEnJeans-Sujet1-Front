@@ -38,7 +38,7 @@
 </script>
 
 <template>
-  <div :class="{dialog_parent: true}">
+  <div class="dialog_parent">
     <div :class="{blurred: modifiedPlayerId !== null, content: true, option_menu: true}">
       <p class="title">Joueurs</p>
       <ul class="data_list dashboard">

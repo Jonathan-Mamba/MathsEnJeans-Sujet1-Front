@@ -4,7 +4,7 @@
   import { useElementSize } from "@vueuse/core";
   getRoutes();
 
-  export class Vector2 {
+  class Vector2 {
     x: number;
     y: number;
     constructor(x: number = 0, y: number = 0) {
@@ -47,10 +47,10 @@
       const first_end = squarePositions[squares.value.indexOf(route.firstEnd)];
       const second_end = squarePositions[squares.value.indexOf(route.secondEnd)];
       const color = routeTypes.value[route.type];
-      const curved = route.firstEnd === route.secondEnd
+      const curved = route.firstEnd === route.secondEnd;
       return new DrawnRoute(first_end, second_end, color, curved);
     }
-    public getCircleCenter(mapCenter: Vector2, circleRadius: number, squareSize: Vector2): Vector2 {
+    public getCircleCenter(mapCenter: Vector2, circleRadius: number, squareSize: Vector2, offset: number = 0): Vector2 {
       if (!this.curved) {
         throw Error("route is not curved");
       }
@@ -58,33 +58,31 @@
       const dy = this.firstEnd.y - mapCenter.y;
       const circleVector = new Vector2();
       if (dx > 0 && dx > dy) { // right
-        circleVector.x = squareSize.x / 2 + circleRadius 
+        circleVector.x = squareSize.x / 2 + circleRadius + offset;
       } else if (dx < 0 && dx < dy) { // left
-        circleVector.x = -squareSize.x / 2 - circleRadius
+        circleVector.x = -squareSize.x / 2 - circleRadius - offset;
       } else if (dy < 0 && dy < dx) { // up
-        circleVector.y = -squareSize.y / 2 - circleRadius
+        circleVector.y = -squareSize.y / 2 - circleRadius - offset;
       } else { // down
-        circleVector.y = squareSize.y / 2 + circleRadius
+        circleVector.y = squareSize.y / 2 + circleRadius + offset;
       }
-      this.circleCenter = this.firstEnd.add(circleVector)
-      this.circleRadius = circleRadius
-      return this.firstEnd.add(circleVector)
+      this.circleCenter = this.firstEnd.add(circleVector);
+      this.circleRadius = circleRadius;
+      return this.firstEnd.add(circleVector);
     }
   }
-
   const mapSVG: Ref<SVGSVGElement | null> = ref(null);
   const { width, height } = useElementSize(mapSVG);
-  const lineWidth: Ref<number> = ref(5)
+  const lineWidth: Ref<number> = ref(5);
 
   const squareSize: Ref<Vector2> = computed(() => {
-    return new Vector2(0.25 * width.value,  0.12 * height.value)
+    return new Vector2(0.3 * width.value,  0.12 * height.value);
   });
-  const center = computed(() => (new Vector2(width.value / 2, height.value / 2)))
-
+  const center = computed(() => (new Vector2(width.value / 2, height.value / 2)));
 
   const squarePositions: Ref<Vector2[]> = computed(() => {
     const result: Vector2[] = [];
-    const radiusVector = new Vector2(0, -0.35 * height.value);
+    const radiusVector = new Vector2(0, -0.3 * height.value);
     const angle = 2 * Math.PI / squares.value.length;
 
     for (let i = 0; i < squares.value.length; i++) {
@@ -98,6 +96,7 @@
     const routeMap: Map<string, Route[]> = new Map();
     const lineOffset = 2 * lineWidth.value;
     const circleRadius = 20;
+    const circleCenterOffset = -5;
     let diff_vector: Vector2;
 
     for (const route of routes.value) {
@@ -110,22 +109,22 @@
     for (const routeGroup of Array.from(routeMap.values())) {
       for (let i = 0; i < routeGroup.length; i++) {
         const drawnRoute = DrawnRoute.fromRoute(routeGroup[i], squarePositions.value);
-        diff_vector = drawnRoute.firstEnd.sub(drawnRoute.secondEnd)
+        diff_vector = drawnRoute.firstEnd.sub(drawnRoute.secondEnd);
         if (drawnRoute.curved) {
-          drawnRoute.getCircleCenter(center.value, circleRadius, squareSize.value)
-          drawnRoute.circleRadius = circleRadius + lineOffset * i
+          drawnRoute.getCircleCenter(center.value, circleRadius, squareSize.value, circleCenterOffset);
+          drawnRoute.circleRadius = circleRadius + lineOffset * i;
         } else if (-1 < diff_vector.y / diff_vector.x && diff_vector.y / diff_vector.x < 1) {
-          drawnRoute.firstEnd = drawnRoute.firstEnd.add(new Vector2(0, lineOffset * i))
-          drawnRoute.secondEnd = drawnRoute.secondEnd.add(new Vector2(0, lineOffset * i))
+          drawnRoute.firstEnd = drawnRoute.firstEnd.add(new Vector2(0, lineOffset * i));
+          drawnRoute.secondEnd = drawnRoute.secondEnd.add(new Vector2(0, lineOffset * i));
         } else {
-          drawnRoute.firstEnd = drawnRoute.firstEnd.add(new Vector2(lineOffset * i, 0))
-          drawnRoute.secondEnd = drawnRoute.secondEnd.add(new Vector2(lineOffset * i, 0))
+          drawnRoute.firstEnd = drawnRoute.firstEnd.add(new Vector2(lineOffset * i, 0));
+          drawnRoute.secondEnd = drawnRoute.secondEnd.add(new Vector2(lineOffset * i, 0));
         }
-        result.push(drawnRoute) 
+        result.push(drawnRoute);
       }
     }
     return result;
-  })
+  });
 </script>
 
 <template>
