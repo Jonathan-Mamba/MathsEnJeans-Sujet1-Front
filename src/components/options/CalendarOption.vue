@@ -72,8 +72,8 @@
   </div>
 </template>
 
-<style scoped lang="scss">
-@import "@/components/options/option_menu";
+<style scoped>
+@import "@/components/options/option_menu.css";
 li label {
   width: 7%;
   text-align: right;
@@ -81,7 +81,7 @@ li label {
 }
 p.empty {
   text-align: center;
-  font-family: $rfont;
+  font-family: var(--rfont);
   font-style: italic;
 }
 img.delete {
@@ -92,16 +92,14 @@ div.dialog {
   min-width: 60%;
   min-height: 15%;
   max-height: 60%;
-  border-radius: $radius+5;
+  border-radius: calc(var(--radius) + 5px);
 }
 div.content {
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
-ul.data_list {
-  span {
-    flex: 1;
-  }
+ul.data_list span {
+  flex: 1;
 }
 </style>

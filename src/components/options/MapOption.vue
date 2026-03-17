@@ -13,8 +13,8 @@
   </div>
 </template>
 
-<style scoped lang="scss">
-@import "@/components/options/option_menu.scss";
+<style scoped>
+@import "@/components/options/option_menu.css";
 span {
   padding: 3px 0px 2px 0px;
   flex: 1;

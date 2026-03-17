@@ -89,21 +89,19 @@
   </div>
 </template>
 
-<style scoped lang="scss">
-@import "@/components/options/option_menu.scss";
-ul.data_list {
-  span {
-    display: flex;
-    flex-direction: row;
-    label {
-      text-align: center;
-      overflow-x: hidden;
-      text-overflow: ellipsis;
-      width: 50%;
-      border-radius: 5px;
-      background-color: $gray7;
-      margin: 5px;
-    }
+<style scoped>
+@import "@/components/options/option_menu.css";
+ul.data_list span {
+  display: flex;
+  flex-direction: row;
+  & label {
+    text-align: center;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    width: 50%;
+    border-radius: 5px;
+    background-color: var(--gray7);
+    margin: 5px;
   }
 }
 </style>

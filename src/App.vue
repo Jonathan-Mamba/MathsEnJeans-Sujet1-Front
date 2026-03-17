@@ -16,7 +16,7 @@
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 div.container {
   display: flex;
   flex-direction: row;

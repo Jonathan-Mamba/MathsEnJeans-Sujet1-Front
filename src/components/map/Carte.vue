@@ -10,14 +10,14 @@ import Map from './GameMap.vue';
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 div.container_map {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 50%;
   gap: 25px;
-  background-color: $gray5;
+  background-color: var(--gray5);
   max-height: 100dvh;
   overflow-y: scroll;
   flex-shrink: 0;

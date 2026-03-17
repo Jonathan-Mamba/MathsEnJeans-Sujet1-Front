@@ -27,46 +27,46 @@ const emit = defineEmits<{
   </div>
 </template>
 
-<style lang="scss" scoped>
-  div.dialog {
+<style scoped>
+div.dialog {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: $gray2;
-  border: $lightblue solid 1px;
+  background-color: var(--gray2);
+  border: var(--lightblue) solid 1px;
   color: white;
-  font-family: $rfont;
+  font-family: var(--rfont);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border-radius: $radius;
-  p.dialog_title {
-    font-size: $stfsize;
-    background-color: $gray8;
+  border-radius: var(--radius);
+  & p.dialog_title {
+    font-size: var(--stfsize);
+    background-color: var(--gray8);
     color: white;
     text-align: center;
     margin-top: 0px;
     padding-bottom: 2px;
     order: -2;
   }
-  div.dialog_content {
+  & div.dialog_content {
     order: -1;
     flex: 1;
     padding: 0 10px 0 10px;
   }
-  div.dialog_footer {
+  & div.dialog_footer {
     display: flex;
     flex-direction: row-reverse;
     width: 100%;
     gap: 5px;
     margin: 10px 10px 5px 0;
-    button {
+    & button {
       border: none;
-      border-radius: $radius;
+      border-radius: var(--radius);
       color: white;
-      font-family: $rfont;
-      font-size: $rfsize ;
+      font-family: var(--rfont);
+      font-size: var(--rfsize);
     }
   }
 }

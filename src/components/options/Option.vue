@@ -37,8 +37,8 @@
 </div>
 </template>
 
-<style scoped lang="scss">
-@import "@/components/options/option_menu";
+<style scoped>
+@import "@/components/options/option_menu.css";
 div.centered {
   width: 40%;
   height: 100dvh;
@@ -47,7 +47,7 @@ div.centered {
   box-sizing: border-box;
 }
 div.v {
-  font-size: $rfsize;
+  font-size: var(--rfsize);
   justify-content: center;
   font-style: italic;
   text-align: center;

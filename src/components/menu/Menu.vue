@@ -13,44 +13,50 @@ const emit = defineEmits(['modechange'])
 </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 div.c {
   display: flex;
   flex-direction: column;
   width: 10%;
-  background-color: $gray1;
+  background-color: var(--gray1);
   z-index: 1001;
   flex-grow: 0;
   flex-shrink: 0;
 }
+
 button {
   height: 20%;
   margin-top: 5px;
   margin-right: 10px;
   margin-left: 10px;
   color: white;
-  background-color: $gray3;
-  border-radius: $radius;
+  background-color: var(--gray3);
+  border-radius: var(--radius);
   border: none;
-  font-family: $tfont;
-  font-size: $tfsize;
-  :hover {
-    background-color: $gray4;
-    border: $blue solid 2px;
+  font-family: var(--tfont);
+  font-size: var(--tfsize);
+  
+  &:hover {
+    background-color: var(--gray4);
+    border: var(--blue) solid 2px;
   }
-  :active {
-    background-color: $gray2;
+  
+  &:active {
+    background-color: var(--gray2);
   }
+  
   &.play {
     margin-bottom: 5px;
-    background-color: $blue;
+    background-color: var(--blue);
     font-style: italic;
+    
     &:hover {
-      background-color: $lightblue;
-      border: $blue solid 2px;
+      background-color: var(--lightblue);
+      border: var(--blue) solid 2px;
     }
+    
     &:active {
-      background-color: $darkblue;
+      background-color: var(--darkblue);
     }
   }
 }

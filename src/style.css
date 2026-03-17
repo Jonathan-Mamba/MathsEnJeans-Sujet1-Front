@@ -1,3 +1,88 @@
+/* Color Variables */
+:root {
+  --gray1: #18181a;
+  --gray2: #232326;
+  --gray3: #2f2f33;
+  --gray4: #3b3b40;
+  --gray5: #47474d;
+  --gray6: #525259;
+  --gray7: #5e5e66;
+  --gray8: #6a6a73;
+  --gray9: #767680;
+  --gray10: #81818c;
+  --gray11: #8d8d99;
+  --gray12: #9999a6;
+  
+  --blue: #3584e4;
+  --lightblue: #5ba0f0;
+  --darkblue: #1965cc;
+  
+  --red: #b31010;
+  --lightred: #d12a2a;
+  --darkred: #8f0a0a;
+  
+  --radius: 5px;
+  
+  --rfsize: 19px;
+  --stfsize: 22px;
+  --tfsize: 26px;
+  
+  --rfont: "Adwaita Sans";
+  --tfont: "Adwaita Sans";
+  --stfont: "Adwaita Sans";
+  --partborder: #6a6a73;
+}
+
+@font-face {
+    font-family: 'Adwaita Sans';
+    src: url('/fonts/AdwaitaSans-Regular.ttf');
+    font-display: swap;
+}
+
 body {
     margin: 0;
+}
+.centered {
+	display: flex; 
+	flex-direction: column; 
+	justify-content: center; 
+	align-items: center;
+}
+
+button, select {
+    background-color: var(--gray5);
+    border-radius: var(--radius);
+    border: 1px solid var(--gray3);
+    font-size: var(--rfsize);
+    &:hover {
+        border: 1px solid var(--blue);
+        background-color: var(--gray6);
+    }
+    &:active {
+        background-color: var(--gray4);   
+    }
+}
+
+button.blue {
+    background-color: var(--blue);
+    border: transparent solid 1px;
+    &:hover {
+        background-color: var(--lightblue);
+        border: var(--blue) solid 1px;
+    }
+    &:active {
+        background-color: var(--darkblue);
+    }
+}
+
+button.red {
+    background-color: var(--red);
+    border: transparent solid 1px;
+    &:hover {
+        background-color: var(--lightred);
+        border: var(--red) solid 1px;
+    }
+    &:active {
+        background-color: var(--darkred);
+    }
 }

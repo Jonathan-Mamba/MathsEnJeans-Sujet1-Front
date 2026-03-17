@@ -163,8 +163,8 @@
   </div>
 </template>
 
-<style scoped lang="scss">
-@import "@/components/options/option_menu.scss";
+<style scoped>
+@import "@/components/options/option_menu.css";
 div.map {
   width: 90%;
   aspect-ratio: 1 / 1;
@@ -177,14 +177,14 @@ svg {
   height: 95%;
 }
 rect {
-  fill: $gray12;
+  fill: var(--gray12);
   stroke: #000;
   stroke-width: 2px;
-  border: $radius;
+  border: var(--radius);
 }
 text {
-  font-size: $rfsize;
-  font-family: $rfont;
+  font-size: var(--rfsize);
+  font-family: var(--rfont);
   text-anchor: middle;
   dominant-baseline: middle;
   color: #000;

@@ -7,5 +7,5 @@
 </template>
 
 <style scoped>
-@import "@/components/options/option_menu.scss";
+@import "@/components/options/option_menu.css";
 </style>

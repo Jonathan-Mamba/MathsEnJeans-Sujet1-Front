@@ -14,34 +14,36 @@
   </div>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 * {
   color: white;
 }
+
 div.legend {
   margin-top: 25px;
   width: 90%;
   flex: 1;
-  background-color: $gray1;
+  background-color: var(--gray1);
   border-radius: 30px;
   min-height: 200px;
   padding-top: 20px;
 }
+
 div.legend-element {
   display: flex;
   flex-direction: row;
   align-items: center;
   margin-left: 5%;
-  hr {
+  & hr {
     width: 8%;
     flex-grow: 0;
     height: 8px;
-    border-radius: $radius;
+    border-radius: var(--radius);
   }
-  label {
+  & label {
     flex-grow: 1;
-    font-family: $rfont;
-    font-size: $rfsize;
+    font-family: var(--rfont);
+    font-size: var(--rfsize);
     margin-left: 3px;
   }
 }

@@ -71,25 +71,25 @@
   </div>
 </template>
 
-<style scoped lang="scss">
-@use "sass:color";
-@import "@/components/options/option_menu.scss";
-
+<style scoped>
+@import "@/components/options/option_menu.css";
 form {
   display: flex;
   flex-direction: column;
   width: 90%;
-  background-color: $gray2;
+  background-color: var(--gray2);
   padding-top: 10px;
   padding-bottom: 10px;
   margin-top: 15px;
-  border-radius: $radius;
-  & .input_form_container {
-    margin-bottom: 5px;
-    min-width: 55%;
-  }
-  button {
-    width: 70%;
-  }
+  border-radius: var(--radius);
+}
+
+form .input_form_container {
+  margin-bottom: 5px;
+  min-width: 55%;
+}
+
+form button {
+  width: 70%;
 }
 </style>
