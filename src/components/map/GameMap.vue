@@ -125,6 +125,25 @@
     }
     return result;
   });
+
+  const splitTextLines = (text: string, maxChars: number = 20): string[] => {
+    const words = text.split(' ');
+    const lines: string[] = [];
+    let currentLine = '';
+
+    for (const word of words) {
+      if ((currentLine + word).length > maxChars && currentLine.length > 0) {
+        lines.push(currentLine);
+        currentLine = word;
+      } else {
+        currentLine += (currentLine ? ' ' : '') + word;
+      }
+    }
+    if (currentLine) {
+      lines.push(currentLine);
+    }
+    return lines;
+  };
 </script>
 
 <template>
@@ -136,7 +155,9 @@
       </g>
       <g v-for="[index, square] in squares.entries()">
         <rect :x="squarePositions[index].x - squareSize.x / 2" :y="squarePositions[index].y - squareSize.y / 2" :width="squareSize.x" :height="squareSize.y"/>
-        <text :x="squarePositions[index].x" :y="squarePositions[index].y">{{ square }}</text>
+        <text :x="squarePositions[index].x" :y="squarePositions[index].y">
+          <tspan v-for="(line, lineIndex) in splitTextLines(square)" :key="lineIndex" :x="squarePositions[index].x" :dy="lineIndex === 0 ? 0 : '1.2em'">{{ line }}</tspan>
+        </text>
       </g>
     </svg>
   </div>
@@ -165,6 +186,7 @@ text {
   font-size: $rfsize;
   font-family: $rfont;
   text-anchor: middle;
+  dominant-baseline: middle;
   color: #000;
 }
 </style>       

@@ -48,13 +48,13 @@ button, select {
     border-radius: $radius;
     border: 1px solid $gray3;
     font-size: $rfsize;
-}
-button:hover, select:hover {
-    border: 1px solid $blue;
-    background-color: $gray6;
-}
-button:active, select:active {
-    background-color: $gray4;
+    &:hover {
+        border: 1px solid $blue;
+        background-color: $gray6;
+    }
+    &:active {
+        background-color: $gray4;   
+    }
 }
 button.blue {
     background-color: $blue;

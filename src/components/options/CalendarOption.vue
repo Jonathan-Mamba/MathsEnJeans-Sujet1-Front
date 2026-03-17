@@ -54,7 +54,7 @@
         </li>
       </ul>
       <div class="button_form_container centered">
-        <select v-model="addedDayType">
+        <select v-model="addedDayType" @change="addDay()">
           <option v-for="dayType in dayTypes" :value="dayType">{{dayType}}</option>
         </select>
         <button @click="addDay(); console.log('Added day:', addedDayType)">Ajouter au calendrier</button>
