@@ -1,8 +1,10 @@
 <script setup lang="ts">
-  import {squares, routes, getRoutes, Route, routeTypes} from "@/util";
+  import {squares, routes, getRoutes, Route, routeTypes, getRouteTypes, getSquares, players} from "@/util";
   import {Ref, ref, computed} from "vue";
-  import { useElementSize } from "@vueuse/core";
+  import { get, useElementSize } from "@vueuse/core";
   getRoutes();
+  getRouteTypes();
+  getSquares();
 
   class Vector2 {
     x: number;
@@ -29,7 +31,6 @@
       );
     }
   }
-
   class DrawnRoute {
     firstEnd: Vector2;
     secondEnd: Vector2;
@@ -72,11 +73,17 @@
     }
   }
   const mapSVG: Ref<SVGSVGElement | null> = ref(null);
+  const mapParent: Ref<HTMLDivElement | null> = ref(null);
   const { width, height } = useElementSize(mapSVG);
+  const mapParentSize  = useElementSize(mapParent);
   const lineWidth: Ref<number> = ref(5);
+  const emit = defineEmits(["select"])
 
   const squareSize: Ref<Vector2> = computed(() => {
     return new Vector2(0.3 * width.value,  0.12 * height.value);
+  });
+  const topleft: Ref<Vector2> = computed(() => {
+    return new Vector2(( mapParentSize.width.value - width.value) / 2, (mapParentSize.height.value - height.value) / 2);
   });
   const center = computed(() => (new Vector2(width.value / 2, height.value / 2)));
 
@@ -144,22 +151,56 @@
     }
     return lines;
   };
+
+  const bannerHeight: Ref<number> = computed(() => {
+    return squareSize.value.y * 0.25;
+  });
+
+  const getPlayersInSquare = (squareName: string) => {
+    return players.value.filter(p => p.position === squareName);
+  };
 </script>
 
 <template>
-  <div class="map centered">
+  <div class="map centered" ref="mapParent">
     <svg ref="mapSVG">
       <g v-for="route in drawnRoutes">
         <line v-if="!route.curved" :x1="route.firstEnd.x" :y1="route.firstEnd.y" :x2="route.secondEnd.x" :y2="route.secondEnd.y" :stroke="route.color" :stroke-width="lineWidth"/>
         <circle v-else :cx="route.circleCenter.x" :cy="route.circleCenter.y" :r="route.circleRadius" :stroke="route.color" :stroke-width="lineWidth" fill="none"/>
       </g>
-      <g v-for="[index, square] in squares.entries()">
+      <g v-for="[index, square] in squares.entries()" @click="emit('select', square)">
+        <!-- Banner background -->
+        <rect 
+          :x="squarePositions[index].x - squareSize.x / 2" 
+          :y="squarePositions[index].y - squareSize.y / 2 - bannerHeight" 
+          :width="squareSize.x" 
+          :height="bannerHeight"
+          fill="#f0f0f0"
+          stroke="#999"
+          stroke-width="1px"
+        ></rect>
+        <!-- Main square -->
         <rect :x="squarePositions[index].x - squareSize.x / 2" :y="squarePositions[index].y - squareSize.y / 2" :width="squareSize.x" :height="squareSize.y"/>
-        <text :x="squarePositions[index].x" :y="squarePositions[index].y">
-          <tspan v-for="(line, lineIndex) in splitTextLines(square)" :key="lineIndex" :x="squarePositions[index].x" :dy="lineIndex === 0 ? 0 : '1.2em'">{{ line }}</tspan>
-        </text>
       </g>
     </svg>
+    <!-- HTML Text Overlay -->
+    <div class="text-overlay">
+      <div 
+        v-for="[index, square] in squares.entries()" 
+        :key="'text-' + index"
+        class="square-text"
+        :style="{
+          left: (squarePositions[index].x + topleft.x) + 'px',
+          top: (squarePositions[index].y + topleft.y) + 'px',
+          width: squareSize.x + 'px',
+          height: squareSize.y + 'px'
+        }"
+      >
+        <div v-for="(line, lineIndex) in splitTextLines(square)" :key="lineIndex">
+          {{ line }}
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -171,6 +212,7 @@ div.map {
   background-color: #fff;
   border-radius: 30px;
   margin-bottom: 25px;
+  position: relative;
 }
 svg {
   width: 95%;
@@ -182,11 +224,24 @@ rect {
   stroke-width: 2px;
   border: var(--radius);
 }
-text {
+.text-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.square-text {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transform: translate(-50%, -50%);
   font-size: var(--rfsize);
   font-family: var(--rfont);
-  text-anchor: middle;
-  dominant-baseline: middle;
   color: #000;
+  text-align: center;
 }
 </style>       

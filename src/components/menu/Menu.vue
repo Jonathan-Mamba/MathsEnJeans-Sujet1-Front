@@ -20,12 +20,12 @@ div.c {
   width: 10%;
   background-color: var(--gray1);
   z-index: 1001;
-  flex-grow: 0;
-  flex-shrink: 0;
+  overflow: scroll;
+  height: 100vh;
 }
 
 button {
-  height: 20%;
+  height: 20vh;
   margin-top: 5px;
   margin-right: 10px;
   margin-left: 10px;
@@ -35,26 +35,24 @@ button {
   border: none;
   font-family: var(--tfont);
   font-size: var(--tfsize);
-  
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  text-overflow: ellipsis;
   &:hover {
     background-color: var(--gray4);
     border: var(--blue) solid 2px;
   }
-  
   &:active {
     background-color: var(--gray2);
   }
-  
   &.play {
     margin-bottom: 5px;
     background-color: var(--blue);
     font-style: italic;
-    
     &:hover {
       background-color: var(--lightblue);
       border: var(--blue) solid 2px;
     }
-    
     &:active {
       background-color: var(--darkblue);
     }

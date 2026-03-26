@@ -1,17 +1,18 @@
 <script setup lang="ts">
-  import Option from "@/components/options/Option.vue";
-  import Menu from "@/components/menu/Menu.vue";
-  import Carte from "@/components/map/Carte.vue";
-  import {EditMode} from "@/util";
-  import {ref} from "vue";
+import Menu from "@/components/menu/Menu.vue";
+import Carte from "@/components/map/Carte.vue";
+import {EditMode, getData} from "@/util";
+import {ref} from "vue";
+import OptionContainer from "@/components/options/OptionContainer.vue";
 
-  const mode = ref(EditMode.NONE);
+const mode = ref(EditMode.NONE);
+getData();
 </script>
 
 <template>
   <div class="container">
     <Menu @modechange="new_mode => {mode = new_mode;}"/>
-    <Option :mode="mode"/>
+    <OptionContainer :mode="mode"/>
     <Carte/>
   </div>
 </template>

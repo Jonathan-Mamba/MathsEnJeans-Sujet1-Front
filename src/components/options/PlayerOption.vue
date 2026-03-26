@@ -1,8 +1,10 @@
 <script setup lang="ts">
   import axios from 'axios';
-  import {backendOrigin, Player, squares, getPlayers, players} from "@/util";
-  import {ref} from "vue";
+  import {backendOrigin, Player, squares, getPlayers, players, getSquares} from "@/util";
+  import {ref, watchEffect} from "vue";
   import Dialog from '@/components/Dialog.vue';
+  import { get } from '@vueuse/core';
+  import { AxiosError } from 'axios';
 
   const newPlayerName = ref<string>("");
   const newPlayerPosition = ref<string>("");
@@ -15,7 +17,9 @@
       await axios.post(`${backendOrigin}/players?name=${newPlayerName.value}&position=${newPlayerPosition.value}`);
       getPlayers();
     } catch (err) {
-      console.log(err);
+      if (err instanceof AxiosError && err.response) {
+        alert(`Erreur lors de l'ajout du joueur: ${err.response.data.detail}`);
+      }
     }
   }
   async function deletePlayer(player_id: string) {
@@ -23,7 +27,9 @@
       await axios.delete(`${backendOrigin}/players?player_id=${player_id}`);
       getPlayers();
     } catch (err) {
-      console.log(err);
+      if (err instanceof AxiosError && err.response) {
+        alert(`Erreur lors de la suppression du joueur: ${err.response.data.detail}`);
+      }
     }
   }
   async function modifyPlayer() {
@@ -31,10 +37,13 @@
       await axios.put(`${backendOrigin}/players?player_id=${modifiedPlayerId.value}&new_name=${modifiedPlayerName.value}&new_position=${modifiedPlayerPosition.value}`);
       getPlayers();
     } catch (err) {
-      console.log(err);
+      if (err instanceof AxiosError && err.response) {
+        alert(`Erreur lors de la modification du joueur: ${err.response.data.detail}`);
+      }
     }
   }
   getPlayers()  
+  getSquares()
 </script>
 
 <template>
@@ -56,7 +65,7 @@
             <label>{{player.position}}</label>
             <label :style="{backgroundColor: player.color}">{{ player.color }}</label>
           </span>
-          <button @click="modifiedPlayerId = player.id">Modifier</button>
+          <button @click="modifiedPlayerId = player.id; modifiedPlayerName = player.name; modifiedPlayerPosition = player.position">Modifier</button>
           <button @click="deletePlayer(player.id)"><img src="/icons/trash-bin-red.png" class="delete"></button>
         </li>
       </ul>
@@ -74,7 +83,7 @@
         <button type="submit" @click.prevent="addPlayer()">Ajouter un joueur</button>
       </form>
     </div>
-    <Dialog title="Modifier le joueur" :is_open="modifiedPlayerId !== null" @confirm="modifyPlayer(); modifiedPlayerId = null" @cancel="modifiedPlayerId = null">
+    <Dialog title="Modifier le joueur" @confirm="modifyPlayer(); modifiedPlayerId = null" @cancel="modifiedPlayerId = null" v-if="modifiedPlayerId !== null">
       <div class="input_form_container centered" style="margin-bottom: 5px;">
         <label for="name">Nom du joueur </label>
         <input id="name" v-model="modifiedPlayerName" type="text" required>

@@ -73,7 +73,7 @@ ul.data_list {
   }
 }
 img.delete {
-  height: 20px;
+  height: 1.4em;
   margin-top: 3px;
 }
 
@@ -119,8 +119,8 @@ div.input_form_container {
     text-align: center;
     font-size: var(--rfsize);
   }
-  & select, & input {
-    min-width: 1%;
+  & select, & input, & span {
+    max-width: 50%;
     border-radius: 0 var(--radius) var(--radius) 0;
     border: var(--gray5) solid 1px;
     flex: 1;
@@ -128,6 +128,8 @@ div.input_form_container {
     height: 100%;
     box-sizing: border-box;
     font-size: var(--rfsize);
+    margin: 0;
+    padding: 0;
   }
   & input:focus {
     outline: none;
@@ -144,7 +146,7 @@ form {
   padding-bottom: 10px;
   margin-top: 15px;
   border-radius: var(--radius);
-  & .input_form_container {
+  & .input_form_container, & .button_form_container, & .info_form_container {
     margin-bottom: 5px;
     width: 55%;
   }

@@ -5,7 +5,6 @@
   import CalendarOption from "@/components/options/CalendarOption.vue";
   import PlayerOption from "@/components/options/PlayerOption.vue";
   import GameOption from "@/components/options/GameOption.vue";
-  import Dialog from "@/components/Dialog.vue";
   import axios from "axios";
   import {onMounted, ref} from "vue";
 
@@ -40,7 +39,7 @@
 <style scoped>
 @import "@/components/options/option_menu.css";
 div.centered {
-  width: 40%;
+  width: 38%;
   height: 100dvh;
   border-right: 3px solid #fff;
   border-left: 1px solid #fff;

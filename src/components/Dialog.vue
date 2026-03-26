@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 const props = withDefaults(defineProps<{
   title: string
-  is_open: boolean
   confirm_text?: string
   cancel_text?: string
 }>(), {
@@ -15,7 +14,7 @@ const emit = defineEmits<{
 </script>
 
 <template lang="html">
-  <div class="dialog" v-if="props.is_open">
+  <div class="dialog">
     <p class="dialog_title">{{ props.title }}</p>
     <div class="dialog_content">
       <slot></slot>
