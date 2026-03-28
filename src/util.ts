@@ -35,7 +35,7 @@ export class Route {
   }
 }
 
-export const backendOrigin = "http://localhost:8000";
+export const backendOrigin = import.meta.env.VITE_BACKEND_ORIGIN;
 
 export const dayTypes: Ref<Array<string>> = ref([]);
 export const routeTypes: Ref<Object> = ref({});
