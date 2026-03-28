@@ -7,6 +7,7 @@ import OptionContainer from "@/components/options/OptionContainer.vue";
 
 const mode = ref(EditMode.NONE);
 getData();
+console.log(import.meta.env.VITE_BACKEND_ORIGIN)
 </script>
 
 <template>
