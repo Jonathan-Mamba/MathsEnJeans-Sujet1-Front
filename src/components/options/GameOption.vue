@@ -108,7 +108,7 @@ const movePlayer = async () => {
   <button v-if="gameRunning" @click="stopGame()" class="red">Arrêter la partie</button>
 </div>
 </template>
-
+ 
 <style scoped>
 @import "@/components/options/option_menu.css";
 div.footer {
