@@ -28,7 +28,7 @@ const addSelectedSquare = (square: string) => {
 <template>
   <div class="container_map">
     <Legend @select="(routeType) => {selectedFirstSquare = ''; selectedSecondSquare = ''; selectedRouteType = routeType}"></Legend>
-    <Map @select="(square) => addSelectedSquare(square)"></Map>
+    <Map @select="(square) => addSelectedSquare(square)" :selected-square1="selectedFirstSquare" :selected-square2="selectedSecondSquare"></Map>
   </div>
 </template>
 

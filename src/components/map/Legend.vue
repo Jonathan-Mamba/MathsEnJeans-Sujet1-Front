@@ -1,16 +1,20 @@
 <script lang="ts" setup>
-  import {routeTypes, getRouteTypes} from "@/util";
-  import { onMounted } from "vue";
-  const emit = defineEmits(["select"]);
-  onMounted(() => {
-    getRouteTypes();
-  });
+import {routeTypes} from "@/util";
+import {ref} from "vue";
+const emit = defineEmits(["select"]);
+const selectedRouteType = ref("")
+
 </script>
 
 <template>
   <div class="legend">
-    <div class="legend-element" v-for="[routeType, color] in Object.entries(routeTypes)">
-      <hr :style="{'background-color': color, border:0}" @click="emit('select', routeType)">
+    <div 
+      class="legend-element" 
+      v-for="[routeType, color] in Object.entries(routeTypes)" 
+      @click="emit('select', routeType); selectedRouteType = routeType" 
+      :class="{selected: routeType === selectedRouteType}"  
+    >
+      <hr :style="{'background-color': color, border:0}">
       <label>{{routeType}}</label>
     </div>
   </div>
@@ -33,14 +37,21 @@ div.legend {
   display: flex;
   flex-direction: column;
 }
-
+div.selected {
+  background-color: var(--gray3);
+}
 div.legend-element {
   display: flex;
   flex-direction: row;
   align-items: center;
   margin-left: 5%;
+  width: fit-content;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-radius: var(--radius);
+  cursor: pointer;
   & hr {
-    width: 8%;
+    width: 3.5em;
     flex-grow: 0;
     height: 8px;
     border-radius: var(--radius);

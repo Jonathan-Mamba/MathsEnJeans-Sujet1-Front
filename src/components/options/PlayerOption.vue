@@ -80,7 +80,7 @@
             <option v-for="value in squares" :key="value">{{ value }}</option>
           </select>
         </div>
-        <button type="submit" @click.prevent="addPlayer()">Ajouter un joueur</button>
+        <button type="submit" @click.prevent="addPlayer()" class="blue">Ajouter un joueur</button>
       </form>
     </div>
     <Dialog title="Modifier le joueur" @confirm="modifyPlayer(); modifiedPlayerId = null" @cancel="modifiedPlayerId = null" v-if="modifiedPlayerId !== null">

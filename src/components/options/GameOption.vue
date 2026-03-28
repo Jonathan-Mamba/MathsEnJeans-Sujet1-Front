@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { backendOrigin , gameStatus, getGameStatus, gameRunning, gameCompleted, squares } from '@/util';
+import { backendOrigin , gameStatus, getGameStatus, gameRunning, gameCompleted, squares, getPlayers } from '@/util';
 import axios from 'axios';
 import {computed, ref, Ref} from "vue";
 import { AxiosError } from 'axios';
 
 const newPlayerPosition = ref<string>("");
+const gameHistory = ref([])
 
-async function startGame() {
+const startGame = async () => {
   try {
     await axios.post(backendOrigin + "/game/start");
   } catch (err) {
@@ -16,7 +17,7 @@ async function startGame() {
   }
   await getGameStatus();
 }
-async function simulateGame() {
+const simulateGame = async () => {
   try {
     await axios.post(backendOrigin + "/game/simulate");
   } catch (err) {
@@ -26,8 +27,9 @@ async function simulateGame() {
     }
   }
   await getGameStatus();
+  await getPlayers();
 }
-async function stopGame() {
+const stopGame = async () => {
   try {
     await axios.post(backendOrigin + "/game/end");
   } catch (err) {
@@ -37,11 +39,22 @@ async function stopGame() {
   }
   await getGameStatus();
 }
-async function movePlayer() {
+const getGameHistory = async () => {
   if (newPlayerPosition.value === "") {
     alert("Veuillez sélectionner une nouvelle position pour le joueur.");
     return;
   }
+  try {
+    const data = (await axios.get(backendOrigin + "/game/history")).data;
+  } catch (err) {
+    if (err instanceof AxiosError && err.response) {
+      alert(`Erreur lors du déplacement du joueur: ${err.response.data.detail}`);
+      console.log(err.response.data);
+    }
+  }
+
+}
+const movePlayer = async () => {
   try {
     await axios.post(`${backendOrigin}/game/move_player?new_position=${newPlayerPosition.value}&player_id=${gameStatus.value.current_player.id}`);
   } catch (err) {
@@ -51,16 +64,7 @@ async function movePlayer() {
     }
   }
   await getGameStatus();
-}
-async function skipTurn() {
-  try {
-    await axios.post(`${backendOrigin}/game/skip_turn`);
-  } catch (err) {
-    if (err instanceof AxiosError && err.response) {
-      alert(`Erreur lors du passage du tour: ${err.response.data.detail}`);
-    }
-  }
-  await getGameStatus();
+  await getPlayers();
 }
 </script>
 
@@ -70,7 +74,7 @@ async function skipTurn() {
   <p class="title" v-else-if="gameRunning">Partie - En cours</p>
   <p class="title" v-else-if="gameCompleted">Partie - Terminée</p>
 
-  <form v-if="!gameRunning && !gameCompleted" class="centered" @submit.prevent="">
+  <form v-if="!gameRunning" class="centered" @submit.prevent="">
     <button @click="startGame()" class="start blue">Jouer la partie</button>
     <button @click="simulateGame()" class="start blue">Simuler la partie</button>  
   </form>
@@ -100,7 +104,6 @@ async function skipTurn() {
       </select>
     </div>
     <button @click="movePlayer()" class="blue">Déplacer le joueur</button>
-    <button @click="skipTurn()" class="blue">Passer le tour</button>
   </form>
   <button v-if="gameRunning" @click="stopGame()" class="red">Arrêter la partie</button>
 </div>

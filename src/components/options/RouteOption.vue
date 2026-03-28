@@ -13,6 +13,7 @@ function sortRoutes(route1: Route, route2: Route): number {
   const route1SecondEndIndex = squares.value.indexOf(route1.secondEnd);
   const route2FirstEndIndex = squares.value.indexOf(route2.firstEnd);
   const route2SecondEndIndex = squares.value.indexOf(route2.secondEnd);
+
   if (route1FirstEndIndex !== route2FirstEndIndex) {
     return route1FirstEndIndex - route2FirstEndIndex;
   } else if (route1SecondEndIndex !== route2SecondEndIndex) {
@@ -25,7 +26,7 @@ function sortRoutes(route1: Route, route2: Route): number {
 async function deleteRoute(route: Route) {
   try {
     await axios.delete(`${backendOrigin}/routes?first_end=${route.firstEnd}&second_end=${route.secondEnd}&route_type=${route.type}`);
-    getRoutes();
+    await getRoutes();
   } catch (err) {
     if (err instanceof AxiosError && err.response) {
       alert(`Erreur lors de la suppression de la route: ${err.response.data.detail}`);
@@ -75,7 +76,7 @@ getRoutes()
           <option v-for="type in Object.keys(routeTypes)" :value="type">{{type}}</option>
         </select>
       </div>
-      <button type="submit">Ajouter la nouvelle route</button>
+      <button type="submit" class="blue">Ajouter la nouvelle route</button>
     </form>
   </div>
 </template>

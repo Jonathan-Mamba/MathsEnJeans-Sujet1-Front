@@ -38,6 +38,7 @@ button {
   aspect-ratio: 4 / 5;
   overflow: hidden;
   text-overflow: ellipsis;
+  box-sizing: border-box;
   &:hover {
     background-color: var(--gray4);
     border: var(--blue) solid 2px;

@@ -1,10 +1,7 @@
 <script setup lang="ts">
   import {squares, routes, getRoutes, Route, routeTypes, getRouteTypes, getSquares, players} from "@/util";
   import {Ref, ref, computed} from "vue";
-  import { get, useElementSize } from "@vueuse/core";
-  getRoutes();
-  getRouteTypes();
-  getSquares();
+  import { useElementSize } from "@vueuse/core";
 
   class Vector2 {
     x: number;
@@ -51,7 +48,7 @@
       const curved = route.firstEnd === route.secondEnd;
       return new DrawnRoute(first_end, second_end, color, curved);
     }
-    public getCircleCenter(mapCenter: Vector2, circleRadius: number, squareSize: Vector2, offset: number = 0): Vector2 {
+    public getCircleCenter(mapCenter: Vector2, circleRadius: number, squareSize: Vector2, offset: number = 0, bannerHeight: number = 0): Vector2 {
       if (!this.curved) {
         throw Error("route is not curved");
       }
@@ -63,7 +60,7 @@
       } else if (dx < 0 && dx < dy) { // left
         circleVector.x = -squareSize.x / 2 - circleRadius - offset;
       } else if (dy < 0 && dy < dx) { // up
-        circleVector.y = -squareSize.y / 2 - circleRadius - offset;
+        circleVector.y = -squareSize.y / 2 - circleRadius - offset - bannerHeight;
       } else { // down
         circleVector.y = squareSize.y / 2 + circleRadius + offset;
       }
@@ -77,7 +74,12 @@
   const { width, height } = useElementSize(mapSVG);
   const mapParentSize  = useElementSize(mapParent);
   const lineWidth: Ref<number> = ref(5);
+  
   const emit = defineEmits(["select"])
+  const props = defineProps<{
+    selectedSquare1: string,
+    selectedSquare2: string,
+  }>();
 
   const squareSize: Ref<Vector2> = computed(() => {
     return new Vector2(0.3 * width.value,  0.12 * height.value);
@@ -118,7 +120,7 @@
         const drawnRoute = DrawnRoute.fromRoute(routeGroup[i], squarePositions.value);
         diff_vector = drawnRoute.firstEnd.sub(drawnRoute.secondEnd);
         if (drawnRoute.curved) {
-          drawnRoute.getCircleCenter(center.value, circleRadius, squareSize.value, circleCenterOffset);
+          drawnRoute.getCircleCenter(center.value, circleRadius, squareSize.value, circleCenterOffset, bannerHeight.value);
           drawnRoute.circleRadius = circleRadius + lineOffset * i;
         } else if (-1 < diff_vector.y / diff_vector.x && diff_vector.y / diff_vector.x < 1) {
           drawnRoute.firstEnd = drawnRoute.firstEnd.add(new Vector2(0, lineOffset * i));
@@ -132,25 +134,6 @@
     }
     return result;
   });
-
-  const splitTextLines = (text: string, maxChars: number = 20): string[] => {
-    const words = text.split(' ');
-    const lines: string[] = [];
-    let currentLine = '';
-
-    for (const word of words) {
-      if ((currentLine + word).length > maxChars && currentLine.length > 0) {
-        lines.push(currentLine);
-        currentLine = word;
-      } else {
-        currentLine += (currentLine ? ' ' : '') + word;
-      }
-    }
-    if (currentLine) {
-      lines.push(currentLine);
-    }
-    return lines;
-  };
 
   const bannerHeight: Ref<number> = computed(() => {
     return squareSize.value.y * 0.25;
@@ -168,27 +151,16 @@
         <line v-if="!route.curved" :x1="route.firstEnd.x" :y1="route.firstEnd.y" :x2="route.secondEnd.x" :y2="route.secondEnd.y" :stroke="route.color" :stroke-width="lineWidth"/>
         <circle v-else :cx="route.circleCenter.x" :cy="route.circleCenter.y" :r="route.circleRadius" :stroke="route.color" :stroke-width="lineWidth" fill="none"/>
       </g>
-      <g v-for="[index, square] in squares.entries()" @click="emit('select', square)">
-        <!-- Banner background -->
-        <rect 
-          :x="squarePositions[index].x - squareSize.x / 2" 
-          :y="squarePositions[index].y - squareSize.y / 2 - bannerHeight" 
-          :width="squareSize.x" 
-          :height="bannerHeight"
-          fill="#f0f0f0"
-          stroke="#999"
-          stroke-width="1px"
-        ></rect>
-        <!-- Main square -->
-        <rect :x="squarePositions[index].x - squareSize.x / 2" :y="squarePositions[index].y - squareSize.y / 2" :width="squareSize.x" :height="squareSize.y"/>
-      </g>
     </svg>
     <!-- HTML Text Overlay -->
     <div class="text-overlay">
+
       <div 
+        class="square-text-rect centered rect"
         v-for="[index, square] in squares.entries()" 
         :key="'text-' + index"
-        class="square-text"
+        @click="emit('select', square)"
+        :class="{selected: props.selectedSquare1 === square || props.selectedSquare2 === square}"
         :style="{
           left: (squarePositions[index].x + topleft.x) + 'px',
           top: (squarePositions[index].y + topleft.y) + 'px',
@@ -196,16 +168,27 @@
           height: squareSize.y + 'px'
         }"
       >
-        <div v-for="(line, lineIndex) in splitTextLines(square)" :key="lineIndex">
-          {{ line }}
-        </div>
+        <span>{{ square }}</span>
       </div>
+
+      <div 
+      v-for="[index, square] in squares.entries()" 
+      :key="'banner-' + index" class="banner-overlay rect"
+      :style="{
+        width: squareSize.x + 'px', 
+        height: bannerHeight + 'px',
+        left: (squarePositions[index].x + topleft.x) + 'px', 
+        top: (squarePositions[index].y + topleft.y - squareSize.y / 2) + 'px'
+      }">
+        <div/> <!-- empty div to create gap between square and banner -->
+        <hr v-for="player in getPlayersInSquare(square)" :key="player.id" :style="{'background-color': player.color}">
+      </div>
+
     </div>
   </div>
 </template>
 
 <style scoped>
-@import "@/components/options/option_menu.css";
 div.map {
   width: 90%;
   aspect-ratio: 1 / 1;
@@ -215,16 +198,10 @@ div.map {
   position: relative;
 }
 svg {
-  width: 95%;
-  height: 95%;
+  width: 100%;
+  height: 100%;
 }
-rect {
-  fill: var(--gray12);
-  stroke: #000;
-  stroke-width: 2px;
-  border: var(--radius);
-}
-.text-overlay {
+div.text-overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -232,16 +209,40 @@ rect {
   height: 100%;
   pointer-events: none;
 }
-.square-text {
+div.rect {
   position: absolute;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  transform: translate(-50%, -50%);
+  color: #000;
+  background-color: var(--gray12);
+  border: #000 solid 2px;
+  pointer-events: auto;
   font-size: var(--rfsize);
   font-family: var(--rfont);
-  color: #000;
-  text-align: center;
+}
+div.square-text-rect {
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  & .selected {
+    border-color: var(--red);
+  }
+}
+div.banner-overlay {
+  left: 50%;
+  transform: translate(-50%, -100%);
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  overflow-x: scroll;
+  gap: 5px;
+  align-items: center;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  & hr {
+    width: 20%;
+    height: 75%;
+    border: none;
+    margin: 0;
+    border-radius: 9999vh;
+  }
 }
 </style>       
