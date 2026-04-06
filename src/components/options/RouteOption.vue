@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import axios from "axios";
-import {backendOrigin, routeTypes, squares, Route, routes, getRoutes, addRoute} from "@/util";
+import {backendOrigin, routeTypes, squares, Route, routes, getRoutes, addRoute, deleteRoute} from "@/util";
 import {Ref, ref} from "vue";
 import { AxiosError } from 'axios';
 
@@ -20,17 +20,6 @@ function sortRoutes(route1: Route, route2: Route): number {
     return route1SecondEndIndex - route2SecondEndIndex;
   } else {
     return 0;
-  }
-}
-
-async function deleteRoute(route: Route) {
-  try {
-    await axios.delete(`${backendOrigin}/routes?first_end=${route.firstEnd}&second_end=${route.secondEnd}&route_type=${route.type}`);
-    await getRoutes();
-  } catch (err) {
-    if (err instanceof AxiosError && err.response) {
-      alert(`Erreur lors de la suppression de la route: ${err.response.data.detail}`);
-    }
   }
 }
 getRoutes()

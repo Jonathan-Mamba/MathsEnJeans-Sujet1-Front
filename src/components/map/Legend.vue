@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import {routeTypes} from "@/util";
 import {ref} from "vue";
-const emit = defineEmits(["select"]);
+const emit = defineEmits(["select", "modechange"]);
 const selectedRouteType = ref("")
 
 </script>
@@ -14,9 +14,22 @@ const selectedRouteType = ref("")
       @click="emit('select', routeType); selectedRouteType = routeType" 
       :class="{selected: routeType === selectedRouteType}"  
     >
-      <hr :style="{'background-color': color, border:0}">
-      <label>{{routeType}}</label>
+      <hr :style="{'background-color': color, border:0}" class="route-color">
+      <span>{{routeType}}</span>
     </div>
+    <hr class="part-separator">
+    <div class="legend-element">
+      <label>
+        <input type="radio" name="a" @input="emit('modechange', 'delete')">
+        Supprimer une route
+      </label>
+    </div>
+    <div class="legend-element">
+      <label>
+        <input type="radio" name="a" @input="emit('modechange', 'add')" placeholder="true">
+        Ajouter une route
+      </label>
+    </div>  
   </div>
 </template>
 
@@ -33,9 +46,11 @@ div.legend {
   border-radius: 30px;
   min-height: 200px;
   padding-top: 20px;
+  padding-bottom: 20px;
   gap: 3px;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 div.selected {
   background-color: var(--gray3);
@@ -50,17 +65,28 @@ div.legend-element {
   padding-right: 5px;
   border-radius: var(--radius);
   cursor: pointer;
-  & hr {
+  & hr.route-color {
     width: 3.5em;
     flex-grow: 0;
     height: 8px;
     border-radius: var(--radius);
   }
-  & label {
+  & span {
     flex-grow: 1;
     font-family: var(--rfont);
     font-size: var(--rfsize);
     margin-left: 0.3em;
   }
+}
+input[type="radio"], label {
+  margin-left: 0px;
+  font-family: var(--rfont);
+  font-size: var(--rfsize);
+}
+hr.part-separator {
+  width: clamp(10%, 20em, 50%);
+  display: inline-block;
+  margin-left: 5%;
+
 }
 </style>

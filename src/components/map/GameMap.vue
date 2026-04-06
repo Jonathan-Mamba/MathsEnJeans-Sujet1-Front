@@ -181,6 +181,7 @@
         top: (squarePositions[index].y + topleft.y - squareSize.y / 2) + 'px'
       }">
         <div/> <!-- empty div to create gap between square and banner -->
+        <!-- <span v-for="player in getPlayersInSquare(square)" :key="player.id">{{ player.name }}</span> -->
         <hr v-for="player in getPlayersInSquare(square)" :key="player.id" :style="{'background-color': player.color}">
       </div>
 
@@ -221,9 +222,10 @@ div.rect {
 div.square-text-rect {
   transform: translate(-50%, -50%);
   cursor: pointer;
-  & .selected {
-    border-color: var(--red);
-  }
+  z-index: 10000001;
+}
+div.square-text-rect.selected {
+  border-color: var(--red);
 }
 div.banner-overlay {
   left: 50%;

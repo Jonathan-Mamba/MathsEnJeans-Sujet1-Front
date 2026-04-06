@@ -119,6 +119,16 @@ export async function addRoute(firstEnd: string, secondEnd: string, routeType: s
     }
   }
 }
+export async function deleteRoute(route: Route) {
+  try {
+    await axios.delete(`${backendOrigin}/routes?first_end=${route.firstEnd}&second_end=${route.secondEnd}&route_type=${route.type}`);
+    await getRoutes();
+  } catch (err) {
+    if (err instanceof AxiosError && err.response) {
+      alert(`Erreur lors de la suppression de la route: ${err.response.data.detail}`);
+    }
+  }
+}
 export const gameStatus: Ref<{status: string, current_player: Player, day_count: number, current_day_type: string | null}> = ref({status: "null", current_player: new Player("null", "null", "null", "null"), day_count: 0, current_day_type: null});
 export async function getGameStatus() {
   try {

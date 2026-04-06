@@ -14,7 +14,7 @@
 
   async function addPlayer() {
     try {
-      await axios.post(`${backendOrigin}/players?name=${newPlayerName.value}&position=${newPlayerPosition.value}`);
+      await axios.post(`${backendOrigin}/players/?name=${newPlayerName.value}&position=${newPlayerPosition.value}`);
       getPlayers();
     } catch (err) {
       if (err instanceof AxiosError && err.response) {
@@ -24,7 +24,7 @@
   }
   async function deletePlayer(player_id: string) {
     try {
-      await axios.delete(`${backendOrigin}/players?player_id=${player_id}`);
+      await axios.delete(`${backendOrigin}/players/?player_id=${player_id}`);
       getPlayers();
     } catch (err) {
       if (err instanceof AxiosError && err.response) {
@@ -34,7 +34,7 @@
   }
   async function modifyPlayer() {
     try {
-      await axios.put(`${backendOrigin}/players?player_id=${modifiedPlayerId.value}&new_name=${modifiedPlayerName.value}&new_position=${modifiedPlayerPosition.value}`);
+      await axios.put(`${backendOrigin}/players/?player_id=${modifiedPlayerId.value}&new_name=${modifiedPlayerName.value}&new_position=${modifiedPlayerPosition.value}`);
       getPlayers();
     } catch (err) {
       if (err instanceof AxiosError && err.response) {
