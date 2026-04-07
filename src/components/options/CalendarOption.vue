@@ -1,70 +1,21 @@
 <script setup lang="ts">
-  import axios from "axios";
-  import {backendOrigin, dayTypes, getDayTypes} from "@/util";
   import {Ref, ref, watchEffect} from "vue";
-  import "@/components/Dialog.vue"
   import Dialog from "@/components/Dialog.vue";
-  import { AxiosError } from 'axios';
+  import { useCalendar, useDayTypes } from "@/composables";
+  const { calendar, addDay, removeDay, modifyDay } = useCalendar();
+  const { dayTypes } = useDayTypes();
 
   const addedDayType: Ref<string> = ref("");
   const modifiedDayType: Ref<string> = ref("");
-  const calendar: Ref<Array<string>> = ref([])
+  
   const modifiedDay: Ref<number> = ref(0)
-  getDayTypes()
 
-  async function getCalendar() {
-    try {
-      const res = await axios.get(`${backendOrigin}/calendar`);
-      calendar.value = res.data;
-    } catch (err) {
-      if (err instanceof AxiosError && err.response) {
-        alert(`Erreur lors de la récupération du calendrier: ${err.response.data.detail}`);
-      }
-    }
-  }
-  const addDay = async () => {
-    if (addedDayType.value === "") {
-      return;
-    }
-    try {
-      await axios.post(`${backendOrigin}/calendar?day_type=${addedDayType.value}`);
-      getCalendar();
-    } catch (err) {
-      if (err instanceof AxiosError && err.response) {
-        alert(`Erreur lors de l'ajout du jour: ${err.response.data.detail}`);
-      }
-    }
-  }
-  const removeDay = async (day_number: number) => {
-    try {
-      await axios.delete(`${backendOrigin}/calendar?day_number=${day_number}`);
-      getCalendar();
-    } catch (err) {
-      if (err instanceof AxiosError && err.response) {
-        alert(`Erreur lors de la suppression du jour: ${err.response.data.detail}`);
-      }
-    }
-  }
-  const modifyDay = async () => {
-    if (modifiedDayType.value === "" || modifiedDay.value === 0) {
-      return;
-    }
-    try {
-      await axios.put(`${backendOrigin}/calendar?day_number=${modifiedDay.value}&new_day=${modifiedDayType.value}`);
-      getCalendar();
-    } catch (err) {
-      if (err instanceof AxiosError && err.response) {
-        alert(`Erreur lors de la modification du jour: ${err.response.data.detail}`);
-      }
-    }
-  }
   watchEffect(() => {
     if (modifiedDay.value > 0) {
       modifiedDayType.value = calendar.value[modifiedDay.value-1]
     }
   })
 
-  getCalendar()
 </script>
 
 <template>
@@ -83,14 +34,14 @@
       <form class="centered" @submit.prevent="">
          <div class="input_form_container centered">
           <label for="day_type">Type de jour</label>
-          <select v-model="addedDayType" @change="addDay()">
+          <select v-model="addedDayType" @change="addDay(addedDayType)">
             <option v-for="dayType in dayTypes" :value="dayType">{{dayType}}</option>
           </select>
          </div>
-        <button @click="addDay()" class="blue">Ajouter au calendrier</button>
+        <button @click="addDay(addedDayType)" class="blue">Ajouter au calendrier</button>
       </form>
     </div>
-    <Dialog title="Modifier le jour" @confirm="modifyDay(); modifiedDay = 0" @cancel="modifiedDay = 0" v-if="modifiedDay > 0">
+    <Dialog title="Modifier le jour" @confirm="modifyDay(modifiedDay, modifiedDayType); modifiedDay = 0" @cancel="modifiedDay = 0" v-if="modifiedDay > 0">
        <div class="centered">
         <label>Nouveau type de jour:
           <select v-model="modifiedDayType" >

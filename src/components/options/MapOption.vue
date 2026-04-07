@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import {squares, getSquares} from "@/util";
-  getSquares()
+  import { useSquares } from "@/composables";
+  const { squares } = useSquares();
 </script>
 
 <template>

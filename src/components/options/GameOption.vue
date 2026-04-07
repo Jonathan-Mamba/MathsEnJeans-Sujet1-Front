@@ -1,71 +1,13 @@
 <script setup lang="ts">
-import { backendOrigin , gameStatus, getGameStatus, gameRunning, gameCompleted, squares, getPlayers } from '@/util';
-import axios from 'axios';
-import {computed, ref, Ref} from "vue";
-import { AxiosError } from 'axios';
+import {ref} from "vue";
+import {squares} from "@/refs";
+import { useGameStatus, useGameControl } from '@/composables';
+
+const { gameStatus, gameRunning, gameCompleted } = useGameStatus();
+const { startGame, stopGame, simulateGame, movePlayer } = useGameControl();
 
 const newPlayerPosition = ref<string>("");
-const gameHistory = ref([])
 
-const startGame = async () => {
-  try {
-    await axios.post(backendOrigin + "/game/start");
-  } catch (err) {
-    if (err instanceof AxiosError && err.response) {
-      alert(`Erreur lors du démarrage de la partie: ${err.response.data.detail}`);
-    }
-  }
-  await getGameStatus();
-}
-const simulateGame = async () => {
-  try {
-    await axios.post(backendOrigin + "/game/simulate");
-  } catch (err) {
-    console.log(err.response.data);
-    if (err instanceof AxiosError && err.response) {
-      alert(`Erreur lors de la simulation de la partie: ${err.response.data.detail}`);
-    }
-  }
-  await getGameStatus();
-  await getPlayers();
-}
-const stopGame = async () => {
-  try {
-    await axios.post(backendOrigin + "/game/end");
-  } catch (err) {
-    if (err instanceof AxiosError && err.response) {
-      alert(`Erreur lors de l'arrêt de la partie: ${err.response.data.detail}`);
-    }
-  }
-  await getGameStatus();
-}
-const getGameHistory = async () => {
-  if (newPlayerPosition.value === "") {
-    alert("Veuillez sélectionner une nouvelle position pour le joueur.");
-    return;
-  }
-  try {
-    const data = (await axios.get(backendOrigin + "/game/history")).data;
-  } catch (err) {
-    if (err instanceof AxiosError && err.response) {
-      alert(`Erreur lors du déplacement du joueur: ${err.response.data.detail}`);
-      console.log(err.response.data);
-    }
-  }
-
-}
-const movePlayer = async () => {
-  try {
-    await axios.post(`${backendOrigin}/game/move_player?new_position=${newPlayerPosition.value}&player_id=${gameStatus.value.current_player.id}`);
-  } catch (err) {
-    if (err instanceof AxiosError && err.response) {
-      alert(`Erreur lors du déplacement du joueur: ${err.response.data.detail}`);
-      console.log(err.response.data);
-    }
-  }
-  await getGameStatus();
-  await getPlayers();
-}
 </script>
 
 <template>
@@ -103,7 +45,7 @@ const movePlayer = async () => {
         <option v-for="square in squares" :value="square">{{square}}</option>
       </select>
     </div>
-    <button @click="movePlayer()" class="blue">Déplacer le joueur</button>
+    <button @click="movePlayer(newPlayerPosition, gameStatus.current_player.id)" class="blue">Déplacer le joueur</button>
   </form>
   <button v-if="gameRunning" @click="stopGame()" class="red">Arrêter la partie</button>
 </div>

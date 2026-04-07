@@ -2,7 +2,9 @@
 import Legend from './Legend.vue';
 import Map from './GameMap.vue';
 import {ref, Ref} from 'vue';
-import {addRoute, deleteRoute, Route} from "@/util";
+import { useRoutes } from "@/composables";
+import { Route } from "@/util";
+const { addRoute, deleteRoute } = useRoutes();
 
 const selectedFirstSquare: Ref<string> = ref("");
 const selectedSecondSquare: Ref<string> = ref("");
@@ -18,12 +20,10 @@ const addSelectedSquare = (square: string) => {
     selectedFirstSquare.value = square;
     selectedSecondSquare.value = "";
   }
-  console.log("caca")
   if (selectedFirstSquare.value !== "" && selectedSecondSquare.value !== "" && selectedRouteType.value !== "") {
     if (mode.value === "add") {
       addRoute(selectedFirstSquare.value, selectedSecondSquare.value, selectedRouteType.value);
     } else if (mode.value === "delete") {
-      console.log("zizi")
       deleteRoute(new Route(selectedFirstSquare.value, selectedSecondSquare.value, selectedRouteType.value));
     } else {
       alert("Mode inconnu");
@@ -47,7 +47,6 @@ div.container_map {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 52%;
   gap: 25px;
   background-color: var(--gray5);
   max-height: 100dvh;

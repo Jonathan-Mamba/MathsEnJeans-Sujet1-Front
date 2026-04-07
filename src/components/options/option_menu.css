@@ -68,7 +68,6 @@ ul.data_list {
       border: var(--gray3) solid 1px;
       font-style: italic;
       text-align: center;
-      font-size: calc(var(--rfsize) + 2px);
     }
   }
 }
@@ -168,11 +167,13 @@ ul.dashboard {
       margin: 5px;
       flex: 1;
       text-align: center;
-      max-width: 240px;
-      min-width: 240px;
+      max-width: 13vw;
+      min-width: 13vw;
+      max-height: 1.2em;
       background-color: var(--gray7);
       border-radius: var(--radius);
       text-overflow: ellipsis;
+      overflow: clip;
     }
     & label.first_row {
       background-color: var(--gray6);

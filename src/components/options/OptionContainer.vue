@@ -39,7 +39,6 @@
 <style scoped>
 @import "@/components/options/option_menu.css";
 div.centered {
-  width: 38%;
   height: 100dvh;
   border-right: 3px solid #fff;
   border-left: 1px solid #fff;

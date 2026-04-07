@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {routeTypes} from "@/util";
+import {routeTypes, gameRunning} from "@/refs";
 import {ref} from "vue";
 const emit = defineEmits(["select", "modechange"]);
 const selectedRouteType = ref("")
@@ -17,14 +17,14 @@ const selectedRouteType = ref("")
       <hr :style="{'background-color': color, border:0}" class="route-color">
       <span>{{routeType}}</span>
     </div>
-    <hr class="part-separator">
-    <div class="legend-element">
+    <hr class="part-separator" v-if="!gameRunning">
+    <div class="legend-element" v-if="!gameRunning">
       <label>
         <input type="radio" name="a" @input="emit('modechange', 'delete')">
         Supprimer une route
       </label>
     </div>
-    <div class="legend-element">
+    <div class="legend-element" v-if="!gameRunning">
       <label>
         <input type="radio" name="a" @input="emit('modechange', 'add')" placeholder="true">
         Ajouter une route

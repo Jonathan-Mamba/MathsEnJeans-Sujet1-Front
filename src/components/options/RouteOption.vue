@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import axios from "axios";
-import {backendOrigin, routeTypes, squares, Route, routes, getRoutes, addRoute, deleteRoute} from "@/util";
+import { useSquares, useRoutes, useRouteTypes } from "@/composables";
+import { Route } from "@/util";
 import {Ref, ref} from "vue";
-import { AxiosError } from 'axios';
+
+const { squares } = useSquares();
+const { routes, addRoute, deleteRoute } = useRoutes();
+const { routeTypes } = useRouteTypes();
 
 const addedRouteFirstEnd: Ref<string> = ref("");
 const addedRouteSecondEnd: Ref<string> = ref("");
@@ -22,7 +25,6 @@ function sortRoutes(route1: Route, route2: Route): number {
     return 0;
   }
 }
-getRoutes()
 </script>
 
 <template>
@@ -81,14 +83,12 @@ form {
   padding-bottom: 10px;
   margin-top: 15px;
   border-radius: var(--radius);
-}
-
-form .input_form_container {
-  margin-bottom: 5px;
-  min-width: 55%;
-}
-
-form button {
-  width: 70%;
+  & button {
+    width: 70%;
+  }
+  & .input_form_container {
+    margin-bottom: 5px;
+    min-width: 55%;
+  }
 }
 </style>

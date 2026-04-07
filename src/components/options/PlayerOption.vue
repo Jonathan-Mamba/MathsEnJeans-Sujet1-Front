@@ -1,10 +1,11 @@
 <script setup lang="ts">
   import axios from 'axios';
-  import {backendOrigin, Player, squares, getPlayers, players, getSquares} from "@/util";
-  import {ref, watchEffect} from "vue";
+  import {ref} from "vue";
   import Dialog from '@/components/Dialog.vue';
-  import { get } from '@vueuse/core';
-  import { AxiosError } from 'axios';
+  import { useSquares, usePlayers } from "@/composables";
+
+  const { squares } = useSquares();
+  const { players, addPlayer, modifyPlayer, deletePlayer } = usePlayers();
 
   const newPlayerName = ref<string>("");
   const newPlayerPosition = ref<string>("");
@@ -12,38 +13,6 @@
   const modifiedPlayerName = ref<string>("");
   const modifiedPlayerPosition = ref<string>("");
 
-  async function addPlayer() {
-    try {
-      await axios.post(`${backendOrigin}/players/?name=${newPlayerName.value}&position=${newPlayerPosition.value}`);
-      getPlayers();
-    } catch (err) {
-      if (err instanceof AxiosError && err.response) {
-        alert(`Erreur lors de l'ajout du joueur: ${err.response.data.detail}`);
-      }
-    }
-  }
-  async function deletePlayer(player_id: string) {
-    try {
-      await axios.delete(`${backendOrigin}/players/?player_id=${player_id}`);
-      getPlayers();
-    } catch (err) {
-      if (err instanceof AxiosError && err.response) {
-        alert(`Erreur lors de la suppression du joueur: ${err.response.data.detail}`);
-      }
-    }
-  }
-  async function modifyPlayer() {
-    try {
-      await axios.put(`${backendOrigin}/players/?player_id=${modifiedPlayerId.value}&new_name=${modifiedPlayerName.value}&new_position=${modifiedPlayerPosition.value}`);
-      getPlayers();
-    } catch (err) {
-      if (err instanceof AxiosError && err.response) {
-        alert(`Erreur lors de la modification du joueur: ${err.response.data.detail}`);
-      }
-    }
-  }
-  getPlayers()  
-  getSquares()
 </script>
 
 <template>
@@ -80,10 +49,15 @@
             <option v-for="value in squares" :key="value">{{ value }}</option>
           </select>
         </div>
-        <button type="submit" @click.prevent="addPlayer()" class="blue">Ajouter un joueur</button>
+        <button type="submit" @click.prevent="addPlayer(newPlayerName, newPlayerPosition)" class="blue">Ajouter un joueur</button>
       </form>
     </div>
-    <Dialog title="Modifier le joueur" @confirm="modifyPlayer(); modifiedPlayerId = null" @cancel="modifiedPlayerId = null" v-if="modifiedPlayerId !== null">
+    <Dialog 
+      v-if="modifiedPlayerId !== null"
+      title="Modifier le joueur" 
+      @confirm="modifyPlayer(modifiedPlayerId, modifiedPlayerName, modifiedPlayerPosition); modifiedPlayerId = null" 
+      @cancel="modifiedPlayerId = null" 
+    >
       <div class="input_form_container centered" style="margin-bottom: 5px;">
         <label for="name">Nom du joueur </label>
         <input id="name" v-model="modifiedPlayerName" type="text" required>

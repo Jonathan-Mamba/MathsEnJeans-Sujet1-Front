@@ -17,28 +17,23 @@ const emit = defineEmits(['modechange'])
 div.c {
   display: flex;
   flex-direction: column;
-  width: 10%;
   background-color: var(--gray1);
-  z-index: 1001;
   overflow: scroll;
   height: 100vh;
 }
 
 button {
   height: 20vh;
-  margin-top: 5px;
-  margin-right: 10px;
-  margin-left: 10px;
+  margin: 5px 10px 0px 10px;
   color: white;
   background-color: var(--gray3);
   border-radius: var(--radius);
-  border: none;
+  border: transparent solid 2px;
   font-family: var(--tfont);
   font-size: var(--tfsize);
   aspect-ratio: 4 / 5;
   overflow: hidden;
   text-overflow: ellipsis;
-  box-sizing: border-box;
   &:hover {
     background-color: var(--gray4);
     border: var(--blue) solid 2px;

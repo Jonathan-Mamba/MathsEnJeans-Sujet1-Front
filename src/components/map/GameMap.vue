@@ -1,7 +1,13 @@
 <script setup lang="ts">
-  import {squares, routes, getRoutes, Route, routeTypes, getRouteTypes, getSquares, players} from "@/util";
-  import {Ref, ref, computed} from "vue";
+  import { useSquares, useRoutes, useRouteTypes, usePlayers } from "@/composables";
+  import { Route } from "@/util";
+  import { Ref, ref, computed } from "vue";
   import { useElementSize } from "@vueuse/core";
+
+  const { squares } = useSquares();
+  const { routes } = useRoutes();
+  const { routeTypes } = useRouteTypes();
+  const { players } = usePlayers();
 
   class Vector2 {
     x: number;
@@ -140,13 +146,13 @@
   });
 
   const getPlayersInSquare = (squareName: string) => {
-    return players.value.filter(p => p.position === squareName);
+    return players.value.filter((p: { position: string; }) => p.position === squareName);
   };
 </script>
 
 <template>
   <div class="map centered" ref="mapParent">
-    <svg ref="mapSVG">
+    <svg ref="mapSVG" :viewBox="`0 0 ${width} ${height}`" preserveAspectRatio="xMidYMid meet">
       <g v-for="route in drawnRoutes">
         <line v-if="!route.curved" :x1="route.firstEnd.x" :y1="route.firstEnd.y" :x2="route.secondEnd.x" :y2="route.secondEnd.y" :stroke="route.color" :stroke-width="lineWidth"/>
         <circle v-else :cx="route.circleCenter.x" :cy="route.circleCenter.y" :r="route.circleRadius" :stroke="route.color" :stroke-width="lineWidth" fill="none"/>
@@ -247,4 +253,4 @@ div.banner-overlay {
     border-radius: 9999vh;
   }
 }
-</style>       
+</style>
