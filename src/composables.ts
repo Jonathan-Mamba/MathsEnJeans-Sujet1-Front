@@ -35,7 +35,7 @@ export const useCalendar = () => {
     await commonDeleter(`/calendar/${day_number}`, {}, "Erreur lors de la suppression du jour", getCalendar);
   }
   const modifyDay = async (modifiedDay: number, modifiedDayType: string) => {
-    await commonPutter("/calendar", { day_number: modifiedDay, new_day: modifiedDayType }, "Erreur lors de la modification du jour", getCalendar);
+    await commonPutter("/calendar", { day_number: modifiedDay, day_type: modifiedDayType }, "Erreur lors de la modification du jour", getCalendar);
   }
 
   return { calendar, getCalendar, addDay, removeDay, modifyDay };
@@ -56,10 +56,10 @@ export const useSquares = () => {
     await commonGetter("/squares", squares, "Erreur lors de la récupération des cases");
   }
   const addSquare = async (square: string) => {
-    await commonPoster("/squares", { square_name: square }, "Erreur lors de l'ajout de la case", () => (squares.value.push(square)));
+    await commonPoster("/squares", { name: square }, "Erreur lors de l'ajout de la case", () => (squares.value.push(square)));
   }
   const deleteSquare = async (square: string) => {
-    await commonDeleter(`/squares/${square}`, {}, "Erreur lors de la suppression de la case", async () => {
+    await commonDeleter(`/squares/`, { name: square }, "Erreur lors de la suppression de la case", async () => {
       squares.value = squares.value.filter(s => s !== square);
     });
   }
@@ -81,10 +81,10 @@ export const useRouteTypes = () => {
     await commonGetter("/routes/types", routeTypes, "Erreur lors de la récupération des types de routes");
   }
   const addRouteType = async (routeType: string) => {
-    await commonPoster("/routes/types", { route_type: routeType }, "Erreur lors de l'ajout du type de route", getRouteTypes);
+    await commonPoster("/routes/types", { name: routeType }, "Erreur lors de l'ajout du type de route", getRouteTypes);
   }
   const deleteRouteType = async (routeType: string) => {
-    await commonDeleter(`/routes/types/${routeType}`, {}, "Erreur lors de la suppression du type de route", async () => {
+    await commonDeleter(`/routes/types/`, { name: routeType }, "Erreur lors de la suppression du type de route", async () => {
       routeTypes.value = Object.fromEntries(Object.entries(routeTypes.value).filter(([key]) => key !== routeType));
     });
   }
@@ -104,10 +104,10 @@ export const usePlayers = () => {
     await commonPoster("/players", { name: new_name, position: new_position }, "Erreur lors de l'ajout du joueur", getPlayers);
   }
   const modifyPlayer = async (player_id: string, new_name: string, new_position: string) => {
-    await commonPutter("/players", { player_id, new_name, new_position }, "Erreur lors de la modification du joueur", getPlayers);
+    await commonPutter("/players", { id: player_id, name: new_name, position: new_position }, "Erreur lors de la modification du joueur", getPlayers);
   }
   const deletePlayer = async (player_id: string) => {
-    await commonDeleter(`/players/${player_id}`, {}, "Erreur lors de la suppression du joueur", getPlayers);
+    await commonDeleter(`/players/`, { id: player_id }, "Erreur lors de la suppression du joueur", getPlayers);
   }
 
   return { players, getPlayers, addPlayer, modifyPlayer, deletePlayer };
@@ -117,7 +117,11 @@ export const usePlayers = () => {
 export const useRoutes = () => {
   const getRoutes = async () => {
     console.log("Fetching routes...");
-    await commonGetter("/routes", routes, "Erreur lors de la récupération des routes" , (data) => data.map((r: any) => new Route(r.first_end, r.second_end, r.type)));
+    await commonGetter(
+      "/routes", 
+      routes, 
+      "Erreur lors de la récupération des routes", 
+      (data) => data.map((r: any) => new Route(r.first_end, r.second_end, r.type)));
     console.log("Routes fetched:", routes.value);
   }
   const addRoute = async (firstEnd: string, secondEnd: string, routeType: string) => {

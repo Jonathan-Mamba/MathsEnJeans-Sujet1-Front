@@ -1,13 +1,9 @@
 <script setup lang="ts">
-  import { useSquares, useRoutes, useRouteTypes, usePlayers } from "@/composables";
+  import { squares, routes, routeTypes, players } from "@/refs";
   import { Route } from "@/util";
   import { Ref, ref, computed } from "vue";
   import { useElementSize } from "@vueuse/core";
 
-  const { squares } = useSquares();
-  const { routes } = useRoutes();
-  const { routeTypes } = useRouteTypes();
-  const { players } = usePlayers();
 
   class Vector2 {
     x: number;
@@ -80,6 +76,7 @@
   const { width, height } = useElementSize(mapSVG);
   const mapParentSize  = useElementSize(mapParent);
   const lineWidth: Ref<number> = ref(5);
+  const mapRadiusMultiplier: Ref<number> = ref(0.3)
   
   const emit = defineEmits(["select"])
   const props = defineProps<{
@@ -97,7 +94,7 @@
 
   const squarePositions: Ref<Vector2[]> = computed(() => {
     const result: Vector2[] = [];
-    const radiusVector = new Vector2(0, -0.3 * height.value);
+    const radiusVector = new Vector2(0, -mapRadiusMultiplier.value * height.value);
     const angle = 2 * Math.PI / squares.value.length;
 
     for (let i = 0; i < squares.value.length; i++) {
@@ -152,7 +149,7 @@
 
 <template>
   <div class="map centered" ref="mapParent">
-    <svg ref="mapSVG" :viewBox="`0 0 ${width} ${height}`" preserveAspectRatio="xMidYMid meet">
+    <svg ref="mapSVG">
       <g v-for="route in drawnRoutes">
         <line v-if="!route.curved" :x1="route.firstEnd.x" :y1="route.firstEnd.y" :x2="route.secondEnd.x" :y2="route.secondEnd.y" :stroke="route.color" :stroke-width="lineWidth"/>
         <circle v-else :cx="route.circleCenter.x" :cy="route.circleCenter.y" :r="route.circleRadius" :stroke="route.color" :stroke-width="lineWidth" fill="none"/>
