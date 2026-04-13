@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import Legend from './Legend.vue';
-import Map from './GameMap.vue';
-import {ref, Ref} from 'vue';
-import { useRoutes } from "@/composables";
-import { Route } from "@/util";
+import { Route } from "~/utils/helpers";
 const { addRoute, deleteRoute } = useRoutes();
 
 const selectedFirstSquare: Ref<string> = ref("");
@@ -22,13 +18,14 @@ const addSelectedSquare = (square: string) => {
   }
   if (selectedFirstSquare.value !== "" && selectedSecondSquare.value !== "" && selectedRouteType.value !== "") {
     if (mode.value === "add") {
+      console.debug("adding route")
       addRoute(selectedFirstSquare.value, selectedSecondSquare.value, selectedRouteType.value);
     } else if (mode.value === "delete") {
       deleteRoute(new Route(selectedFirstSquare.value, selectedSecondSquare.value, selectedRouteType.value));
+      console.debug("deleting route")
     } else {
       alert("Mode inconnu");
     }
-    addRoute(selectedFirstSquare.value, selectedSecondSquare.value, selectedRouteType.value);
     selectedFirstSquare.value = "";
     selectedSecondSquare.value = "";
   }
@@ -36,14 +33,22 @@ const addSelectedSquare = (square: string) => {
 </script>
 
 <template>
-  <div class="container_map">
-    <Legend @select="(routeType) => {selectedFirstSquare = ''; selectedSecondSquare = ''; selectedRouteType = routeType}" @modechange="(m) => {mode = m}"></Legend>
-    <Map @select="(square) => addSelectedSquare(square)" :selected-square1="selectedFirstSquare" :selected-square2="selectedSecondSquare"></Map>
+  <div class="map-container">
+    <MapLegend 
+    @select="(routeType) => {selectedFirstSquare = ''; selectedSecondSquare = ''; selectedRouteType = routeType}" 
+    @modechange="(m) => {mode = m}"
+    />
+    <MapDiagram 
+    @select="(square) => addSelectedSquare(square)" 
+    :selected-square1="selectedFirstSquare" 
+    :selected-square2="selectedSecondSquare"
+    />
   </div>
+
 </template>
 
 <style scoped>
-div.container_map {
+div.map-container {
   display: flex;
   flex-direction: column;
   align-items: center;

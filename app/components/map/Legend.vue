@@ -1,9 +1,8 @@
 <script lang="ts" setup>
-import {routeTypes, gameRunning} from "@/refs";
+import {routeTypes, gameRunning} from "~/composables/refs";
 import {ref} from "vue";
 const emit = defineEmits(["select", "modechange"]);
-const selectedRouteType = ref("")
-
+const selectedRouteType = ref<string>("")
 </script>
 
 <template>

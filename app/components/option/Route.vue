@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { useSquares, useRoutes, useRouteTypes } from "@/composables";
-import { Route } from "@/util";
-import {Ref, ref} from "vue";
+import { Route } from "~/utils/helpers";
+import { ref } from "vue";
+import type { Ref } from "vue";
+
 
 const { squares } = useSquares();
 const { routes, addRoute, deleteRoute } = useRoutes();
@@ -28,40 +29,40 @@ function sortRoutes(route1: Route, route2: Route): number {
 </script>
 
 <template>
-  <div class="option_menu">
+  <div class="option-menu">
     <p class="title">Routes</p>
-    <ul class="data_list dashboard">
+    <ul class="data-list dashboard">
       <li>
         <span>
-          <label class="first_row">Premier point</label>
-          <label class="first_row">Deuxième point</label>
-          <label class="first_row">Type de route</label>
+          <label class="first-row">Premier point</label>
+          <label class="first-row">Deuxième point</label>
+          <label class="first-row">Type de route</label>
         </span>
       </li>
       <p class="empty" v-if="routes.length === 0">Aucune route n'est définie pour le moment</p>
       <li v-for="route in routes.sort(sortRoutes)" :key="route.firstEnd + route.secondEnd + route.type">
         <span>
-          <label >{{route.firstEnd}}</label>
-          <label >{{route.secondEnd}}</label>
-          <label >{{route.type}}</label>
+          <label>{{route.firstEnd}}</label>
+          <label>{{route.secondEnd}}</label>
+          <label>{{route.type}}</label>
         </span>
         <button @click="deleteRoute(route)"><img src="/icons/trash-bin-red.png" class="delete"></button>
       </li>
     </ul>
     <form @submit.prevent="addRoute(addedRouteFirstEnd, addedRouteSecondEnd, addedRouteType)" class="centered">
-      <div class="input_form_container centered">
+      <div class="input-form-container centered">
         <label for="premier_point">Premier point</label>
         <select name="premier_point" id="premier_point" v-model="addedRouteFirstEnd">
           <option v-for="square in squares" :value="square">{{square}}</option>
         </select>
       </div>
-      <div class="input_form_container centered">
+      <div class="input-form-container centered">
         <label for="deuxieme_point">Deuxième point</label>
         <select name="deuxieme_point" id="deuxieme_point" v-model="addedRouteSecondEnd">
           <option v-for="square in squares" :value="square">{{square}}</option>
         </select>
       </div>
-      <div class="input_form_container centered">
+      <div class="input-form-container centered">
         <label for="route_type">Type de route</label>
         <select name="route_type" id="route_type" v-model="addedRouteType">
           <option v-for="type in Object.keys(routeTypes)" :value="type">{{type}}</option>
@@ -73,7 +74,7 @@ function sortRoutes(route1: Route, route2: Route): number {
 </template>
 
 <style scoped>
-@import "@/components/options/option_menu.css";
+@import "~/assets/style.css";
 form {
   display: flex;
   flex-direction: column;
@@ -86,7 +87,7 @@ form {
   & button {
     width: 70%;
   }
-  & .input_form_container {
+  & .input-form-container {
     margin-bottom: 5px;
     min-width: 55%;
   }

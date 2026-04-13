@@ -15,11 +15,11 @@ const emit = defineEmits<{
 
 <template lang="html">
   <div class="dialog">
-    <p class="dialog_title">{{ props.title }}</p>
-    <div class="dialog_content">
+    <p class="title">{{ props.title }}</p>
+    <div class="content">
       <slot></slot>
     </div>
-    <div class="dialog_footer">
+    <div class="footer">
       <button class="blue" @click="emit('confirm')">{{ props.confirm_text }}</button>
       <button class="red" @click="emit('cancel')">{{ props.cancel_text }}</button>
     </div>
@@ -49,12 +49,12 @@ div.dialog {
     padding-bottom: 2px;
     order: -2;
   }
-  & div.dialog_content {
+  & div.content {
     order: -1;
     flex: 1;
     padding: 0 10px 0 10px;
   }
-  & div.dialog_footer {
+  & div.footer {
     display: flex;
     flex-direction: row-reverse;
     width: 100%;

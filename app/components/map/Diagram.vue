@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import { squares, routes, routeTypes, players } from "@/refs";
-  import { Route } from "@/util";
-  import { Ref, ref, computed } from "vue";
+  import { squares, routes, routeTypes, players } from "~/composables/refs";
+  import { Route } from "~/utils/helpers";
+  import { ref, computed } from "vue";
   import { useElementSize } from "@vueuse/core";
 
 
@@ -48,7 +48,7 @@
       const second_end = squarePositions[squares.value.indexOf(route.secondEnd)];
       const color = routeTypes.value[route.type];
       const curved = route.firstEnd === route.secondEnd;
-      return new DrawnRoute(first_end, second_end, color, curved);
+      return new DrawnRoute(first_end!, second_end!, color!, curved);
     }
     public getCircleCenter(mapCenter: Vector2, circleRadius: number, squareSize: Vector2, offset: number = 0, bannerHeight: number = 0): Vector2 {
       if (!this.curved) {
@@ -120,7 +120,7 @@
     }
     for (const routeGroup of Array.from(routeMap.values())) {
       for (let i = 0; i < routeGroup.length; i++) {
-        const drawnRoute = DrawnRoute.fromRoute(routeGroup[i], squarePositions.value);
+        const drawnRoute = DrawnRoute.fromRoute(routeGroup[i]!, squarePositions.value);
         diff_vector = drawnRoute.firstEnd.sub(drawnRoute.secondEnd);
         if (drawnRoute.curved) {
           drawnRoute.getCircleCenter(center.value, circleRadius, squareSize.value, circleCenterOffset, bannerHeight.value);
@@ -165,8 +165,8 @@
         @click="emit('select', square)"
         :class="{selected: props.selectedSquare1 === square || props.selectedSquare2 === square}"
         :style="{
-          left: (squarePositions[index].x + topleft.x) + 'px',
-          top: (squarePositions[index].y + topleft.y) + 'px',
+          left: (squarePositions[index]!.x + topleft.x) + 'px',
+          top: (squarePositions[index]!.y + topleft.y) + 'px',
           width: squareSize.x + 'px',
           height: squareSize.y + 'px'
         }"
@@ -180,8 +180,8 @@
       :style="{
         width: squareSize.x + 'px', 
         height: bannerHeight + 'px',
-        left: (squarePositions[index].x + topleft.x) + 'px', 
-        top: (squarePositions[index].y + topleft.y - squareSize.y / 2) + 'px'
+        left: (squarePositions[index]!.x + topleft.x) + 'px', 
+        top: (squarePositions[index]!.y + topleft.y - squareSize.y / 2) + 'px'
       }">
         <div/> <!-- empty div to create gap between square and banner -->
         <!-- <span v-for="player in getPlayersInSquare(square)" :key="player.id">{{ player.name }}</span> -->

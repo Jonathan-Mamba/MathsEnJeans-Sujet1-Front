@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import {ref} from "vue";
-import {squares} from "@/refs";
-import { useGameStatus, useGameControl } from '@/composables';
 
-const { gameStatus, gameRunning, gameCompleted } = useGameStatus();
+const { gameStatus, gameNotStarted, gameRunning } = useGameStatus();
 const { startGame, stopGame, simulateGame, movePlayer } = useGameControl();
 
 const newPlayerPosition = ref<string>("");
@@ -11,48 +9,48 @@ const newPlayerPosition = ref<string>("");
 </script>
 
 <template>
-<div class="option_menu">
-  <p class="title" v-if="(!gameRunning) && (!gameCompleted)">Partie - En attente</p>
+<div class="option-menu">
+  <p class="title" v-if="gameNotStarted">Partie - En attente</p>
   <p class="title" v-else-if="gameRunning">Partie - En cours</p>
-  <p class="title" v-else-if="gameCompleted">Partie - Terminée</p>
+  <p class="title" v-else>Partie - Terminée</p>
 
-  <form v-if="!gameRunning" class="centered" @submit.prevent="">
+  <form v-if="gameNotStarted" class="centered" @submit.prevent="">
     <button @click="startGame()" class="start blue">Jouer la partie</button>
     <button @click="simulateGame()" class="start blue">Simuler la partie</button>  
   </form>
 
-  <form v-else-if="gameRunning" class="centered" @submit.prevent="">
-    <div class="info_form_container">
+  <form v-else-if="gameRunning" class="centered" @submit.prevent="movePlayer(newPlayerPosition, gameStatus.current_player.id)">
+    <div class="info-form-container">
       <label>Tour numéro</label>
       <span>{{ gameStatus.day_count }}</span>
     </div>
-    <div class="info_form_container">
+    <div class="info-form-container">
       <label>Type de jour</label>
       <span>{{ gameStatus.current_day_type }}</span>
     </div>
-    <div class="info_form_container">
+    <div class="info-form-container">
       <label>Nom du joueur</label>
       <span>{{ gameStatus.current_player.name }}</span>
     </div>
-    <div class="info_form_container">
+    <div class="info-form-container">
       <label>Position du joueur</label>
       <span>{{ gameStatus.current_player.position }}</span>
     </div>
     <hr>
-    <div class="input_form_container">
+    <div class="input-form-container">
       <label>Nouvelle position</label>
       <select v-model="newPlayerPosition">
         <option v-for="square in squares" :value="square">{{square}}</option>
       </select>
     </div>
-    <button @click="movePlayer(newPlayerPosition, gameStatus.current_player.id)" class="blue">Déplacer le joueur</button>
+    <button type="submit" class="blue">Déplacer le joueur</button>
   </form>
   <button v-if="gameRunning" @click="stopGame()" class="red">Arrêter la partie</button>
 </div>
 </template>
  
 <style scoped>
-@import "@/components/options/option_menu.css";
+@import "~/assets/style.css";
 div.footer {
     display: flex;
     flex-direction: column;
@@ -74,7 +72,7 @@ button.red {
 button.blue {
   margin-bottom: 5px;
 }
-div.info_form_container {
+div.info-form-container {
   display: flex;
   flex-direction: row;
   background-color: var(--gray5);

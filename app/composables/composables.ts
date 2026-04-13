@@ -1,4 +1,4 @@
-import { Route, commonGetter, commonPoster, commonPutter, commonDeleter, Player } from '@/util';
+import { Route, commonGetter, commonPoster, commonPutter, commonDeleter, Player } from '~/utils/helpers';
 import { 
   dayTypes, 
   routeTypes,
@@ -12,7 +12,7 @@ import {
   gameCompleted,
   gameHistory,
   calendar
-} from '@/refs';
+} from './refs';
 
 
 export const useGameStatus = () => {
@@ -20,7 +20,7 @@ export const useGameStatus = () => {
     await commonGetter("/game/status", gameStatus, "Erreur lors de la récupération du statut du jeu");
   }
 
-  return { gameStatus, gameNotStarted, gameRunning, gameCompleted, getGameStatus};
+  return { gameStatus, gameNotStarted, gameRunning, gameCompleted, getGameStatus };
 }
 
 
@@ -116,13 +116,11 @@ export const usePlayers = () => {
 
 export const useRoutes = () => {
   const getRoutes = async () => {
-    console.log("Fetching routes...");
     await commonGetter(
       "/routes", 
       routes, 
       "Erreur lors de la récupération des routes", 
       (data) => data.map((r: any) => new Route(r.first_end, r.second_end, r.type)));
-    console.log("Routes fetched:", routes.value);
   }
   const addRoute = async (firstEnd: string, secondEnd: string, routeType: string) => {
     await commonPoster(

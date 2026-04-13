@@ -1,8 +1,5 @@
 <script setup lang="ts">
-  import axios from 'axios';
-  import {ref} from "vue";
-  import Dialog from '@/components/Dialog.vue';
-  import { useSquares, usePlayers } from "@/composables";
+  import { ref } from "vue";
 
   const { squares } = useSquares();
   const { players, addPlayer, modifyPlayer, deletePlayer } = usePlayers();
@@ -16,15 +13,15 @@
 </script>
 
 <template>
-  <div class="dialog_parent">
-    <div :class="{blurred: modifiedPlayerId !== null, content: true, option_menu: true}">
+  <div class="dialog-parent">
+    <div :class="{blurred: modifiedPlayerId !== null, content: true, 'option-menu': true}">
       <p class="title">Joueurs</p>
-      <ul class="data_list dashboard">
+      <ul class="data-list dashboard">
          <li>
           <span>
-            <label class="first_row">Nom du joueur</label>
-            <label class="first_row">Position du joueur</label>
-            <label class="first_row">Couleur du joueur</label>
+            <label class="first-row">Nom du joueur</label>
+            <label class="first-row">Position du joueur</label>
+            <label class="first-row">Couleur du joueur</label>
           </span>
         </li>
         <p class="empty" v-if="players.length === 0">Aucun joueur n'est défini pour le moment</p>
@@ -39,11 +36,11 @@
         </li>
       </ul>
       <form class="centered">
-        <div class="input_form_container centered">
+        <div class="input-form-container centered">
           <label for="name">Nom du joueur </label>
           <input id="name" v-model="newPlayerName" type="text" required>
         </div>
-        <div class="input_form_container centered">
+        <div class="input-form-container centered">
           <label for="position">Position du joueur</label>
           <select id="position" v-model="newPlayerPosition">
             <option v-for="value in squares" :key="value">{{ value }}</option>
@@ -58,11 +55,11 @@
       @confirm="modifyPlayer(modifiedPlayerId, modifiedPlayerName, modifiedPlayerPosition); modifiedPlayerId = null" 
       @cancel="modifiedPlayerId = null" 
     >
-      <div class="input_form_container centered" style="margin-bottom: 5px;">
+      <div class="input-form-container centered" style="margin-bottom: 5px;">
         <label for="name">Nom du joueur </label>
         <input id="name" v-model="modifiedPlayerName" type="text" required>
       </div>
-      <div class="input_form_container centered">
+      <div class="input-form-container centered">
         <label for="position">Position du joueur</label>
         <select id="position" v-model="modifiedPlayerPosition">
           <option v-for="value in squares" :key="value">{{ value }}</option>
@@ -73,8 +70,8 @@
 </template>
 
 <style scoped>
-@import "@/components/options/option_menu.css";
-ul.data_list span {
+@import "~/assets/style.css";
+ul.data-list span {
   display: flex;
   flex-direction: row;
   & label {

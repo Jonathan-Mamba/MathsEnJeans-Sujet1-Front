@@ -3,7 +3,7 @@ import { AxiosError } from "axios";
 
 export enum EditMode {
   PLAYER = "player",
-  MAP = "map",
+  SQUARE = "square",
   ROUTE = "route",
   CALENDAR = "calendar",
   GAME = "game",

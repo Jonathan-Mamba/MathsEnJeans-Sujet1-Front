@@ -1,38 +1,36 @@
 <script setup lang="ts">
-  import {Ref, ref, watchEffect} from "vue";
+  import {ref, watchEffect} from "vue";
   import Dialog from "@/components/Dialog.vue";
-  import { useCalendar, useDayTypes } from "@/composables";
   const { calendar, addDay, removeDay, modifyDay } = useCalendar();
   const { dayTypes } = useDayTypes();
 
-  const addedDayType: Ref<string> = ref("");
-  const modifiedDayType: Ref<string> = ref("");
+  const addedDayType = ref<string>("");
+  const modifiedDayType = ref<string>("");
   
-  const modifiedDay: Ref<number> = ref(0)
+  const modifiedDay = ref<number>(0)
 
-  watchEffect(() => {
-    if (modifiedDay.value > 0) {
-      modifiedDayType.value = calendar.value[modifiedDay.value-1]
-    }
-  })
+  const setModifiedDay = (index: number) => {
+    modifiedDay.value = index;
+    modifiedDayType.value = calendar.value.at(index - 1) ?? "";
+  }
 
 </script>
 
 <template>
-  <div class="option_menu dialog_parent">
+  <div class="option-menu dialog-parent">
     <div :class="{'blurred': modifiedDay > 0, 'content': true, 'centered': true}">
       <p class="title">Calendrier</p>
-      <ul class="data_list">
+      <ul class="data-list">
         <p v-if="calendar.length === 0" class="empty">Le calendrier est vide</p>
         <li v-for="[index, day] in calendar.entries()" :key="day">
           <label>{{index+1}} - </label>
           <span>{{day}}</span>
-          <button class="edit" @click="modifiedDay = index+1">Modifier</button>
+          <button class="edit" @click="setModifiedDay(index)">Modifier</button>
           <button @click="removeDay(index+1)"><img class="delete" src="/icons/trash-bin-red.png"></button>
         </li>
       </ul>
       <form class="centered" @submit.prevent="">
-         <div class="input_form_container centered">
+         <div class="input-form-container centered">
           <label for="day_type">Type de jour</label>
           <select v-model="addedDayType" @change="addDay(addedDayType)">
             <option v-for="dayType in dayTypes" :value="dayType">{{dayType}}</option>
@@ -54,7 +52,7 @@
 </template>
 
 <style scoped>
-@import "@/components/options/option_menu.css";
+@import "~/assets/style.css";
 li label {
   width: 7%;
   text-align: right;
@@ -80,7 +78,7 @@ div.content {
   height: 100%;
   overflow: hidden;
 }
-ul.data_list span {
+ul.data-list span {
   flex: 1;
 }
 </style>

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import {EditMode} from '@/util.js'
+import {EditMode} from '~/utils/helpers'
 const emit = defineEmits(['modechange'])
 </script>
 
 <template>
 <div class="c">
-  <button @click="emit('modechange', EditMode.MAP)">Editer la carte</button>
+  <button @click="emit('modechange', EditMode.SQUARE)">Editer la carte</button>
   <button @click="emit('modechange', EditMode.ROUTE)">Editer les routes</button>
   <button @click="emit('modechange', EditMode.CALENDAR)">Editer le calendrier</button>
   <button @click="emit('modechange', EditMode.PLAYER)">Gérer les joueurs</button>
