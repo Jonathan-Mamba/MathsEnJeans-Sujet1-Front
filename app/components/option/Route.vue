@@ -74,7 +74,7 @@ function sortRoutes(route1: Route, route2: Route): number {
 </template>
 
 <style scoped>
-@import "~/assets/style.css";
+@import "~/assets/option_menu.css";
 form {
   display: flex;
   flex-direction: column;

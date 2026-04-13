@@ -70,7 +70,7 @@
 </template>
 
 <style scoped>
-@import "~/assets/style.css";
+@import "~/assets/option_menu.css";
 ul.data-list span {
   display: flex;
   flex-direction: row;

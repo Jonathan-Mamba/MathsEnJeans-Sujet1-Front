@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="option_menu">
+  <div class="option-menu">
     <p class="title">Carte</p>
     <ul class="data-list">
       <p class="empty" v-if="squares.length === 0">Aucune carte n'est définie pour le moment</p>
@@ -13,7 +13,7 @@
 </template>
 
 <style scoped>
-@import "~/assets/style.css";
+@import "~/assets/option_menu.css";
 span {
   padding: 3px 0px 2px 0px;
   flex: 1;

@@ -52,7 +52,7 @@
 </template>
 
 <style scoped>
-@import "~/assets/style.css";
+@import "~/assets/option_menu.css";
 li label {
   width: 7%;
   text-align: right;

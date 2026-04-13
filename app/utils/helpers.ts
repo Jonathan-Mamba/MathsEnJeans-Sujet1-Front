@@ -34,7 +34,7 @@ export class Route {
   }
 }
 
-export const backendOrigin = import.meta.env.VITE_BACKEND_ORIGIN;
+export const backendOrigin = import.meta.env.VITE_BACKEND_ORIGIN || "http://localhost:8000";
 
 
 export const commonGetter = async (endpoint: string, refVar: any, errorMessage: string, formatResponse: (data: any) => any = (data) => data) => {

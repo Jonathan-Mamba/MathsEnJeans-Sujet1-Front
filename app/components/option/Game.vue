@@ -50,7 +50,7 @@ const newPlayerPosition = ref<string>("");
 </template>
  
 <style scoped>
-@import "~/assets/style.css";
+@import "~/assets/option_menu.css";
 div.footer {
     display: flex;
     flex-direction: column;

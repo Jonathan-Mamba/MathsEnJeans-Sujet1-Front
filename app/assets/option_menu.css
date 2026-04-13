@@ -145,7 +145,7 @@ form {
   padding-bottom: 10px;
   margin-top: 15px;
   border-radius: var(--radius);
-  & .input_form_container, & .button_form_container, & .info_form_container {
+  & .input-form-container, & .button-form-container, & .info-form-container {
     margin-bottom: 5px;
     width: 55%;
   }
