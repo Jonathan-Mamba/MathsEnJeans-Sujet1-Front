@@ -43,7 +43,11 @@ export const commonGetter = async (endpoint: string, refVar: any, errorMessage: 
     refVar.value = formatResponse(res.data);
   } catch (err) {
     if (err instanceof AxiosError && err.response) {
-      alert(`${errorMessage}: ${err.response.data.detail}`);
+      if (import.meta.client) {
+        alert(`${errorMessage}: ${err.response.data.detail}`);
+      } else {
+        console.error(`${errorMessage}: ${err.response.data.detail}`);
+      }
     }
   }
 }
@@ -60,7 +64,11 @@ const commonUploader = async (method: string, endpoint: string, payload: any, er
     await callback();
   } catch (err) {
     if (err instanceof AxiosError && err.response) {
-      alert(`${errorMessage}: ${err.response.data.detail}`);
+      if (import.meta.client) {
+        alert(`${errorMessage}: ${err.response.data.detail}`);
+      } else {
+        console.error(`${errorMessage}: ${err.response.data.detail}`);
+      }
     }
   }
 }

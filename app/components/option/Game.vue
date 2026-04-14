@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {ref} from "vue";
 
 const { gameStatus, gameNotStarted, gameRunning } = useGameStatus();
 const { startGame, stopGame, simulateGame, movePlayer } = useGameControl();

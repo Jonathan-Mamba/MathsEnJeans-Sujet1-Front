@@ -1,5 +1,3 @@
-import { Player, Route } from "~/utils/helpers";
-
 export const dayTypes = ref<string[]>([]);
 export const routeTypes = ref<Record<string, string>>({});
 export const routeTypeAll = ref<string>("");

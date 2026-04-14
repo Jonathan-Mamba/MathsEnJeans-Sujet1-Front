@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import {ref, watchEffect} from "vue";
-  import Dialog from "@/components/Dialog.vue";
   const { calendar, addDay, removeDay, modifyDay } = useCalendar();
   const { dayTypes } = useDayTypes();
 

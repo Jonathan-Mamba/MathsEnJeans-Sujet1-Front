@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  import { ref } from "vue";
-
   const { squares } = useSquares();
   const { players, addPlayer, modifyPlayer, deletePlayer } = usePlayers();
 

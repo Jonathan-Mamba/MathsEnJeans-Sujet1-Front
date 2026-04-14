@@ -1,7 +1,5 @@
 <script setup lang="ts">
-  import { EditMode, backendOrigin } from "~/utils/helpers";
   import axios from "axios";
-  import { onMounted, ref } from "vue";
 
   const props = defineProps<{
     mode: EditMode

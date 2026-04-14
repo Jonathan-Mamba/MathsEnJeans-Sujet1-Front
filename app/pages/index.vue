@@ -13,9 +13,7 @@ useHead({
 })
 
 const mode = ref(EditMode.NONE);
-onMounted(() => {
-  loadInitialData();
-});
+useAsyncData(loadInitialData);
 </script>
 
 <template>

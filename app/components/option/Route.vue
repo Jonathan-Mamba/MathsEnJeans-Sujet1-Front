@@ -1,9 +1,4 @@
 <script setup lang="ts">
-import { Route } from "~/utils/helpers";
-import { ref } from "vue";
-import type { Ref } from "vue";
-
-
 const { squares } = useSquares();
 const { routes, addRoute, deleteRoute } = useRoutes();
 const { routeTypes } = useRouteTypes();

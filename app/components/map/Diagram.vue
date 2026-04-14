@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { squares, routes, routeTypes, players } from "~/composables/refs";
   import { Route } from "~/utils/helpers";
   import { ref, computed } from "vue";
   import { useElementSize } from "@vueuse/core";
@@ -165,8 +164,8 @@
         @click="emit('select', square)"
         :class="{selected: props.selectedSquare1 === square || props.selectedSquare2 === square}"
         :style="{
-          left: (squarePositions[index]!.x + topleft.x) + 'px',
-          top: (squarePositions[index]!.y + topleft.y) + 'px',
+          left: (squarePositions[index]!.x) + 'px',
+          top: (squarePositions[index]!.y) + 'px',
           width: squareSize.x + 'px',
           height: squareSize.y + 'px'
         }"
@@ -180,14 +179,13 @@
       :style="{
         width: squareSize.x + 'px', 
         height: bannerHeight + 'px',
-        left: (squarePositions[index]!.x + topleft.x) + 'px', 
-        top: (squarePositions[index]!.y + topleft.y - squareSize.y / 2) + 'px'
+        left: (squarePositions[index]!.x) + 'px', 
+        top: (squarePositions[index]!.y - squareSize.y / 2) + 'px'
       }">
         <div/> <!-- empty div to create gap between square and banner -->
         <!-- <span v-for="player in getPlayersInSquare(square)" :key="player.id">{{ player.name }}</span> -->
         <hr v-for="player in getPlayersInSquare(square)" :key="player.id" :style="{'background-color': player.color}">
       </div>
-
     </div>
   </div>
 </template>
@@ -201,11 +199,7 @@ div.map {
   margin-bottom: 25px;
   position: relative;
 }
-svg {
-  width: 100%;
-  height: 100%;
-}
-div.text-overlay {
+div.text-overlay, svg {
   position: absolute;
   top: 0;
   left: 0;

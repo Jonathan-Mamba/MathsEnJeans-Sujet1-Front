@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {EditMode} from '~/utils/helpers'
 const emit = defineEmits(['modechange'])
 </script>
 
