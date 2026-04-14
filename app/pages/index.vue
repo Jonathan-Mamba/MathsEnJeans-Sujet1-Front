@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditMode } from "~/utils/helpers";
+import { EditMode } from "~/util";
 import {ref, onMounted} from "vue";
 
 useHead({

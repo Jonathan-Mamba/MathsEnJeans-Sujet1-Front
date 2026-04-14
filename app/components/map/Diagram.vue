@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Route } from "~/utils/helpers";
+  import { Route } from "~/util";
   import { ref, computed } from "vue";
   import { useElementSize } from "@vueuse/core";
 

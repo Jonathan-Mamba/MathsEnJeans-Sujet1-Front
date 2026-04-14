@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Route } from "~/utils/helpers";
+import { Route } from "~/util";
 const { addRoute, deleteRoute } = useRoutes();
 
 const selectedFirstSquare: Ref<string> = ref("");

@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+const { gameRunning } = useGameStatus();
+const { routeTypes } = useRouteTypes();
 const emit = defineEmits(["select", "modechange"]);
 const selectedRouteType = ref<string>("")
 </script>

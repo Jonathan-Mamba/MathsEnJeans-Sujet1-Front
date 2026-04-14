@@ -1,18 +1,5 @@
-import { Route, commonGetter, commonPoster, commonPutter, commonDeleter, Player } from '~/utils/helpers';
-import { 
-  dayTypes, 
-  routeTypes,
-  routeTypeAll, 
-  squares, 
-  players, 
-  routes, 
-  gameStatus,
-  gameNotStarted, 
-  gameRunning, 
-  gameCompleted,
-  gameHistory,
-  calendar
-} from './refs';
+import { Route, commonGetter, commonPoster, commonPutter, commonDeleter, Player } from '~/util';
+import { dayTypes, routeTypes, routeTypeAll, squares, players, routes, calendar, gameHistory, gameStatus, gameNotStarted, gameRunning, gameCompleted } from '~/refs';
 
 
 export const useGameStatus = () => {
@@ -136,7 +123,7 @@ export const useRoutes = () => {
       { first_end: route.firstEnd, second_end: route.secondEnd, route_type: route.type }, 
       "Erreur lors de la suppression de la route", 
       async () => {
-        routes.value = routes.value.filter(r => !(r.firstEnd === route.firstEnd && r.secondEnd === route.secondEnd && r.type === route.type));
+        routes.value = routes.value.filter((r: Route) => !(r.firstEnd === route.firstEnd && r.secondEnd === route.secondEnd && r.type === route.type));
       }
     );
   }
