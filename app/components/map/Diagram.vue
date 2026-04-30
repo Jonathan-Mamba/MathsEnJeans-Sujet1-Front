@@ -1,7 +1,8 @@
 <script setup lang="ts">
-  import { Route } from "~/util";
-  import { ref, computed } from "vue";
+  import { Route, Player } from "~/util";
   import { useElementSize } from "@vueuse/core";
+  import { squares, routes, players, routeTypes } from "~/refs";
+  import diagramStyle from "~/assets/map_diagram.json";
 
 
   class Vector2 {
@@ -17,9 +18,6 @@
     public sub(other: Vector2): Vector2 {
       return new Vector2(this.x - other.x, this.y - other.y)
     }
-    public toString(): string {
-      return `(${this.x}, ${this.y})`;
-    }
     public rotate(angle: number): Vector2 {
       const cos = Math.cos(angle);
       const sin = Math.sin(angle);
@@ -27,6 +25,9 @@
         this.x * cos - this.y * sin,
         this.x * sin + this.y * cos
       );
+    }
+    public copy(): Vector2 {
+      return new Vector2(this.x, this.y);
     }
   }
   class DrawnRoute {
@@ -47,9 +48,9 @@
       const second_end = squarePositions[squares.value.indexOf(route.secondEnd)];
       const color = routeTypes.value[route.type];
       const curved = route.firstEnd === route.secondEnd;
-      return new DrawnRoute(first_end!, second_end!, color!, curved);
+      return new DrawnRoute(first_end!.copy(), second_end!.copy(), color!, curved);
     }
-    public getCircleCenter(mapCenter: Vector2, circleRadius: number, squareSize: Vector2, offset: number = 0, bannerHeight: number = 0): Vector2 {
+    public setCircleCenter(mapCenter: Vector2, circleRadius: number, squareSize: Vector2, offset: number = 0, bannerHeight: number = 0): Vector2 {
       if (!this.curved) {
         throw Error("route is not curved");
       }
@@ -71,11 +72,7 @@
     }
   }
   const mapSVG: Ref<SVGSVGElement | null> = ref(null);
-  const mapParent: Ref<HTMLDivElement | null> = ref(null);
   const { width, height } = useElementSize(mapSVG);
-  const mapParentSize  = useElementSize(mapParent);
-  const lineWidth: Ref<number> = ref(5);
-  const mapRadiusMultiplier: Ref<number> = ref(0.3)
   
   const emit = defineEmits(["select"])
   const props = defineProps<{
@@ -84,16 +81,13 @@
   }>();
 
   const squareSize: Ref<Vector2> = computed(() => {
-    return new Vector2(0.3 * width.value,  0.12 * height.value);
+    return new Vector2(diagramStyle.squareWidth * width.value,  diagramStyle.squareHeight * height.value);
   });
-  const topleft: Ref<Vector2> = computed(() => {
-    return new Vector2(( mapParentSize.width.value - width.value) / 2, (mapParentSize.height.value - height.value) / 2);
-  });
-  const center = computed(() => (new Vector2(width.value / 2, height.value / 2)));
+  const center = computed(() => (new Vector2(width.value * 0.5, height.value * 0.5)));
 
   const squarePositions: Ref<Vector2[]> = computed(() => {
     const result: Vector2[] = [];
-    const radiusVector = new Vector2(0, -mapRadiusMultiplier.value * height.value);
+    const radiusVector = new Vector2(0, -diagramStyle.diagramRadius * height.value);
     const angle = 2 * Math.PI / squares.value.length;
 
     for (let i = 0; i < squares.value.length; i++) {
@@ -105,10 +99,8 @@
   const drawnRoutes: Ref<DrawnRoute[]> = computed(() => {
     const result: DrawnRoute[] = [];
     const routeMap: Map<string, Route[]> = new Map();
-    const lineOffset = 2 * lineWidth.value;
-    const circleRadius = 20;
-    const circleCenterOffset = -5;
-    let diff_vector: Vector2;
+    const lineOffset = diagramStyle.lineWidth * 2;
+    const circleRadius = diagramStyle.circleRouteRadius;
 
     for (const route of routes.value) {
       const key = [route.firstEnd, route.secondEnd].sort().join(":::");
@@ -117,19 +109,19 @@
       }
       routeMap.get(key)!.push(route);
     }
-    for (const routeGroup of Array.from(routeMap.values())) {
+    for (const routeGroup of routeMap.values()) {
       for (let i = 0; i < routeGroup.length; i++) {
         const drawnRoute = DrawnRoute.fromRoute(routeGroup[i]!, squarePositions.value);
-        diff_vector = drawnRoute.firstEnd.sub(drawnRoute.secondEnd);
+        let { x: dx, y: dy } = drawnRoute.firstEnd.sub(drawnRoute.secondEnd);
         if (drawnRoute.curved) {
-          drawnRoute.getCircleCenter(center.value, circleRadius, squareSize.value, circleCenterOffset, bannerHeight.value);
+          drawnRoute.setCircleCenter(center.value, circleRadius, squareSize.value, diagramStyle.circleCenterOffset, bannerHeight.value);
           drawnRoute.circleRadius = circleRadius + lineOffset * i;
-        } else if (-1 < diff_vector.y / diff_vector.x && diff_vector.y / diff_vector.x < 1) {
-          drawnRoute.firstEnd = drawnRoute.firstEnd.add(new Vector2(0, lineOffset * i));
-          drawnRoute.secondEnd = drawnRoute.secondEnd.add(new Vector2(0, lineOffset * i));
-        } else {
-          drawnRoute.firstEnd = drawnRoute.firstEnd.add(new Vector2(lineOffset * i, 0));
-          drawnRoute.secondEnd = drawnRoute.secondEnd.add(new Vector2(lineOffset * i, 0));
+        } else if (-1 < dy / dx && dy / dx < 1) { // vertical
+          drawnRoute.firstEnd.y += lineOffset * i;
+          drawnRoute.secondEnd.y += lineOffset * i;
+        } else { // horizontal
+          drawnRoute.firstEnd.x += lineOffset * i;
+          drawnRoute.secondEnd.x += lineOffset * i;
         }
         result.push(drawnRoute);
       }
@@ -138,27 +130,42 @@
   });
 
   const bannerHeight: Ref<number> = computed(() => {
-    return squareSize.value.y * 0.25;
+    return squareSize.value.y * diagramStyle.banner_height;
   });
 
   const getPlayersInSquare = (squareName: string) => {
-    return players.value.filter((p: { position: string; }) => p.position === squareName);
+    return players.value.filter((p: Player) => p.position === squareName);
   };
 </script>
 
 <template>
-  <div class="map centered" ref="mapParent">
+  <div class="map centered">
+    <ClientOnly>
     <svg ref="mapSVG">
       <g v-for="route in drawnRoutes">
-        <line v-if="!route.curved" :x1="route.firstEnd.x" :y1="route.firstEnd.y" :x2="route.secondEnd.x" :y2="route.secondEnd.y" :stroke="route.color" :stroke-width="lineWidth"/>
-        <circle v-else :cx="route.circleCenter.x" :cy="route.circleCenter.y" :r="route.circleRadius" :stroke="route.color" :stroke-width="lineWidth" fill="none"/>
+        <line 
+        v-if="!route.curved" 
+        :x1="route.firstEnd.x" 
+        :y1="route.firstEnd.y" 
+        :x2="route.secondEnd.x" 
+        :y2="route.secondEnd.y" 
+        :stroke="route.color" 
+        :stroke-width="diagramStyle.lineWidth"
+        />
+        <circle v-else 
+        :cx="route.circleCenter.x" 
+        :cy="route.circleCenter.y" 
+        :r="route.circleRadius" 
+        :stroke="route.color" 
+        :stroke-width="diagramStyle.lineWidth" 
+        fill="none"
+        />
       </g>
     </svg>
     <!-- HTML Text Overlay -->
     <div class="text-overlay">
-
       <div 
-        class="square-text-rect centered rect"
+        class="square-text-rect rect centered"
         v-for="[index, square] in squares.entries()" 
         :key="'text-' + index"
         @click="emit('select', square)"
@@ -170,7 +177,7 @@
           height: squareSize.y + 'px'
         }"
       >
-        <span>{{ square }}</span>
+        <span style="text-align: center;">{{ square }}</span>
       </div>
 
       <div 
@@ -183,10 +190,10 @@
         top: (squarePositions[index]!.y - squareSize.y / 2) + 'px'
       }">
         <div/> <!-- empty div to create gap between square and banner -->
-        <!-- <span v-for="player in getPlayersInSquare(square)" :key="player.id">{{ player.name }}</span> -->
         <hr v-for="player in getPlayersInSquare(square)" :key="player.id" :style="{'background-color': player.color}">
       </div>
     </div>
+    </ClientOnly>
   </div>
 </template>
 
@@ -225,7 +232,6 @@ div.square-text-rect.selected {
   border-color: var(--red);
 }
 div.banner-overlay {
-  left: 50%;
   transform: translate(-50%, -100%);
   display: flex;
   flex-direction: row;
@@ -233,9 +239,6 @@ div.banner-overlay {
   overflow-x: scroll;
   gap: 5px;
   align-items: center;
-  &::-webkit-scrollbar {
-    display: none;
-  }
   & hr {
     width: 20%;
     height: 75%;

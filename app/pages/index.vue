@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { EditMode } from "~/util";
-import {ref, onMounted} from "vue";
+import { EditMode, SSEEndpoint } from "~/util";
+import { setupSSE } from "~/sseHandlers";
 
 useHead({
   title: "Math en Jeans - Conception d'un jeu de role diabolique (éditeur de jeu)",
@@ -13,7 +13,16 @@ useHead({
 })
 
 const mode = ref(EditMode.NONE);
-useAsyncData(loadInitialData);
+useAsyncData(async () => {
+    await loadInitialData(); 
+    return {loaded: true}; 
+});
+onMounted(async () => {
+  await loadInitialData();
+  const sse = new EventSource(SSEEndpoint)
+  setupSSE(sse, "1");
+})
+
 </script>
 
 <template>

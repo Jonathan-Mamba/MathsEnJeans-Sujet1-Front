@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Route } from "~/util";
 const { squares } = useSquares();
 const { routes, addRoute, deleteRoute } = useRoutes();
 const { routeTypes } = useRouteTypes();

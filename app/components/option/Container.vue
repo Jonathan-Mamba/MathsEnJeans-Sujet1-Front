@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import axios from "axios";
+  import { EditMode, backendOrigin } from "~/util";
 
   const props = defineProps<{
     mode: EditMode

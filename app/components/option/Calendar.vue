@@ -23,18 +23,18 @@
         <li v-for="[index, day] in calendar.entries()" :key="day">
           <label>{{index+1}} - </label>
           <span>{{day}}</span>
-          <button class="edit" @click="setModifiedDay(index)">Modifier</button>
+          <button class="edit" @click="setModifiedDay(index+1)">Modifier</button>
           <button @click="removeDay(index+1)"><img class="delete" src="/icons/trash-bin-red.png"></button>
         </li>
       </ul>
-      <form class="centered" @submit.prevent="">
+      <form class="centered" @submit.prevent="addDay(addedDayType)">
          <div class="input-form-container centered">
           <label for="day_type">Type de jour</label>
           <select v-model="addedDayType" @change="addDay(addedDayType)">
             <option v-for="dayType in dayTypes" :value="dayType">{{dayType}}</option>
           </select>
          </div>
-        <button @click="addDay(addedDayType)" class="blue">Ajouter au calendrier</button>
+        <button type="submit" class="blue">Ajouter au calendrier</button>
       </form>
     </div>
     <Dialog title="Modifier le jour" @confirm="modifyDay(modifiedDay, modifiedDayType); modifiedDay = 0" @cancel="modifiedDay = 0" v-if="modifiedDay > 0">

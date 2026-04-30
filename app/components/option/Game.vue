@@ -2,6 +2,7 @@
 
 const { gameStatus, gameNotStarted, gameRunning } = useGameStatus();
 const { startGame, stopGame, simulateGame, movePlayer } = useGameControl();
+const { squares } = useSquares();
 
 const newPlayerPosition = ref<string>("");
 

@@ -21,6 +21,9 @@ export class Player {
     this.id = id;
     this.color = color;
   }
+  public static from(data: Record<string, any>): Player {
+    return new Player(data.name, data.position, data.id, data.color);
+  }
 }
 
 export class Route {
@@ -32,9 +35,17 @@ export class Route {
     this.secondEnd = second_end;
     this.type = type;
   }
+  public static from(data: Record<string, any>): Route {
+    return new Route(data.first_end, data.second_end, data.type);
+  }
+  public equals(other: Route): boolean {
+    return (this.firstEnd === other.firstEnd && this.secondEnd === other.secondEnd) || (this.firstEnd === other.secondEnd && this.secondEnd === other.firstEnd) && this.type === other.type;
+  }
 }
 
 export const backendOrigin = import.meta.env.VITE_BACKEND_ORIGIN || "http://localhost:8000";
+
+export const SSEEndpoint = new URL("/events", backendOrigin + "/").href;
 
 
 export const commonGetter = async (endpoint: string, refVar: any, errorMessage: string, formatResponse: (data: any) => any = (data) => data) => {
@@ -84,4 +95,5 @@ export const commonPutter = async (endpoint: string, payload: any, errorMessage:
 export const commonDeleter = async (endpoint: string, payload: any, errorMessage: string, callback: () => void) => {
   await commonUploader("delete", endpoint, payload, errorMessage, callback); 
 }
+
 

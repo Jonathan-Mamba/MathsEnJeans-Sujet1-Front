@@ -7,6 +7,7 @@ const selectedRouteType = ref<string>("")
 
 <template>
   <div class="legend">
+    <ClientOnly>
     <div 
       class="legend-element" 
       v-for="[routeType, color] in Object.entries(routeTypes)" 
@@ -29,6 +30,7 @@ const selectedRouteType = ref<string>("")
         Ajouter une route
       </label>
     </div>  
+    </ClientOnly>
   </div>
 </template>
 
