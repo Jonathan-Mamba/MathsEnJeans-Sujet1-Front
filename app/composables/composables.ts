@@ -29,13 +29,13 @@ export const useCalendar = () => {
     await commonGetter("/calendar", calendar, "Erreur lors de la récupération du calendrier");
   }
   const addDay = async (addedDayType: string) => {
-    await commonPoster("/calendar", { day_type: addedDayType }, "Erreur lors de l'ajout du jour", getCalendar);
+    await commonPoster("/calendar", { day_type: addedDayType }, "Erreur lors de l'ajout du jour");
   }
   const removeDay = async (dayNumber: number) => {
-    await commonDeleter(`/calendar/${dayNumber}`, {}, "Erreur lors de la suppression du jour", getCalendar);
+    await commonDeleter(`/calendar/${dayNumber}`, {}, "Erreur lors de la suppression du jour");
   }
   const modifyDay = async (modifiedDay: number, modifiedDayType: string) => {
-    await commonPutter("/calendar", { day_number: modifiedDay, day_type: modifiedDayType }, "Erreur lors de la modification du jour", getCalendar);
+    await commonPutter("/calendar", { day_number: modifiedDay, day_type: modifiedDayType }, "Erreur lors de la modification du jour");
   }
 
   return { calendar, getCalendar, addDay, removeDay, modifyDay };
@@ -56,12 +56,10 @@ export const useSquares = () => {
     await commonGetter("/squares", squares, "Erreur lors de la récupération des cases");
   }
   const addSquare = async (name: string) => {
-    await commonPoster("/squares", { name }, "Erreur lors de l'ajout de la case", () => (squares.value.push(name)));
+    await commonPoster("/squares", { name }, "Erreur lors de l'ajout de la case");
   }
   const deleteSquare = async (name: string) => {
-    await commonDeleter(`/squares/`, { name }, "Erreur lors de la suppression de la case", async () => {
-      squares.value = squares.value.filter(s => s !== name);
-    });
+    await commonDeleter(`/squares/`, { name }, "Erreur lors de la suppression de la case");
   }
   return { squares, getSquares, addSquare, deleteSquare };
 }
@@ -77,12 +75,10 @@ export const useRouteTypes = () => {
     await commonGetter("/routes/types", routeTypes, "Erreur lors de la récupération des types de routes");
   }
   const addRouteType = async (name: string) => {
-    await commonPoster("/routes/types", { name }, "Erreur lors de l'ajout du type de route", getRouteTypes);
+    await commonPoster("/routes/types", { name }, "Erreur lors de l'ajout du type de route");
   }
   const deleteRouteType = async (name: string) => {
-    await commonDeleter(`/routes/types/`, { name }, "Erreur lors de la suppression du type de route", async () => {
-      routeTypes.value = Object.fromEntries(Object.entries(routeTypes.value).filter(([key]) => key !== name));
-    });
+    await commonDeleter(`/routes/types/`, { name }, "Erreur lors de la suppression du type de route");
   }
   const getRouteTypeAll = async () => {
     await commonGetter("/routes/types/all", routeTypeAll, "Erreur lors de la récupération de tous les types de routes");
@@ -94,16 +90,16 @@ export const useRouteTypes = () => {
 
 export const usePlayers = () => {
   const getPlayers = async () => {
-    await commonGetter("/players", players, "Erreur lors de la récupération des joueurs", (data) => data.map((p: any) => new Player(p.name, p.position, p.id, p.color)));
+    await commonGetter("/players", players, "Erreur lors de la récupération des joueurs", (data) => data.map((p: any) => Player.from(p)));
   }
   const addPlayer = async (name: string, position: string) => {
-    await commonPoster("/players", { name, position }, "Erreur lors de l'ajout du joueur", getPlayers);
+    await commonPoster("/players", { name, position }, "Erreur lors de l'ajout du joueur");
   }
   const modifyPlayer = async (id: string, name: string, position: string) => {
-    await commonPutter("/players", { id, name, position}, "Erreur lors de la modification du joueur", getPlayers);
+    await commonPutter("/players", { id, name, position}, "Erreur lors de la modification du joueur");
   }
   const deletePlayer = async (id: string) => {
-    await commonDeleter(`/players/`, { id }, "Erreur lors de la suppression du joueur", getPlayers);
+    await commonDeleter(`/players/`, { id }, "Erreur lors de la suppression du joueur");
   }
 
   return { players, getPlayers, addPlayer, modifyPlayer, deletePlayer };
@@ -116,22 +112,21 @@ export const useRoutes = () => {
       "/routes", 
       routes, 
       "Erreur lors de la récupération des routes", 
-      (data) => data.map((r: any) => new Route(r.first_end, r.second_end, r.type)));
+      (data) => data.map((r: any) => Route.from(r))
+    );
   }
   const addRoute = async (firstEnd: string, secondEnd: string, routeType: string) => {
     await commonPoster(
       "/routes", 
       { first_end: firstEnd, second_end: secondEnd, route_type: routeType }, 
-      "Erreur lors de l'ajout de la route", 
-      getRoutes
+      "Erreur lors de l'ajout de la route"
     );
   }
   const deleteRoute = async (route: Route) => {
     await commonDeleter(
       "/routes", 
       { first_end: route.firstEnd, second_end: route.secondEnd, route_type: route.type }, 
-      "Erreur lors de la suppression de la route", 
-      getRoutes
+      "Erreur lors de la suppression de la route"
     );
   }
   return { routes, getRoutes, addRoute, deleteRoute };
@@ -139,38 +134,31 @@ export const useRoutes = () => {
 
 
 export const useGameControl = () => {
-  const { getGameStatus } = useGameStatus();
-  const { getPlayers } = usePlayers();
   const startGame = async () => {
-    await commonPoster("/game/start", {}, "Erreur lors du démarrage de la partie", getGameStatus);
+    await commonPoster("/game/start", {}, "Erreur lors du démarrage de la partie");
   }
   const simulateGame = async () => {
-    await commonPoster("/game/simulate", {}, "Erreur lors de la simulation de la partie", async () => {
-      await getGameStatus();
-      await getPlayers();
-    });
+    await commonPoster("/game/simulate", {}, "Erreur lors de la simulation de la partie");
   }
   const stopGame = async () => {
-    await commonPoster("/game/end", {}, "Erreur lors de l'arrêt de la partie", getGameStatus);    
+    await commonPoster("/game/end", {}, "Erreur lors de l'arrêt de la partie");    
   }
   const movePlayer = async (new_position: string, player_id: string) => {
-    await commonPoster("/game/move_player", { new_position, player_id }, "Erreur lors du déplacement du joueur", async () => {
-      await getGameStatus();
-      await getPlayers();
-    });
+    await commonPoster("/game/move_player", { new_position, player_id }, "Erreur lors du déplacement du joueur");
   }
   return { startGame, simulateGame, stopGame, movePlayer };
 }
 
 export const loadInitialData = async () => {
-  await Promise.all([
-    useSquares().getSquares(),
-    useRouteTypes().getRouteTypes(),
-    useRouteTypes().getRouteTypeAll(),
-    usePlayers().getPlayers(),
-    useRoutes().getRoutes(),
-    useCalendar().getCalendar(),
-    useGameStatus().getGameStatus(),
-    useGameHistory().getGameHistory()
-  ]);
+  const gameData = ref<Record<string, any>>({});
+  await commonGetter("/export", gameData, "Erreur lors de la récupération des données du jeu");
+  players.value = gameData.value.players.map((p: any) => Player.from(p));
+  calendar.value = gameData.value.calendar;
+  routes.value = gameData.value.routes.map((r: any) => Route.from(r));
+  routeTypes.value = gameData.value.route_colors;
+  routeTypeAll.value = gameData.value.route_type_all;
+  gameStatus.value = gameData.value.game_status;
+  gameHistory.value = gameData.value.game_history;
+  squares.value = gameData.value.squares;
+  return gameData.value;
 }

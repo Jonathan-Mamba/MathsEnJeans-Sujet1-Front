@@ -17,10 +17,9 @@ useAsyncData(async () => {
     await loadInitialData(); 
     return {loaded: true}; 
 });
-onMounted(async () => {
+onBeforeMount(async () => {
   await loadInitialData();
-  const sse = new EventSource(SSEEndpoint)
-  setupSSE(sse, "1");
+  setupSSE(new EventSource(SSEEndpoint), "1");
 })
 
 </script>

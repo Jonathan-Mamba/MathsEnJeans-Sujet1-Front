@@ -130,7 +130,7 @@
   });
 
   const bannerHeight: Ref<number> = computed(() => {
-    return squareSize.value.y * diagramStyle.banner_height;
+    return squareSize.value.y * diagramStyle.bannerHeight;
   });
 
   const getPlayersInSquare = (squareName: string) => {

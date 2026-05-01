@@ -1,13 +1,13 @@
 {
     "$schema": {
-        "square_width": "number (percent of diagram width)",
-        "square_height": "number (percent of diagram width)",
-        "diagram_radius": "number (percent of diagram width)",
-        "line_width": "number (in px)",
-        "line_offset": "number (in px) - distance between two routes going to the same squares",
-        "circle_route_radius": "number (in px) - radius of the circle used to draw curved routes",
-        "circle_center_offset": "number (in px) - distance between the center of the circle and the point where the two routes intersect",
-        "banner_height": "number (percent of square height)"
+        "squareWidth": "number (percent of diagram width)",
+        "squareHeight": "number (percent of diagram width)",
+        "diagramRadius": "number (percent of diagram width)",
+        "lineWidth": "number (in px)",
+        "lineOffset": "number (in px) - distance between two routes going to the same squares",
+        "circleRouteRadius": "number (in px) - radius of the circle used to draw curved routes",
+        "circleCenterOffset": "number (in px) - distance between the center of the circle and the point where the two routes intersect",
+        "bannerHeight": "number (percent of square height)"
     },
     "squareWidth": 0.3,
     "squareHeight": 0.12,
@@ -15,5 +15,5 @@
     "lineWidth": 5,
     "circleRouteRadius": 20,
     "circleCenterOffset": -10,
-    "banner_height": 0.25  
+    "bannerHeight": 0.25  
 }
