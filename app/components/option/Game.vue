@@ -10,16 +10,17 @@ const newPlayerPosition = ref<string>("");
 
 <template>
 <div class="option-menu">
+  {{ gameStatus }}
   <p class="title" v-if="gameNotStarted">Partie - En attente</p>
   <p class="title" v-else-if="gameRunning">Partie - En cours</p>
   <p class="title" v-else>Partie - Terminée</p>
 
-  <form v-if="gameNotStarted" class="centered" @submit.prevent="">
+  <form v-if="!gameRunning" class="centered" @submit.prevent="">
     <button @click="startGame()" class="start blue">Jouer la partie</button>
-    <button @click="simulateGame()" class="start blue">Simuler la partie</button>  
+    <button @click="(async () => {await startGame(); await simulateGame()})()" class="start blue">Simuler la partie</button>  
   </form>
 
-  <form v-else-if="gameRunning" class="centered" @submit.prevent="movePlayer(newPlayerPosition, gameStatus.current_player.id)">
+  <form v-else class="centered" @submit.prevent="movePlayer(newPlayerPosition, gameStatus.current_player.id)">
     <div class="info-form-container">
       <label>Tour numéro</label>
       <span>{{ gameStatus.day_count }}</span>

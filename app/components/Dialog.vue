@@ -13,7 +13,7 @@ const emit = defineEmits<{
 }>()
 </script>
 
-<template lang="html">
+<template>
   <div class="dialog">
     <p class="title">{{ props.title }}</p>
     <div class="content">
@@ -33,16 +33,16 @@ div.dialog {
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: var(--gray2);
-  border: var(--lightblue) solid 1px;
+  border: antiquewhite solid 1px;
   color: white;
   font-family: var(--rfont);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   border-radius: var(--radius);
-  & p.dialog_title {
+  & p.title {
     font-size: var(--stfsize);
-    background-color: var(--gray8);
+    background-color: var(--lightblue);
     color: white;
     text-align: center;
     margin-top: 0px;
@@ -50,7 +50,6 @@ div.dialog {
     order: -2;
   }
   & div.content {
-    order: -1;
     flex: 1;
     padding: 0 10px 0 10px;
   }
