@@ -8,6 +8,8 @@
   const { players } = useGamePlayers();
   const { routeTypes } = useGameRouteTypes();
 
+  const clamp = (num: number, min: number, max: number) => Math.min(Math.max(num, min), max);
+
   class Vector2 {
     x: number;
     y: number;
@@ -84,7 +86,21 @@
   }>();
 
   const squareSize: Ref<Vector2> = computed(() => {
-    return new Vector2(diagramStyle.squareWidth * width.value,  diagramStyle.squareHeight * height.value);
+    const stepRange = diagramStyle.maxSizeThreshold - diagramStyle.minSizeThreshold;
+    
+    const widthFactor = (diagramStyle.maxSquareFactor[0]! - diagramStyle.minSquareFactor[0]!) / stepRange;
+    const widthB = diagramStyle.maxSquareFactor[0]! - widthFactor * diagramStyle.maxSizeThreshold
+    const widthValue = widthB + widthFactor * squares.value.length;
+    console.debug(widthFactor, widthB);
+    
+    const heightFactor = (diagramStyle.maxSquareFactor[1]! - diagramStyle.minSquareFactor[1]!) / stepRange;
+    const heightB = diagramStyle.maxSquareFactor[1]! - heightFactor * diagramStyle.maxSizeThreshold
+    const heightValue = heightB + heightFactor * squares.value.length;
+
+    return new Vector2(
+      clamp(widthValue * width.value, diagramStyle.minSquareFactor[0]! * width.value, diagramStyle.maxSquareFactor[0]! * width.value),  
+      clamp(heightValue * height.value, diagramStyle.minSquareFactor[1]! * height.value, diagramStyle.maxSquareFactor[1]! * height.value)
+    );
   });
   const center = computed(() => (new Vector2(width.value * 0.5, height.value * 0.5)));
 
@@ -151,25 +167,24 @@
     <svg ref="mapSVG">
       <g v-for="route in drawnRoutes">
         <line 
-        v-if="!route.curved" 
-        :x1="route.firstEnd.x" 
-        :y1="route.firstEnd.y" 
-        :x2="route.secondEnd.x" 
-        :y2="route.secondEnd.y" 
-        :stroke="route.color" 
-        :stroke-width="diagramStyle.lineWidth"
+          v-if="!route.curved" 
+          :x1="Math.round(route.firstEnd.x)" 
+          :y1="Math.round(route.firstEnd.y)" 
+          :x2="Math.round(route.secondEnd.x)" 
+          :y2="Math.round(route.secondEnd.y)" 
+          :stroke="route.color" 
+          :stroke-width="diagramStyle.lineWidth"
         />
         <circle v-else 
-        :cx="route.circleCenter.x" 
-        :cy="route.circleCenter.y" 
-        :r="route.circleRadius" 
-        :stroke="route.color" 
-        :stroke-width="diagramStyle.lineWidth" 
-        fill="none"
+          :cx="Math.round(route.circleCenter.x)" 
+          :cy="Math.round(route.circleCenter.y)" 
+          :r="Math.round(route.circleRadius)" 
+          :stroke="route.color" 
+          :stroke-width="diagramStyle.lineWidth" 
+          fill="none"
         />
       </g>
     </svg>
-    <!-- HTML Text Overlay -->
     <div class="text-overlay">
       <div 
         class="square-text-rect rect centered"
@@ -178,10 +193,11 @@
         @click="emit('select', square)"
         :class="{selected: props.selectedSquare1 === square || props.selectedSquare2 === square}"
         :style="{
-          left: (squarePositions[index]!.x) + 'px',
-          top: (squarePositions[index]!.y) + 'px',
-          width: squareSize.x + 'px',
-          height: squareSize.y + 'px'
+          left: Math.round(squarePositions[index]!.x - squareSize.x / 2) + 'px',
+          top: Math.round(squarePositions[index]!.y - squareSize.y / 2) + 'px',
+          width: Math.round(squareSize.x) + 'px',
+          height: Math.round(squareSize.y) + 'px',
+          'padding-top': Math.round(bannerHeight) + 'px'
         }"
       >
         <span style="text-align: center;">{{ square }}</span>
@@ -190,11 +206,12 @@
       <div 
       v-for="[index, square] in squares.entries()" 
       :key="'banner-' + index" class="banner-overlay rect"
+      :class="{selected: props.selectedSquare1 === square || props.selectedSquare2 === square}"
       :style="{
-        width: squareSize.x + 'px', 
-        height: bannerHeight + 'px',
-        left: (squarePositions[index]!.x) + 'px', 
-        top: (squarePositions[index]!.y - squareSize.y / 2) + 'px'
+        width: Math.round(squareSize.x) + 'px', 
+        height: Math.round(bannerHeight) + 'px',
+        left: Math.round(squarePositions[index]!.x - squareSize.x / 2) + 'px', 
+        top: Math.round(squarePositions[index]!.y - squareSize.y / 2) + 'px'
       }">
         <div/> <!-- empty div to create gap between square and banner -->
         <hr v-for="player in getPlayersInSquare(square)" :key="player.id" :style="{'background-color': player.color}">
@@ -231,15 +248,12 @@ div.rect {
   font-family: var(--rfont);
 }
 div.square-text-rect {
-  transform: translate(-50%, -50%);
   cursor: pointer;
-  z-index: 10000001;
 }
 div.square-text-rect.selected {
   border-color: var(--red);
 }
 div.banner-overlay {
-  transform: translate(-50%, -100%);
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -253,5 +267,8 @@ div.banner-overlay {
     margin: 0;
     border-radius: 9999vh;
   }
+}
+div.banner-overlay.selected {
+  border-bottom-color: var(--red);
 }
 </style>

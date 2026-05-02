@@ -1,23 +1,23 @@
 {
     "$schema": {
-        "squareWidth": "number (percent of diagram width)",
-        "squareHeight": "number (percent of diagram width)",
         "diagramRadius": "number (percent of diagram width)",
         "lineWidth": "number (in px)",
         "lineOffset": "number (in px) - distance between two routes going to the same squares",
         "circleRouteRadius": "number (in px) - radius of the circle used to draw curved routes",
-        "circleCenterOffset": "number (in px) - distance between the center of the circle and the point where the two routes intersect",
-        "bannerHeight": "number (percent of square height)"
+        "circleCenterOffset": "number (in px) - distance added from the end of a square",
+        "bannerHeight": "number (percent of square height)",
+        "maxSquareFactor": "array of 2 numbers (percent of diagram width and height) - maximum size of a square",
+        "minSquareFactor": "array of 2 numbers (percent of diagram width and height) - minimum size of a square",
+        "maxSizeThreshold": "number - maximum number of squares before using the minimum size",
+        "minSizeThreshold": "number - minimum number of squares before using the maximum size"
     },
-    "squareWidth": 0.15,
-    "squareHeight": 0.08,
-    "maxSquareSize": [0.3, 0.12],
-    "maxSquareStep": 5,
-    "minSquareSize": [0.08, 0.08],
-    "minSquareStep": 10,
+    "maxSquareFactor": [0.3, 0.12],
+    "maxSizeThreshold": 5,
+    "minSquareFactor": [0.12, 0.08],
+    "minSizeThreshold": 12,
     "diagramRadius": 0.35,
     "lineWidth": 5,
     "circleRouteRadius": 20,
     "circleCenterOffset": -10,
-    "bannerHeight": 0.2  
+    "bannerHeight": 0.25  
 }
