@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { Route } from "~/util";
-const { squares } = useSquares();
-const { routes, addRoute, deleteRoute } = useRoutes();
-const { routeTypes } = useRouteTypes();
+const { squares } = useGameSquares();
+const { routes, addRoute, deleteRoute } = useGameRoutes();
+const { routeTypes } = useGameRouteTypes();
 
 const addedRouteFirstEnd: Ref<string> = ref("");
 const addedRouteSecondEnd: Ref<string> = ref("");

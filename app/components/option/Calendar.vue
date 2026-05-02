@@ -1,17 +1,16 @@
 <script setup lang="ts">
-  const { calendar, addDay, removeDay, modifyDay } = useCalendar();
-  const { dayTypes } = useDayTypes();
+const { calendar, addDay, removeDay, modifyDay } = useGameCalendar();
+const { dayTypes } = useGameDayTypes();
 
-  const addedDayType = ref<string>("");
-  const modifiedDayType = ref<string>("");
-  
-  const modifiedDay = ref<number>(0)
+const addedDayType = ref<string>("");
+const modifiedDayType = ref<string>("");
 
-  const setModifiedDay = (index: number) => {
-    modifiedDay.value = index;
-    modifiedDayType.value = calendar.value.at(index - 1) ?? "";
-  }
+const modifiedDay = ref<number>(0)
 
+const setModifiedDay = (index: number) => {
+  modifiedDay.value = index;
+  modifiedDayType.value = calendar.value.at(index - 1) ?? "";
+}
 </script>
 
 <template>
@@ -23,8 +22,8 @@
         <li v-for="[index, day] in calendar.entries()" :key="day">
           <label>{{index+1}} - </label>
           <span>{{day}}</span>
-          <button class="edit" @click="setModifiedDay(index+1)">Modifier</button>
-          <button @click="removeDay(index+1)"><img class="delete" src="/icons/trash-bin-red.png"></button>
+          <button class="edit" @click="setModifiedDay(index + 1)">Modifier</button>
+          <button @click="removeDay(index + 1)"><img class="delete" src="/icons/trash-bin-red.png"></button>
         </li>
       </ul>
       <form class="centered" @submit.prevent="addDay(addedDayType)">

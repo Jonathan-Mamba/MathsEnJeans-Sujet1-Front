@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Route } from "~/util";
-const { addRoute, deleteRoute } = useRoutes();
+const { addRoute, deleteRoute } = useGameRoutes();
 
 const selectedFirstSquare: Ref<string> = ref("");
 const selectedSecondSquare: Ref<string> = ref("");
@@ -18,7 +18,6 @@ const addSelectedSquare = (square: string) => {
   }
   if (selectedFirstSquare.value !== "" && selectedSecondSquare.value !== "" && selectedRouteType.value !== "") {
     if (mode.value === "add") {
-      console.debug("adding route")
       addRoute(selectedFirstSquare.value, selectedSecondSquare.value, selectedRouteType.value);
     } else if (mode.value === "delete") {
       deleteRoute(new Route(selectedFirstSquare.value, selectedSecondSquare.value, selectedRouteType.value));

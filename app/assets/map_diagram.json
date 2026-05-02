@@ -9,11 +9,15 @@
         "circleCenterOffset": "number (in px) - distance between the center of the circle and the point where the two routes intersect",
         "bannerHeight": "number (percent of square height)"
     },
-    "squareWidth": 0.3,
-    "squareHeight": 0.12,
-    "diagramRadius": 0.3,
+    "squareWidth": 0.15,
+    "squareHeight": 0.08,
+    "maxSquareSize": [0.3, 0.12],
+    "maxSquareStep": 5,
+    "minSquareSize": [0.08, 0.08],
+    "minSquareStep": 10,
+    "diagramRadius": 0.35,
     "lineWidth": 5,
     "circleRouteRadius": 20,
     "circleCenterOffset": -10,
-    "bannerHeight": 0.25  
+    "bannerHeight": 0.2  
 }

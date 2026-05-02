@@ -13,11 +13,7 @@ useHead({
 })
 
 const mode = ref(EditMode.NONE);
-useAsyncData(async () => {
-    await loadInitialData(); 
-    return {loaded: true}; 
-});
-onBeforeMount(async () => {
+onMounted(async () => {
   await loadInitialData();
   setupSSE(new EventSource(SSEEndpoint), "1");
 })

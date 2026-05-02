@@ -2,7 +2,7 @@
 
 const { gameStatus, gameNotStarted, gameRunning } = useGameStatus();
 const { startGame, stopGame, simulateGame, movePlayer } = useGameControl();
-const { squares } = useSquares();
+const { squares } = useGameSquares();
 
 const newPlayerPosition = ref<string>("");
 
@@ -10,7 +10,6 @@ const newPlayerPosition = ref<string>("");
 
 <template>
 <div class="option-menu">
-  {{ gameStatus }}
   <p class="title" v-if="gameNotStarted">Partie - En attente</p>
   <p class="title" v-else-if="gameRunning">Partie - En cours</p>
   <p class="title" v-else>Partie - Terminée</p>

@@ -1,9 +1,12 @@
 <script setup lang="ts">
   import { Route, Player } from "~/util";
   import { useElementSize } from "@vueuse/core";
-  import { squares, routes, players, routeTypes } from "~/refs";
   import diagramStyle from "~/assets/map_diagram.json";
 
+  const { squares } = useGameSquares();
+  const { routes } = useGameRoutes();
+  const { players } = useGamePlayers();
+  const { routeTypes } = useGameRouteTypes();
 
   class Vector2 {
     x: number;
@@ -44,11 +47,11 @@
       this.curved = curved;
     }
     public static fromRoute(route: Route, squarePositions: Vector2[]): DrawnRoute {
-      const first_end = squarePositions[squares.value.indexOf(route.firstEnd)];
-      const second_end = squarePositions[squares.value.indexOf(route.secondEnd)];
+      const firstEnd = squarePositions[squares.value.indexOf(route.firstEnd)];
+      const secondEnd = squarePositions[squares.value.indexOf(route.secondEnd)];
       const color = routeTypes.value[route.type];
       const curved = route.firstEnd === route.secondEnd;
-      return new DrawnRoute(first_end!.copy(), second_end!.copy(), color!, curved);
+      return new DrawnRoute(firstEnd!.copy(), secondEnd!.copy(), color!, curved);
     }
     public setCircleCenter(mapCenter: Vector2, circleRadius: number, squareSize: Vector2, offset: number = 0, bannerHeight: number = 0): Vector2 {
       if (!this.curved) {
@@ -89,6 +92,10 @@
     const result: Vector2[] = [];
     const radiusVector = new Vector2(0, -diagramStyle.diagramRadius * height.value);
     const angle = 2 * Math.PI / squares.value.length;
+
+    if (squares.value.length === 1) {
+      return [center.value];
+    }
 
     for (let i = 0; i < squares.value.length; i++) {
       const position = center.value.add(radiusVector.rotate(angle * i));

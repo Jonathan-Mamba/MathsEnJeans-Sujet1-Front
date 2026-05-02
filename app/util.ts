@@ -39,7 +39,7 @@ export class Route {
     return new Route(data.first_end, data.second_end, data.type);
   }
   public equals(other: Route): boolean {
-    return (this.firstEnd === other.firstEnd && this.secondEnd === other.secondEnd) || (this.firstEnd === other.secondEnd && this.secondEnd === other.firstEnd) && this.type === other.type;
+    return ((this.firstEnd === other.firstEnd && this.secondEnd === other.secondEnd) || (this.firstEnd === other.secondEnd && this.secondEnd === other.firstEnd)) && this.type === other.type;
   }
 }
 

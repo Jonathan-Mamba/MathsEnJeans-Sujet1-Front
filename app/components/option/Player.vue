@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  const { squares } = useSquares();
-  const { players, addPlayer, modifyPlayer, deletePlayer } = usePlayers();
+  const { squares } = useGameSquares();
+  const { players, addPlayer, modifyPlayer, deletePlayer } = useGamePlayers();
 
   const newPlayerName = ref<string>("");
   const newPlayerPosition = ref<string>("");
