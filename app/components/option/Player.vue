@@ -33,7 +33,7 @@
           <button @click="deletePlayer(player.id)"><img src="/icons/trash-bin-red.png" class="delete"></button>
         </li>
       </ul>
-      <form class="centered">
+      <form class="centered" @submit.prevent="addPlayer(newPlayerName, newPlayerPosition); newPlayerName = ''; newPlayerPosition = ''">
         <div class="input-form-container centered">
           <label for="name">Nom du joueur </label>
           <input id="name" v-model="newPlayerName" type="text" required>
@@ -44,7 +44,7 @@
             <option v-for="value in squares" :key="value">{{ value }}</option>
           </select>
         </div>
-        <button type="submit" @click.prevent="addPlayer(newPlayerName, newPlayerPosition)" class="blue">Ajouter un joueur</button>
+        <button type="submit" class="blue">Ajouter un joueur</button>
       </form>
     </div>
     <Dialog 

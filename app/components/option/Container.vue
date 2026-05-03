@@ -1,26 +1,16 @@
 <script setup lang="ts">
-  import axios from "axios";
-  import { EditMode, backendOrigin } from "~/util";
+  import { EditMode } from "~/util";
 
   const props = defineProps<{
     mode: EditMode
   }>();
 
-  const connection = ref(false);
-  const connect = () => {
-    axios.get(backendOrigin)
-        .then((res) => {console.log(res.data); connection.value = (res.status === 200);})
-        .catch((err) => {console.log(err);})
-  }
-
-  onMounted(() => {
-    connect();
-  })
+  const { error } = useGameState();
 </script>
 
 <template>
 <div class="centered option-container">
-  <div v-if="!connection" class="option-menu v">La connection avec le serveur n'a pas pu être établie. Veuillez actualiser la page pour réessayer.</div>
+  <div v-if="error" class="option-menu v">La connection avec le serveur n'a pas pu être établie. Veuillez actualiser la page pour réessayer.</div>
   <div v-else-if="mode === EditMode.NONE" class="option-menu v">Pas de mode sélectionné</div>
   <OptionSquare v-else-if="mode === EditMode.SQUARE"/>
   <OptionRoute v-else-if="mode === EditMode.ROUTE"/>

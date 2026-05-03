@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditMode, SSEEndpoint } from "~/util";
+import { EditMode, backendOrigin } from "~/util";
 import { setupSSE } from "~/sseHandlers";
 
 useHead({
@@ -13,15 +13,18 @@ useHead({
 })
 
 const mode = ref(EditMode.NONE);
-onMounted(async () => {
-  await loadInitialData();
-  setupSSE(new EventSource(SSEEndpoint), "1");
-})
 
+const { pending, error, loadInitialData } = useGameState();
+
+await loadInitialData();
+
+onMounted(() => {
+  setupSSE(new EventSource(new URL("/events", backendOrigin).href), "1");
+})
 </script>
 
 <template>
-  <div class="container">
+  <div class="app-container">
     <GameMenu @modechange="newMode => (mode = newMode)"/>
     <OptionContainer :mode="mode"/>
     <MapContainer/>
@@ -29,7 +32,7 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-div.container {
+div.app-container {
   display: grid;
   grid-template-columns: 10% 40% 50%;
 }

@@ -1,6 +1,3 @@
-import axios from "axios";
-import { AxiosError } from "axios";
-
 export enum EditMode {
   PLAYER = "player",
   SQUARE = "square",
@@ -38,56 +35,11 @@ export class Route {
   public static from(data: Record<string, any>): Route {
     return new Route(data.first_end, data.second_end, data.type);
   }
-  public equals(other: Route): boolean {
-    return ((this.firstEnd === other.firstEnd && this.secondEnd === other.secondEnd) || (this.firstEnd === other.secondEnd && this.secondEnd === other.firstEnd)) && this.type === other.type;
+  public static equals(route1: Route, route2: Route): boolean {
+    return ((route1.firstEnd === route2.firstEnd && route1.secondEnd === route2.secondEnd) || (route1.firstEnd === route2.secondEnd && route1.secondEnd === route2.firstEnd)) && route1.type === route2.type;
   }
 }
 
 export const backendOrigin = import.meta.env.VITE_BACKEND_ORIGIN || "http://localhost:8000";
 
 export const SSEEndpoint = new URL("/events", backendOrigin + "/").href;
-
-
-export const commonUploader = async (method: string, endpoint: string, errorMessage: string, payload: any, refVar: Ref | null = null, formatter: (data: any) => any = (data) => data) => {
-  try {
-    if (method === "post") {
-      const res = await axios.post(new URL(endpoint, backendOrigin + "/").href, payload);
-      if (refVar) refVar.value = formatter(res.data);
-    } else if (method === "put") {
-      const res = await axios.put(new URL(endpoint, backendOrigin + "/").href, payload);
-      if (refVar) refVar.value = formatter(res.data);
-    } else if (method === "delete") {
-      const res = await axios.delete(new URL(endpoint, backendOrigin + "/").href, { data: payload });
-      if (refVar) refVar.value = formatter(res.data);
-    } else if (method === "get") {
-      const res = await axios.get(new URL(endpoint, backendOrigin + "/").href, { data: payload });
-      if (refVar) refVar.value = formatter(res.data);
-    }
-  } catch (err) {
-    if (err instanceof AxiosError && err.response) {
-      if (import.meta.client) {
-        alert(`${errorMessage}: ${err.response.data.detail}`);
-      } else {
-        console.error(`${errorMessage}: ${err.response.data.detail}`);
-      }
-    }
-  }
-}
-
-export const commonGetter = async (endpoint: string, refVar: Ref, errorMessage: string, formatter: (data: any) => any = (data) => data) => {
-  await commonUploader("get", endpoint, errorMessage, {}, refVar, formatter);
-}
-
-export const commonPoster = async (endpoint: string, payload: any, errorMessage: string) => {
-  await commonUploader("post", endpoint, errorMessage, payload);
-}
-
-export const commonPutter = async (endpoint: string, payload: any, errorMessage: string) => {
-  await commonUploader("put", endpoint, errorMessage, payload);
-}
-
-export const commonDeleter = async (endpoint: string, payload: any, errorMessage: string) => {
-  await commonUploader("delete", endpoint, errorMessage, payload);
-}
-
-

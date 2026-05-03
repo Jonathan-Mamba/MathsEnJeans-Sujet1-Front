@@ -91,7 +91,6 @@
     const widthFactor = (diagramStyle.maxSquareFactor[0]! - diagramStyle.minSquareFactor[0]!) / stepRange;
     const widthB = diagramStyle.maxSquareFactor[0]! - widthFactor * diagramStyle.maxSizeThreshold
     const widthValue = widthB + widthFactor * squares.value.length;
-    console.debug(widthFactor, widthB);
     
     const heightFactor = (diagramStyle.maxSquareFactor[1]! - diagramStyle.minSquareFactor[1]!) / stepRange;
     const heightB = diagramStyle.maxSquareFactor[1]! - heightFactor * diagramStyle.maxSizeThreshold
@@ -165,25 +164,24 @@
   <div class="map centered">
     <ClientOnly>
     <svg ref="mapSVG">
-      <g v-for="route in drawnRoutes">
-        <line 
-          v-if="!route.curved" 
-          :x1="Math.round(route.firstEnd.x)" 
-          :y1="Math.round(route.firstEnd.y)" 
-          :x2="Math.round(route.secondEnd.x)" 
-          :y2="Math.round(route.secondEnd.y)" 
-          :stroke="route.color" 
-          :stroke-width="diagramStyle.lineWidth"
-        />
-        <circle v-else 
-          :cx="Math.round(route.circleCenter.x)" 
-          :cy="Math.round(route.circleCenter.y)" 
-          :r="Math.round(route.circleRadius)" 
-          :stroke="route.color" 
-          :stroke-width="diagramStyle.lineWidth" 
-          fill="none"
-        />
-      </g>
+      <line 
+        v-for="route in drawnRoutes.filter(r => !r.curved)"
+        :x1="Math.round(route.firstEnd.x)" 
+        :y1="Math.round(route.firstEnd.y + bannerHeight)" 
+        :x2="Math.round(route.secondEnd.x)" 
+        :y2="Math.round(route.secondEnd.y + bannerHeight)" 
+        :stroke="route.color" 
+        :stroke-width="diagramStyle.lineWidth"
+      />
+      <circle 
+        v-for="route in drawnRoutes.filter(r => r.curved)"
+        :cx="Math.round(route.circleCenter.x)" 
+        :cy="Math.round(route.circleCenter.y + bannerHeight)" 
+        :r="Math.round(route.circleRadius)" 
+        :stroke="route.color" 
+        :stroke-width="diagramStyle.lineWidth" 
+        fill="none"
+      />
     </svg>
     <div class="text-overlay">
       <div 

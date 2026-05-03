@@ -4,7 +4,7 @@ const emit = defineEmits(['modechange'])
 </script>
 
 <template>
-<div class="c">
+<div class="menu-container">
   <button @click="emit('modechange', EditMode.SQUARE)">Editer la carte</button>
   <button @click="emit('modechange', EditMode.ROUTE)">Editer les routes</button>
   <button @click="emit('modechange', EditMode.CALENDAR)">Editer le calendrier</button>
@@ -14,7 +14,7 @@ const emit = defineEmits(['modechange'])
 </template>
 
 <style scoped>
-div.c {
+div.menu-container {
   display: flex;
   flex-direction: column;
   background-color: var(--gray1);

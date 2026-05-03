@@ -11,7 +11,7 @@
         "maxSizeThreshold": "number - maximum number of squares before using the minimum size",
         "minSizeThreshold": "number - minimum number of squares before using the maximum size"
     },
-    "maxSquareFactor": [0.3, 0.12],
+    "maxSquareFactor": [0.25, 0.1],
     "maxSizeThreshold": 5,
     "minSquareFactor": [0.12, 0.08],
     "minSizeThreshold": 12,

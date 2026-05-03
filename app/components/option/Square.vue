@@ -8,7 +8,7 @@ const addedSquare = ref<string>("");
 <template>
   <div class="dialog-parent">
     <div :class="{'blurred': modifiedSquare !== '', 'content': true, 'centered': true, 'option-menu': true}">
-      <p class="title">Calendrier</p>
+      <p class="title">Cases</p>
       <ul class="data-list">
         <p v-if="squares.length === 0" class="empty">La liste des cases est vide</p>
         <li v-for="square in squares" :key="square">

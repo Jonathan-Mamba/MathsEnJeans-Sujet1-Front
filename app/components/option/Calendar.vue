@@ -38,11 +38,12 @@ const setModifiedDay = (index: number) => {
     </div>
     <Dialog title="Modifier le jour" @confirm="modifyDay(modifiedDay, modifiedDayType); modifiedDay = 0" @cancel="modifiedDay = 0" v-if="modifiedDay > 0">
        <div class="centered">
-        <label>Nouveau type de jour:
-          <select v-model="modifiedDayType" >
-            <option v-for="dayType in dayTypes" :value="dayType">{{dayType}}</option>
-          </select>
-        </label>
+         <div class="input-form-container centered">
+           <label for="new_day_type">Type de jour</label>
+           <select v-model="modifiedDayType" name="new_day_type">
+             <option v-for="dayType in dayTypes" :value="dayType">{{dayType}}</option>
+           </select>
+         </div>
        </div>
     </Dialog>
   </div>
@@ -51,7 +52,7 @@ const setModifiedDay = (index: number) => {
 <style scoped>
 @import "~/assets/option_menu.css";
 li label {
-  width: 7%;
+  width: 10%;
   text-align: right;
   margin-right: 5px;
 }
