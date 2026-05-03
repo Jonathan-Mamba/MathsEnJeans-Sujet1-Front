@@ -11,7 +11,6 @@
 <template>
 <div class="centered option-container">
   <div v-if="error" class="option-menu v">La connection avec le serveur n'a pas pu être établie. Veuillez actualiser la page pour réessayer.</div>
-  <div v-else-if="mode === EditMode.NONE" class="option-menu v">Pas de mode sélectionné</div>
   <OptionSquare v-else-if="mode === EditMode.SQUARE"/>
   <OptionRoute v-else-if="mode === EditMode.ROUTE"/>
   <OptionCalendar v-else-if="mode === EditMode.CALENDAR"/>

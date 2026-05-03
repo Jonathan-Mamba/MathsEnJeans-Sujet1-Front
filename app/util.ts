@@ -3,8 +3,7 @@ export enum EditMode {
   SQUARE = "square",
   ROUTE = "route",
   CALENDAR = "calendar",
-  GAME = "game",
-  NONE = "null",
+  GAME = "game"
 }
 
 export class Player {

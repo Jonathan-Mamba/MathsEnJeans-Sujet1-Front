@@ -50,7 +50,7 @@ export const useGameState = () => {
   const gameRunning = computed(() => gameStatus.value.status === "in_progress");
   const gameCompleted = computed(() => gameStatus.value.status === "completed");
 
-  const { data, pending, error, refresh: refreshData } = useFetch<ExportData>(`${backendOrigin}/export`, {
+  const { data, pending, error, refresh: refreshData } = useFetch<ExportData>(new URL("/export", backendOrigin).href, {
     immediate: false,
   });
 
