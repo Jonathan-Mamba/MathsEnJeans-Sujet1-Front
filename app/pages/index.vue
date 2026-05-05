@@ -12,7 +12,7 @@ useHead({
   ]
 })
 
-const mode = ref(EditMode.NONE);
+const mode = ref(EditMode.SQUARE);
 
 const { pending, error, loadInitialData } = useGameState();
 
