@@ -1,4 +1,4 @@
-import { Player, Route, backendOrigin } from "~/util";
+import { GamePlayer, GameRoute, backendOrigin, commonUploader } from "~/util";
 
 
 type ExportData = {
@@ -13,25 +13,10 @@ type ExportData = {
 };
 
 
-type HTTPMethod = "GET" | "HEAD" | "PATCH" | "POST" | "PUT" | "DELETE" | "CONNECT" | "OPTIONS" | "TRACE" | "get" | "head" | "patch" | "post" | "put" | "delete" | "connect" | "options" | "trace";
-
-
-const commonUploader = async (endpoint: string, method: HTTPMethod | typeof undefined = undefined, body: Record<string, any> = {}, errorMessage: string = "Erreur"): Promise<any | null> => {
-  const toast = useToast();
-  try {
-    return await $fetch(new URL(endpoint, backendOrigin).href, { method, body });
-  } catch (err) {
-    const detail = err?.data?.detail || err?.response?.data?.detail || errorMessage;
-    toast.add({ title: errorMessage, description: String(detail), color: "error" });
-    return null;
-  }
-};
-
-
 export const useGameState = () => {
-  const players = useState<Player[]>("gs-players", () => []);
+  const players = useState<GamePlayer[]>("gs-players", () => []);
   const squares = useState<string[]>("gs-squares", () => []);
-  const routes = useState<Route[]>("gs-routes", () => []);
+  const routes = useState<GameRoute[]>("gs-routes", () => []);
   const routeTypes = useState<Record<string, string>>("gs-route-types", () => ({}));
   const routeTypeAll = useState<string>("gs-route-type-all", () => "");
   const calendar = useState<string[]>("gs-calendar", () => []);
@@ -57,9 +42,9 @@ export const useGameState = () => {
   const loadInitialData = async () => {
     await refreshData();
     if (data.value) {
-      players.value = data.value.players.map((p) => Player.from(p));
+      players.value = data.value.players.map((p) => GamePlayer.from(p));
       squares.value = data.value.squares;
-      routes.value = data.value.routes.map((r) => Route.from(r));
+      routes.value = data.value.routes.map((r) => GameRoute.from(r));
       routeTypes.value = data.value.route_colors;
       routeTypeAll.value = data.value.route_type_all;
       calendar.value = data.value.calendar;
@@ -198,7 +183,7 @@ export const useGameRoutes = () => {
     );
   };
 
-  const deleteRoute = async (route: Route) => {
+  const deleteRoute = async (route: GameRoute) => {
     await commonUploader(
       "/routes", 
       "DELETE", 

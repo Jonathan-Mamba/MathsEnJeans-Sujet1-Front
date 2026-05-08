@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { Route, Player } from "~/util";
+  import { GameRoute, GamePlayer } from "~/util";
   import { useElementSize } from "@vueuse/core";
   import diagramStyle from "~/assets/map_diagram.json";
 
@@ -48,7 +48,7 @@
       this.color = color;
       this.curved = curved;
     }
-    public static fromRoute(route: Route, squarePositions: Vector2[]): DrawnRoute {
+    public static fromRoute(route: GameRoute, squarePositions: Vector2[]): DrawnRoute {
       const firstEnd = squarePositions[squares.value.indexOf(route.firstEnd)];
       const secondEnd = squarePositions[squares.value.indexOf(route.secondEnd)];
       const color = routeTypes.value[route.type];
@@ -120,7 +120,7 @@
   });
   const drawnRoutes: Ref<DrawnRoute[]> = computed(() => {
     const result: DrawnRoute[] = [];
-    const routeMap: Map<string, Route[]> = new Map();
+    const routeMap: Map<string, GameRoute[]> = new Map();
     const lineOffset = diagramStyle.lineWidth * 2;
     const circleRadius = diagramStyle.circleRouteRadius;
 
@@ -156,7 +156,7 @@
   });
 
   const getPlayersInSquare = (squareName: string) => {
-    return players.value.filter((p: Player) => p.position === squareName);
+    return players.value.filter((p: GamePlayer) => p.position === squareName);
   };
 </script>
 
@@ -197,9 +197,7 @@
           height: Math.round(squareSize.y) + 'px',
           'padding-top': Math.round(bannerHeight) + 'px'
         }"
-      >
-        <span style="text-align: center;">{{ square }}</span>
-      </div>
+      ><span>{{ square }}</span></div>
 
       <div 
       v-for="[index, square] in squares.entries()" 
@@ -247,6 +245,12 @@ div.rect {
 }
 div.square-text-rect {
   cursor: pointer;
+  & span {
+    text-align: center;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
 }
 div.square-text-rect.selected {
   border-color: var(--red);

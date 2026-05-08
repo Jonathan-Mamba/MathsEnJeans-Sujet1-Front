@@ -19,7 +19,7 @@ const newPlayerPosition = ref<string>("");
     <button @click="(async () => {await startGame(); await simulateGame()})()" class="start blue">Simuler la partie</button>  
   </form>
 
-  <form v-else class="centered" @submit.prevent="movePlayer(newPlayerPosition, gameStatus.current_player.id)">
+  <form v-else class="centered" @submit.prevent="movePlayer(newPlayerPosition, gameStatus.current_player!.id)">
     <div class="info-form-container">
       <label>Tour numéro</label>
       <span>{{ gameStatus.day_count }}</span>
@@ -30,11 +30,11 @@ const newPlayerPosition = ref<string>("");
     </div>
     <div class="info-form-container">
       <label>Nom du joueur</label>
-      <span>{{ gameStatus.current_player.name }}</span>
+      <span>{{ gameStatus.current_player!.name }}</span>
     </div>
     <div class="info-form-container">
       <label>Position du joueur</label>
-      <span>{{ gameStatus.current_player.position }}</span>
+      <span>{{ gameStatus.current_player!.position }}</span>
     </div>
     <hr>
     <div class="input-form-container">

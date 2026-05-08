@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import { EditMode } from "~/util";
+  import { MenuEditMode } from "~/util";
 
   const props = defineProps<{
-    mode: EditMode
+    mode: MenuEditMode
   }>();
 
   const { error } = useGameState();
@@ -11,11 +11,11 @@
 <template>
 <div class="centered option-container">
   <div v-if="error" class="option-menu v">La connection avec le serveur n'a pas pu être établie. Veuillez actualiser la page pour réessayer.</div>
-  <OptionSquare v-else-if="mode === EditMode.SQUARE"/>
-  <OptionRoute v-else-if="mode === EditMode.ROUTE"/>
-  <OptionCalendar v-else-if="mode === EditMode.CALENDAR"/>
-  <OptionPlayer v-else-if="mode === EditMode.PLAYER"/>
-  <OptionGame v-else-if="mode === EditMode.GAME"/>
+  <OptionSquare v-else-if="mode === MenuEditMode.SQUARE"/>
+  <OptionRoute v-else-if="mode === MenuEditMode.ROUTE"/>
+  <OptionCalendar v-else-if="mode === MenuEditMode.CALENDAR"/>
+  <OptionPlayer v-else-if="mode === MenuEditMode.PLAYER"/>
+  <OptionGame v-else-if="mode === MenuEditMode.GAME"/>
 </div>
 </template>
 

@@ -1,4 +1,4 @@
-import { Route, Player } from "~/util";
+import { GameRoute, GamePlayer } from "~/util";
 
 export const setupSSE = (source: EventSource, gameId: string | null) => {
   const state = useGameState();
@@ -15,18 +15,18 @@ export const setupSSE = (source: EventSource, gameId: string | null) => {
     },
 
     "game.route.added": async (data: Record<string, any>) => {
-      state.routes.value.push(Route.from(data.route));
+      state.routes.value.push(GameRoute.from(data.route));
     },
     "game.route.removed": async (data: Record<string, any>) => {
-      const routeToRemove = Route.from(data.route);
-      state.routes.value = state.routes.value.filter((route) => !Route.equals(route, routeToRemove));
+      const routeToRemove = GameRoute.from(data.route);
+      state.routes.value = state.routes.value.filter((route) => !GameRoute.equals(route, routeToRemove));
     },
     "game.route.type.added": async (data: Record<string, any>) => {
       state.routeTypes.value[data.name] = data.color;
     },
     "game.route.type.removed": async (data: Record<string, any>) => {
       delete state.routeTypes.value[data.name];
-      state.routes.value = data.routes.map((routeData: Record<string, any>) => Route.from(routeData));
+      state.routes.value = data.routes.map((routeData: Record<string, any>) => GameRoute.from(routeData));
       state.calendar.value = data.calendar;
     },
 
@@ -37,14 +37,9 @@ export const setupSSE = (source: EventSource, gameId: string | null) => {
       state.squares.value = state.squares.value.map((square) =>
         square === data.old_name ? data.new_name : square
       );
-      state.routes.value = state.routes.value.map((route) => {
-        if (route.firstEnd === data.old_name) {
-          route.firstEnd = data.new_name;
-        }
-        if (route.secondEnd === data.old_name) {
-          route.secondEnd = data.new_name;
-        }
-        return route;
+      state.routes.value.forEach((route) => {
+        route.firstEnd = route.firstEnd === data.old_name ? data.new_name : route.firstEnd;
+        route.secondEnd = route.secondEnd === data.old_name ? data.new_name : route.secondEnd;
       });
       state.players.value = state.players.value.map((player) =>
         player.position === data.old_name ? { ...player, position: data.new_name } : player
@@ -52,11 +47,11 @@ export const setupSSE = (source: EventSource, gameId: string | null) => {
     },
     "game.square.removed": async (data: Record<string, any>) => {
       state.squares.value = state.squares.value.filter((square) => square !== data.name);
-      state.routes.value = data.routes.map((routeData: Record<string, any>) => Route.from(routeData));
+      state.routes.value = data.routes.map((routeData: Record<string, any>) => GameRoute.from(routeData));
     },
 
     "game.player.added": async (data: Record<string, any>) => {
-      state.players.value.push(Player.from(data.player));
+      state.players.value.push(GamePlayer.from(data.player));
     },
     "game.player.removed": async (data: Record<string, any>) => {
       state.players.value = state.players.value.filter((player) => player.id !== data.id);
@@ -64,11 +59,11 @@ export const setupSSE = (source: EventSource, gameId: string | null) => {
     "game.player.modified": async (data: Record<string, any>) => {
       const playerIndex = state.players.value.findIndex((player) => player.id === data.player.id);
       if (playerIndex !== -1) {
-        state.players.value[playerIndex] = Player.from(data.player);
+        state.players.value[playerIndex] = GamePlayer.from(data.player);
       }
     },
     "game.player.moved": async (data: Record<string, any>) => {
-      const playerIndex = state.players.value.findIndex((player) => player.id === data.player.id);
+      const playerIndex = state.players.value.findIndex((player) => player.id === data.id);
       if (playerIndex !== -1) {
         state.players.value[playerIndex]!.position = data.position;
       }

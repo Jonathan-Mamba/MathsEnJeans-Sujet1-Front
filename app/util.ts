@@ -1,4 +1,4 @@
-export enum EditMode {
+export enum MenuEditMode {
   PLAYER = "player",
   SQUARE = "square",
   ROUTE = "route",
@@ -6,7 +6,7 @@ export enum EditMode {
   GAME = "game"
 }
 
-export class Player {
+export class GamePlayer {
   name: string;
   position: string;
   id: string;
@@ -17,12 +17,12 @@ export class Player {
     this.id = id;
     this.color = color;
   }
-  public static from(data: Record<string, any>): Player {
-    return new Player(data.name, data.position, data.id, data.color);
+  public static from(data: Record<string, any>): GamePlayer {
+    return new GamePlayer(data.name, data.position, data.id, data.color);
   }
 }
 
-export class Route {
+export class GameRoute {
   firstEnd: string;
   secondEnd: string;
   type: string;
@@ -31,10 +31,10 @@ export class Route {
     this.secondEnd = second_end;
     this.type = type;
   }
-  public static from(data: Record<string, any>): Route {
-    return new Route(data.first_end, data.second_end, data.type);
+  public static from(data: Record<string, any>): GameRoute {
+    return new GameRoute(data.first_end, data.second_end, data.type);
   }
-  public static equals(route1: Route, route2: Route): boolean {
+  public static equals(route1: GameRoute, route2: GameRoute): boolean {
     return ((route1.firstEnd === route2.firstEnd && route1.secondEnd === route2.secondEnd) || (route1.firstEnd === route2.secondEnd && route1.secondEnd === route2.firstEnd)) && route1.type === route2.type;
   }
 }
@@ -42,3 +42,17 @@ export class Route {
 export const backendOrigin = import.meta.env.VITE_BACKEND_ORIGIN || "http://localhost:8000";
 
 export const SSEEndpoint = new URL("/events", backendOrigin + "/").href;
+
+
+type HTTPMethod = "GET" | "HEAD" | "PATCH" | "POST" | "PUT" | "DELETE" | "CONNECT" | "OPTIONS" | "TRACE" | "get" | "head" | "patch" | "post" | "put" | "delete" | "connect" | "options" | "trace";
+
+export const commonUploader = async (endpoint: string, method: HTTPMethod | typeof undefined = undefined, body: Record<string, any> = {}, errorMessage: string = "Erreur"): Promise<any | null> => {
+  const toast = useToast();
+  try {
+    return await $fetch(new URL(endpoint, backendOrigin).href, { method, body });
+  } catch (err) {
+    const detail = err?.data?.detail || err?.response?.data?.detail || errorMessage;
+    toast.add({ title: errorMessage, description: String(detail), color: "error" });
+    return null;
+  }
+};

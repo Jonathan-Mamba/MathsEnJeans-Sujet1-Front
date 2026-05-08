@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Route } from "~/util";
+import { GameRoute } from "~/util";
 const { squares } = useGameSquares();
 const { routes, addRoute, deleteRoute } = useGameRoutes();
 const { routeTypes } = useGameRouteTypes();
@@ -8,7 +8,7 @@ const addedRouteFirstEnd: Ref<string> = ref("");
 const addedRouteSecondEnd: Ref<string> = ref("");
 const addedRouteType: Ref<string> = ref("");
 
-function sortRoutes(route1: Route, route2: Route): number {
+function sortRoutes(route1: GameRoute, route2: GameRoute): number {
   const route1FirstEndIndex = squares.value.indexOf(route1.firstEnd);
   const route1SecondEndIndex = squares.value.indexOf(route1.secondEnd);
   const route2FirstEndIndex = squares.value.indexOf(route2.firstEnd);

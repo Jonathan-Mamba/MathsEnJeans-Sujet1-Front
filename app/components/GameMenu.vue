@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { EditMode } from "~/util";
+import { MenuEditMode } from "~/util";
 const emit = defineEmits(['modechange'])
 </script>
 
 <template>
 <div class="menu-container">
-  <button @click="emit('modechange', EditMode.SQUARE)">Editer la carte</button>
-  <button @click="emit('modechange', EditMode.ROUTE)">Editer les routes</button>
-  <button @click="emit('modechange', EditMode.CALENDAR)">Editer le calendrier</button>
-  <button @click="emit('modechange', EditMode.PLAYER)">Gérer les joueurs</button>
-  <button @click="emit('modechange', EditMode.GAME)" class="play">Jouer</button>
+  <button @click="emit('modechange', MenuEditMode.SQUARE)">Editer la carte</button>
+  <button @click="emit('modechange', MenuEditMode.ROUTE)">Editer les routes</button>
+  <button @click="emit('modechange', MenuEditMode.CALENDAR)">Editer le calendrier</button>
+  <button @click="emit('modechange', MenuEditMode.PLAYER)">Gérer les joueurs</button>
+  <button @click="emit('modechange', MenuEditMode.GAME)" class="play">Jouer</button>
 </div>
 </template>
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { EditMode, backendOrigin } from "~/util";
+import { MenuEditMode, backendOrigin } from "~/util";
 import { setupSSE } from "~/sseHandlers";
 
 useHead({
@@ -12,7 +12,7 @@ useHead({
   ]
 })
 
-const mode = ref(EditMode.SQUARE);
+const mode = ref(MenuEditMode.SQUARE);
 
 const { pending, error, loadInitialData } = useGameState();
 
