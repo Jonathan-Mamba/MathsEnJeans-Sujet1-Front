@@ -9,7 +9,8 @@
         "maxSquareFactor": "array of 2 numbers (percent of diagram width and height) - maximum size of a square",
         "minSquareFactor": "array of 2 numbers (percent of diagram width and height) - minimum size of a square",
         "maxSizeThreshold": "number - maximum number of squares before using the minimum size",
-        "minSizeThreshold": "number - minimum number of squares before using the maximum size"
+        "minSizeThreshold": "number - minimum number of squares before using the maximum size",
+        "fontSize": "number (percent of square size) - size of the font used for the text in the squares"
     },
     "maxSquareFactor": [0.25, 0.1],
     "maxSizeThreshold": 5,
@@ -19,5 +20,6 @@
     "lineWidth": 5,
     "circleRouteRadius": 20,
     "circleCenterOffset": -10,
-    "bannerHeight": 0.25  
+    "bannerHeight": 0.25,
+    "fontSize": 0.003
 }

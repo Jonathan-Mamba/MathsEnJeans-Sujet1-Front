@@ -34,7 +34,8 @@ function sortRoutes(route1: GameRoute, route2: GameRoute): number {
           <label>Deuxième point</label>
           <label>Type de route</label>
         </span>
-      </li>
+        <button class="delete" style="visibility: hidden;"><Icon name="lucide:x"/></button>
+      </li> 
       <p class="empty" v-if="routes.length === 0">Aucune route n'est définie pour le moment</p>
       <li v-for="route in routes.sort(sortRoutes)" :key="route.firstEnd + route.secondEnd + route.type">
         <span>

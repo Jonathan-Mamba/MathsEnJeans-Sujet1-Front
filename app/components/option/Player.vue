@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { GamePlayer } from "~/util";
   const { squares } = useGameSquares();
   const { players, addPlayer, modifyPlayer, deletePlayer } = useGamePlayers();
 
@@ -8,6 +9,11 @@
   const modifiedPlayerName = ref<string>("");
   const modifiedPlayerPosition = ref<string>("");
 
+  const setModifiedPlayer = (player: GamePlayer) => {
+    modifiedPlayerId.value = player.id;
+    modifiedPlayerName.value = player.name;
+    modifiedPlayerPosition.value = player.position;
+  }
 </script>
 
 <template>
@@ -21,6 +27,8 @@
             <label>Position du joueur</label>
             <label>Couleur du joueur</label>
           </span>
+          <button style="visibility: hidden;"><Icon name="lucide:edit"/></button>
+          <button style="visibility: hidden;" class="delete"><Icon name="lucide:trash-2"/></button>
         </li>
         <p class="empty" v-if="players.length === 0">Aucun joueur n'est défini pour le moment</p>
         <li v-for="player in players" :key="player.id">
@@ -29,8 +37,8 @@
             <label>{{player.position}}</label>
             <label :style="{backgroundColor: player.color}">{{ player.color }}</label>
           </span>
-          <button @click="modifiedPlayerId = player.id; modifiedPlayerName = player.name; modifiedPlayerPosition = player.position">Modifier</button>
-          <button @click="deletePlayer(player.id)" class="delete"><Icon name="lucide:x"/></button>
+          <button @click="setModifiedPlayer(player)"><Icon name="lucide:edit"/></button>
+          <button @click="deletePlayer(player.id)" class="delete"><Icon name="lucide:trash-2"/></button>
         </li>
       </ul>
       <form class="centered" @submit.prevent="addPlayer(newPlayerName, newPlayerPosition); newPlayerName = ''; newPlayerPosition = ''">
@@ -69,4 +77,4 @@
 
 <style scoped>
 @import "~/assets/option_menu.css";
-</style>
+</style> 

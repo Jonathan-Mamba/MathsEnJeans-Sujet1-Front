@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { MenuEditMode, backendOrigin } from "~/util";
 import { setupSSE } from "~/sseHandlers";
-import { useEventListener } from "@vueuse/core";
+import { useEventListener, useWindowSize } from "@vueuse/core";
 
 useHead({
   title: "Math en Jeans - Conception d'un jeu de role diabolique (éditeur de jeu)",
@@ -12,8 +12,6 @@ useHead({
     }
   ]
 })
-
-const mode = ref(MenuEditMode.SQUARE);
 
 const { pending, error, loadInitialData } = useGameState();
 
@@ -51,14 +49,17 @@ useEventListener(document, "mousemove", (e: MouseEvent) => {
 useEventListener(document, "mouseup", () => {
   isResizing.value = false;
 });
+
+const { editMode, tabletLayoutThreshold } = useLayout();
+const { width: windowWidth } = useWindowSize();
 </script>
 
 <template>
   <div ref="appContainerRef" class="app-container" :class="{ resizing: isResizing }">
-    <GameMenu class="game-menu" @modechange="newMode => (mode = newMode)" :edit-mode="mode"/>
-    <OptionContainer :mode="mode" :style="{ flex: `0 0 ${optionWidth}%` }"/>
+    <GameMenu class="game-menu"/>
+    <OptionContainer v-if="editMode !== MenuEditMode.MAP || windowWidth > tabletLayoutThreshold" :style="{ flex: `0 0 ${optionWidth}%` }"/>
     <div class="splitter" @mousedown="startResize" />
-    <MapContainer class="map-panel"/>
+    <MapContainer v-if="editMode === MenuEditMode.MAP || windowWidth > tabletLayoutThreshold" class="map-panel"/>
   </div>
 </template>
 
@@ -87,5 +88,17 @@ div.splitter {
 }
 div.splitter:hover, div.app-container.resizing div.splitter {
   background: #888;
+}
+
+@media (max-width: 800px) {
+  div.splitter {
+    display: none;
+  }
+  .option-container {
+    flex: 1 0 0 !important;
+  }
+  .map-panel {
+    flex: 1 0 0;
+  }
 }
 </style>

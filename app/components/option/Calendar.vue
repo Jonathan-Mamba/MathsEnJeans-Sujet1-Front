@@ -22,8 +22,8 @@ const setModifiedDay = (index: number) => {
         <li v-for="[index, day] in calendar.entries()" :key="day">
           <label>{{index+1}} - </label>
           <span>{{day}}</span>
-          <button class="edit" @click="setModifiedDay(index + 1)">Modifier</button>
-          <button @click="removeDay(index + 1)" class="delete"><Icon name="lucide:x"/></button>
+          <button class="edit" @click="setModifiedDay(index + 1)"><Icon name="lucide:edit"/></button>
+          <button @click="removeDay(index + 1)" class="delete"><Icon name="lucide:trash-2"/></button>
         </li>
       </ul>
       <form class="centered" @submit.prevent="addDay(addedDayType)">

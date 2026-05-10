@@ -13,8 +13,8 @@ const addedSquare = ref<string>("");
         <p v-if="squares.length === 0" class="empty">La liste des cases est vide</p>
         <li v-for="square in squares" :key="square">
           <span>{{square}}</span>
-          <button class="edit" @click="modifiedSquare = square">Modifier</button>
-          <button class="delete" @click="deleteSquare(square)"><Icon name="lucide:x"/></button>
+          <button class="edit" @click="modifiedSquare = square"><Icon name="lucide:edit"/></button>
+          <button class="delete" @click="deleteSquare(square)"><Icon name="lucide:trash-2"/></button>
         </li>
       </ul>
       <form class="centered" @submit.prevent="addSquare(addedSquare)">

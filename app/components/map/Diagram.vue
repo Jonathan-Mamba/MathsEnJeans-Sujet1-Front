@@ -197,7 +197,9 @@
           height: Math.round(squareSize.y) + 'px',
           'padding-top': Math.round(bannerHeight) + 'px'
         }"
-      ><span>{{ square }}</span></div>
+      >
+        <span :style="{'font-size': 1 + 'em'}">{{ square }}</span>
+      </div>
 
       <div 
       v-for="[index, square] in squares.entries()" 
@@ -240,8 +242,6 @@ div.rect {
   background-color: var(--gray12);
   border: #000 solid 2px;
   pointer-events: auto;
-  font-size: var(--rfsize);
-  font-family: var(--rfont);
 }
 div.square-text-rect {
   cursor: pointer;
@@ -249,6 +249,7 @@ div.square-text-rect {
     text-align: center;
     text-overflow: ellipsis;
     overflow: hidden;
+    font-family: var(--rfont);
   }
 }
 div.square-text-rect.selected {

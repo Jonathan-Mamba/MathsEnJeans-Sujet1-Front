@@ -24,14 +24,24 @@
   
   --radius: 5px;
   
-  --rfsize: clamp(10px, 1.5vw, 20px);
-  --stfsize: clamp(12px, 1.8vw, 22px);
-  --tfsize: clamp(14px, 2.5vw, 26px);
+  --rfsize: 18px;
+  --stfsize: 20px;
+  --tfsize: 24px;
   
   --rfont: "Adwaita Sans";
   --tfont: "Adwaita Sans";
   --stfont: "Adwaita Sans";
   --partborder: #6a6a73;
+
+  --menu-width: 50px;
+}
+
+@media (max-width: 800px) {
+	:root {
+		--rfsize: clamp(12px, 1.6vw, 18px);
+		--stfsize: clamp(14px, 2vw, 20px);
+		--tfsize: clamp(16px, 2.7vw, 24px);
+	}
 }
 
 @font-face {
@@ -51,28 +61,28 @@ body {
 }
 
 button, select {
-    background-color: var(--gray5);
-    border-radius: var(--radius);
-    border: 1px solid var(--gray3);
-    font-size: var(--rfsize);
-    &:hover {
-        border: 1px solid var(--blue);
-        background-color: var(--gray6);
-    }
-    &:active {
-        background-color: var(--gray4);   
-    }
+	background-color: var(--gray5);
+	border-radius: var(--radius);
+	border: 1px solid var(--gray3);
+	font-size: var(--rfsize);
+	&:hover {
+		border: 1px solid var(--blue);
+		background-color: var(--gray6);
+	}
+	&:active {
+		background-color: var(--gray4);   
+	}
 }
 
 button.blue {
     background-color: var(--blue);
     border: transparent solid 1px;
     &:hover {
-        background-color: var(--lightblue);
-        border: var(--blue) solid 1px;
+			background-color: var(--lightblue);
+			border: var(--blue) solid 1px;
     }
     &:active {
-        background-color: var(--darkblue);
+			background-color: var(--darkblue);
     }
 }
 
@@ -80,10 +90,10 @@ button.red {
     background-color: var(--red);
     border: transparent solid 1px;
     &:hover {
-        background-color: var(--lightred);
-        border: var(--red) solid 1px;
+			background-color: var(--lightred);
+			border: var(--red) solid 1px;
     }
     &:active {
-        background-color: var(--darkred);
+			background-color: var(--darkred);
     }
 }

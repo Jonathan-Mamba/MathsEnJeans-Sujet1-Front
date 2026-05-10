@@ -3,7 +3,8 @@ export enum MenuEditMode {
   SQUARE = "square",
   ROUTE = "route",
   CALENDAR = "calendar",
-  GAME = "game"
+  GAME = "game",
+  MAP = "map",
 }
 
 export class GamePlayer {

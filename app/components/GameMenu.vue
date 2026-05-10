@@ -1,20 +1,18 @@
 <script setup lang="ts">
 import { MenuEditMode } from "~/util";
-const emit = defineEmits(['modechange'])
-const props = defineProps<{
-  editMode: MenuEditMode
-}>();
+
 
 const navItems = [
   { id: MenuEditMode.SQUARE, icon: 'lucide:layers', label: 'Configurer les cases' },
   { id: MenuEditMode.ROUTE, icon: 'lucide:route', label: 'Configurer les routes' },
   { id: MenuEditMode.CALENDAR, icon: 'lucide:calendar', label: 'Configurer le calendrier' },
   { id: MenuEditMode.PLAYER, icon: 'lucide:user', label: 'Gérer les joueurs' },
-  { id: MenuEditMode.GAME, icon: 'lucide:play', label: 'Jouer' }
+  { id: MenuEditMode.GAME, icon: 'lucide:play', label: 'Jouer' },
+  { id: MenuEditMode.MAP, icon: 'lucide:map', label: 'Voir la carte'}
 ];
 
 const selectItem = (itemId: MenuEditMode) => {
-  emit('modechange', itemId);
+  useLayout().editMode.value = itemId;
 };
 </script>
 
@@ -24,7 +22,7 @@ const selectItem = (itemId: MenuEditMode) => {
       v-for="item in navItems" 
       :key="item.id"
       class="nav-item centered"
-      :class="{ active: props.editMode === item.id }"
+      :class="{ active: useLayout().editMode.value === item.id, map: item.id === MenuEditMode.MAP }"
       @click="selectItem(item.id)"
     >
       <Icon :name="item.icon" class="icon"/>
@@ -35,7 +33,7 @@ const selectItem = (itemId: MenuEditMode) => {
 
 <style scoped>
 aside.menu-container {
-  width: 50px;
+  width: var(--menu-width);
   height: 100vh;
   background-color: var(--gray2);
   display: flex;
@@ -64,6 +62,15 @@ div.nav-item {
   }
   &.active {
     background-color: var(--gray1);
+  }
+  &.map {
+    display: none;
+  }
+}
+
+@media (max-width: 800px) {
+  div.nav-item.map {
+    display: flex;
   }
 }
 
