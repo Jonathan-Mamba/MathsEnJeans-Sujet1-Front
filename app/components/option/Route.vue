@@ -34,7 +34,7 @@ function sortRoutes(route1: GameRoute, route2: GameRoute): number {
           <label>Deuxième point</label>
           <label>Type de route</label>
         </span>
-        <button class="delete" style="visibility: hidden;"><Icon name="lucide:x"/></button>
+        <button class="delete" style="visibility: hidden;"><Icon name="lucide:trash-2"/></button>
       </li> 
       <p class="empty" v-if="routes.length === 0">Aucune route n'est définie pour le moment</p>
       <li v-for="route in routes.sort(sortRoutes)" :key="route.firstEnd + route.secondEnd + route.type">
@@ -43,7 +43,7 @@ function sortRoutes(route1: GameRoute, route2: GameRoute): number {
           <label>{{route.secondEnd}}</label>
           <label>{{route.type}}</label>
         </span>
-        <button @click="deleteRoute(route)" class="delete"><Icon name="lucide:x"/></button>
+        <button @click="deleteRoute(route)" class="delete"><Icon name="lucide:trash-2"/></button>
       </li>
     </ul>
     <form @submit.prevent="addRoute(addedRouteFirstEnd, addedRouteSecondEnd, addedRouteType)" class="centered">
