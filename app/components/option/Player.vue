@@ -16,10 +16,10 @@
       <p class="title">Joueurs</p>
       <ul class="data-list dashboard">
          <li>
-          <span>
-            <label class="first-row">Nom du joueur</label>
-            <label class="first-row">Position du joueur</label>
-            <label class="first-row">Couleur du joueur</label>
+          <span class="first-row">
+            <label>Nom du joueur</label>
+            <label>Position du joueur</label>
+            <label>Couleur du joueur</label>
           </span>
         </li>
         <p class="empty" v-if="players.length === 0">Aucun joueur n'est défini pour le moment</p>
@@ -30,7 +30,7 @@
             <label :style="{backgroundColor: player.color}">{{ player.color }}</label>
           </span>
           <button @click="modifiedPlayerId = player.id; modifiedPlayerName = player.name; modifiedPlayerPosition = player.position">Modifier</button>
-          <button @click="deletePlayer(player.id)"><img src="/icons/trash-bin-red.png" class="delete"></button>
+          <button @click="deletePlayer(player.id)" class="delete"><Icon name="lucide:x"/></button>
         </li>
       </ul>
       <form class="centered" @submit.prevent="addPlayer(newPlayerName, newPlayerPosition); newPlayerName = ''; newPlayerPosition = ''">
@@ -69,17 +69,4 @@
 
 <style scoped>
 @import "~/assets/option_menu.css";
-ul.data-list span {
-  display: flex;
-  flex-direction: row;
-  & label {
-    text-align: center;
-    overflow-x: hidden;
-    text-overflow: ellipsis;
-    width: 50%;
-    border-radius: 5px;
-    background-color: var(--gray7);
-    margin: 5px;
-  }
-}
 </style>

@@ -23,7 +23,7 @@ const setModifiedDay = (index: number) => {
           <label>{{index+1}} - </label>
           <span>{{day}}</span>
           <button class="edit" @click="setModifiedDay(index + 1)">Modifier</button>
-          <button @click="removeDay(index + 1)"><img class="delete" src="/icons/trash-bin-red.png"></button>
+          <button @click="removeDay(index + 1)" class="delete"><Icon name="lucide:x"/></button>
         </li>
       </ul>
       <form class="centered" @submit.prevent="addDay(addedDayType)">
@@ -52,18 +52,12 @@ const setModifiedDay = (index: number) => {
 <style scoped>
 @import "~/assets/option_menu.css";
 li label {
-  width: 10%;
-  text-align: right;
   margin-right: 5px;
 }
 p.empty {
   text-align: center;
   font-family: var(--rfont);
   font-style: italic;
-}
-img.delete {
-  height: 20px;
-  margin-top: 3px;
 }
 div.dialog {
   min-width: 60%;
@@ -75,8 +69,5 @@ div.content {
   width: 100%;
   height: 100%;
   overflow: hidden;
-}
-ul.data-list span {
-  flex: 1;
 }
 </style>

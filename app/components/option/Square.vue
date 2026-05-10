@@ -14,7 +14,7 @@ const addedSquare = ref<string>("");
         <li v-for="square in squares" :key="square">
           <span>{{square}}</span>
           <button class="edit" @click="modifiedSquare = square">Modifier</button>
-          <button @click="deleteSquare(square)"><img class="delete" src="/icons/trash-bin-red.png"></button>
+          <button class="delete" @click="deleteSquare(square)"><Icon name="lucide:x"/></button>
         </li>
       </ul>
       <form class="centered" @submit.prevent="addSquare(addedSquare)">

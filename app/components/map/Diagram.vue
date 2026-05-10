@@ -249,7 +249,6 @@ div.square-text-rect {
     text-align: center;
     text-overflow: ellipsis;
     overflow: hidden;
-    white-space: nowrap;
   }
 }
 div.square-text-rect.selected {

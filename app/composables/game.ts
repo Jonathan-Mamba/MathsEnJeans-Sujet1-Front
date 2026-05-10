@@ -1,4 +1,4 @@
-import { GamePlayer, GameRoute, backendOrigin, commonUploader } from "~/util";
+import { GamePlayer, GameRoute, backendOrigin, commonUploader, type GameStatus } from "~/util";
 
 
 type ExportData = {
@@ -20,7 +20,7 @@ export const useGameState = () => {
   const routeTypes = useState<Record<string, string>>("gs-route-types", () => ({}));
   const routeTypeAll = useState<string>("gs-route-type-all", () => "");
   const calendar = useState<string[]>("gs-calendar", () => []);
-  const gameStatus = useState("gs-game-status", () => ({
+  const gameStatus = useState<GameStatus>("gs-game-status", () => ({
     status: "not_started",
     current_player: null,
     day_count: 0,

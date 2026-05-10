@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { MenuEditMode, backendOrigin } from "~/util";
 import { setupSSE } from "~/sseHandlers";
+import { useEventListener } from "@vueuse/core";
 
 useHead({
   title: "Math en Jeans - Conception d'un jeu de role diabolique (éditeur de jeu)",
@@ -21,19 +22,70 @@ await loadInitialData();
 onMounted(() => {
   setupSSE(new EventSource(new URL("/events", backendOrigin).href), "1");
 })
+
+const optionWidth = ref(40);
+const isResizing = ref(false);
+const resizeStartX = ref(0);
+const resizeStartWidth = ref(0);
+const appContainerRef = ref<HTMLElement | null>(null);
+
+function startResize(e: MouseEvent) {
+  isResizing.value = true;
+  resizeStartX.value = e.clientX;
+  resizeStartWidth.value = optionWidth.value;
+}
+
+useEventListener(document, "mousemove", (e: MouseEvent) => {
+  if (!isResizing.value) return;
+  const container = appContainerRef.value;
+  if (!container) return;
+  const containerWidth = container.clientWidth;
+  const gameMenuWidth = containerWidth * 0.1;
+  const availableWidth = containerWidth - gameMenuWidth;
+  const delta = e.clientX - resizeStartX.value;
+  let newWidth = resizeStartWidth.value + (delta / availableWidth) * 100;
+  newWidth = Math.max(10, Math.min(90, newWidth));
+  optionWidth.value = newWidth;
+});
+
+useEventListener(document, "mouseup", () => {
+  isResizing.value = false;
+});
 </script>
 
 <template>
-  <div class="app-container">
-    <GameMenu @modechange="newMode => (mode = newMode)"/>
-    <OptionContainer :mode="mode"/>
-    <MapContainer/>
+  <div ref="appContainerRef" class="app-container" :class="{ resizing: isResizing }">
+    <GameMenu class="game-menu" @modechange="newMode => (mode = newMode)" :edit-mode="mode"/>
+    <OptionContainer :mode="mode" :style="{ flex: `0 0 ${optionWidth}%` }"/>
+    <div class="splitter" @mousedown="startResize" />
+    <MapContainer class="map-panel"/>
   </div>
 </template>
 
 <style scoped>
 div.app-container {
-  display: grid;
-  grid-template-columns: 10% 40% 50%;
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+}
+div.app-container.resizing {
+  cursor: col-resize;
+  user-select: none;
+}
+.game-menu {
+  flex: 0 0 auto;
+}
+.map-panel {
+  flex: 1 1 0;
+  min-width: 0;
+}
+div.splitter {
+  width: 4px;
+  cursor: col-resize;
+  background: transparent;
+  flex-shrink: 0;
+}
+div.splitter:hover, div.app-container.resizing div.splitter {
+  background: #888;
 }
 </style>

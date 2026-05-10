@@ -22,6 +22,13 @@ export class GamePlayer {
   }
 }
 
+export interface GameStatus {
+    status: string,
+    current_player: null | GamePlayer,
+    day_count: number,
+    current_day_type: null | string,
+}
+
 export class GameRoute {
   firstEnd: string;
   secondEnd: string;

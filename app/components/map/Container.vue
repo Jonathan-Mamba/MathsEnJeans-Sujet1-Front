@@ -54,6 +54,6 @@ div.map-container {
   gap: 25px;
   background-color: var(--gray5);
   max-height: 100dvh;
-  overflow-y: scroll;
+  overflow: auto scroll;
 }
 </style>
