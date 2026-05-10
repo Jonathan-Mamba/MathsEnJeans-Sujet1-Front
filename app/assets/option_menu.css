@@ -158,7 +158,10 @@ ul.dashboard {
       text-overflow: ellipsis;
       overflow: hidden;
       margin: 5px;
-      white-space: nowrap;
+      display: flex;
+	    flex-direction: column; 
+	    justify-content: center; 
+	    align-items: center;
     }
     &.first-row label {
       background-color: var(--gray6);

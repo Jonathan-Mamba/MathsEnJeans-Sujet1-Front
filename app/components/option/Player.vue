@@ -23,9 +23,9 @@
       <ul class="data-list dashboard">
          <li>
           <span class="first-row">
-            <label>Nom du joueur</label>
-            <label>Position du joueur</label>
-            <label>Couleur du joueur</label>
+            <label>Nom</label>
+            <label>Position</label>
+            <label>Couleur</label>
           </span>
           <button style="visibility: hidden;" class="edit"><Icon name="lucide:edit"/></button>
           <button style="visibility: hidden;" class="delete"><Icon name="lucide:trash-2"/></button>

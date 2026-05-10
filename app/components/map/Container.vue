@@ -53,7 +53,6 @@ div.map-container {
   align-items: center;
   gap: 25px;
   background-color: var(--gray5);
-  max-height: 100dvh;
   overflow: auto scroll;
 }
 </style>
