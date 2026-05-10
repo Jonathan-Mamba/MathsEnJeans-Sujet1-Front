@@ -27,7 +27,7 @@
             <label>Position du joueur</label>
             <label>Couleur du joueur</label>
           </span>
-          <button style="visibility: hidden;"><Icon name="lucide:edit"/></button>
+          <button style="visibility: hidden;" class="edit"><Icon name="lucide:edit"/></button>
           <button style="visibility: hidden;" class="delete"><Icon name="lucide:trash-2"/></button>
         </li>
         <p class="empty" v-if="players.length === 0">Aucun joueur n'est défini pour le moment</p>
@@ -37,7 +37,7 @@
             <label>{{player.position}}</label>
             <label :style="{backgroundColor: player.color}">{{ player.color }}</label>
           </span>
-          <button @click="setModifiedPlayer(player)"><Icon name="lucide:edit"/></button>
+          <button @click="setModifiedPlayer(player)" class="edit"><Icon name="lucide:edit"/></button>
           <button @click="deletePlayer(player.id)" class="delete"><Icon name="lucide:trash-2"/></button>
         </li>
       </ul>

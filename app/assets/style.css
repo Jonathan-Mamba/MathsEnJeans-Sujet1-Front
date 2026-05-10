@@ -1,3 +1,6 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
 /* Color Variables */
 :root {
   --gray0: #0c0c0d;
@@ -90,10 +93,36 @@ button.red {
     background-color: var(--red);
     border: transparent solid 1px;
     &:hover {
-			background-color: var(--lightred);
-			border: var(--red) solid 1px;
+        background-color: var(--lightred);
+        border: var(--red) solid 1px;
     }
     &:active {
-			background-color: var(--darkred);
+		background-color: var(--darkred);
     }
+}
+
+/* Toast Styling - Nuxt UI v4 */
+ol[data-slot="viewport"] {
+    --toast-bg: var(--gray2);
+    --toast-title: var(--lightblue);
+    --toast-text: var(--gray12);
+    --toast-progress: var(--blue);
+}
+
+ol[data-slot="viewport"] li[data-slot="base"] {
+    background-color: var(--gray2) !important;
+    background-image: none !important;
+}
+
+ol[data-slot="viewport"] li [data-slot="title"] {
+    color: var(--lightblue) !important;
+}
+
+ol[data-slot="viewport"] li [data-slot="description"] {
+    color: var(--gray12) !important;
+}
+
+ol[data-slot="viewport"] li [data-slot="indicator"] {
+    background-color: var(--blue) !important;
+    background-image: linear-gradient(90deg, var(--blue), var(--lightblue)) !important;
 }

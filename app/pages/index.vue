@@ -52,6 +52,12 @@ useEventListener(document, "mouseup", () => {
 
 const { editMode, tabletLayoutThreshold } = useLayout();
 const { width: windowWidth } = useWindowSize();
+
+watchEffect(() => {
+  if (editMode.value === MenuEditMode.MAP && windowWidth.value > tabletLayoutThreshold) {
+    editMode.value = MenuEditMode.SQUARE
+  }
+})
 </script>
 
 <template>
@@ -83,7 +89,7 @@ div.app-container.resizing {
 div.splitter {
   width: 4px;
   cursor: col-resize;
-  background: transparent;
+  background: white;
   flex-shrink: 0;
 }
 div.splitter:hover, div.app-container.resizing div.splitter {

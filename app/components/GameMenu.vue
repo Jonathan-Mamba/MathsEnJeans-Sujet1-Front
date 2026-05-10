@@ -10,6 +10,11 @@ const navItems = [
   { id: MenuEditMode.GAME, icon: 'lucide:play', label: 'Jouer' },
   { id: MenuEditMode.MAP, icon: 'lucide:map', label: 'Voir la carte'}
 ];
+const bottomItems = [
+  { icon: 'lucide:upload', label: "Importer des données de jeu", callback: async () => {} },
+  { icon: 'lucide:download', label: "Exporter les données de jeu", callback: async () => {} },
+  { icon: 'lucide:upload', label: "Importer des données de jeu", callback: async () => {} },
+]
 
 const selectItem = (itemId: MenuEditMode) => {
   useLayout().editMode.value = itemId;
@@ -28,10 +33,17 @@ const selectItem = (itemId: MenuEditMode) => {
       <Icon :name="item.icon" class="icon"/>
       <div class="label">{{ item.label }}</div>
     </div>
+    <div class="spacer"></div>
+    <div 
+    class="nav-item centered bottom"></div>
   </aside>
 </template>
 
 <style scoped>
+div.spacer {
+  flex: 1
+}
+
 aside.menu-container {
   width: var(--menu-width);
   height: 100vh;
@@ -63,6 +75,9 @@ div.nav-item {
   &.active {
     background-color: var(--gray1);
   }
+  &.bottom:active {
+    background-color: var(--gray1);
+  }
   &.map {
     display: none;
   }
@@ -85,8 +100,6 @@ div.label {
   font-family: var(--rfont);
   border-radius: var(--radius);
 
-  
-  /* Initial hidden state */
   opacity: 0;
   visibility: hidden;
   transform: translateX(-5px);

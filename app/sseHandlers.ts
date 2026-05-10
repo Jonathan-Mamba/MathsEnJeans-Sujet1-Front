@@ -83,6 +83,9 @@ export const setupSSE = (source: EventSource, gameId: string | null) => {
       state.gameStatus.value = data.status;
       state.gameHistory.value = data.history;
     },
+    "game.data.import": async (data: Record<string, any>) => {
+      await state.loadInitialData()
+    }
   };
 
   if (gameId) {

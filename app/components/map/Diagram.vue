@@ -161,7 +161,7 @@
 </script>
 
 <template>
-  <div class="map centered">
+  <div class="map">
     <ClientOnly>
     <svg ref="mapSVG">
       <line 

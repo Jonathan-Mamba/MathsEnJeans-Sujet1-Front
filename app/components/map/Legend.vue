@@ -7,7 +7,6 @@ const selectedRouteType = ref<string>("")
 
 <template>
   <div class="legend">
-    <ClientOnly>
     <div 
       class="legend-element" 
       v-for="[routeType, color] in Object.entries(routeTypes)" 
@@ -30,7 +29,6 @@ const selectedRouteType = ref<string>("")
         Ajouter une route
       </label>
     </div>  
-    </ClientOnly>
   </div>
 </template>
 
@@ -42,7 +40,7 @@ const selectedRouteType = ref<string>("")
 div.legend {
   margin-top: 25px;
   width: 90%;
-  flex: 1;
+  flex: 1 0 auto;
   background-color: var(--gray1);
   border-radius: 30px;
   min-height: 200px;
@@ -51,7 +49,6 @@ div.legend {
   gap: 3px;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 div.selected {
   background-color: var(--gray3);
