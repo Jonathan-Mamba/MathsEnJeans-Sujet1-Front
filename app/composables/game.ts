@@ -196,8 +196,7 @@ export const useGameRoutes = () => {
 };
 
 export const useGameControl = () => {
-  const state = useGameState();
-
+  
   const startGame = async () => {
     await commonUploader("/game/start", "POST", {}, "Erreur lors du démarrage de la partie");
   };

@@ -245,6 +245,7 @@ div.rect {
 }
 div.square-text-rect {
   cursor: pointer;
+  border-radius: var(--radius);
   & span {
     text-align: center;
     text-overflow: ellipsis;
@@ -262,6 +263,7 @@ div.banner-overlay {
   overflow-x: scroll;
   gap: 5px;
   align-items: center;
+  border-radius: var(--radius) var(--radius) 0 0;
   & hr {
     width: 20%;
     height: 75%;
