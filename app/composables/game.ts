@@ -17,9 +17,15 @@ export const useGameState = () => {
   const players = useState<GamePlayer[]>("gs-players", () => []);
   const squares = useState<string[]>("gs-squares", () => []);
   const routes = useState<GameRoute[]>("gs-routes", () => []);
-  const routeTypes = useState<Record<string, string>>("gs-route-types", () => ({}));
-  const routeTypeAll = useState<string>("gs-route-type-all", () => "");
+  const routeTypeAll = useState<string>("gs-route-type-all", () => "Tout");
   const calendar = useState<string[]>("gs-calendar", () => []);
+  const routeTypes = useState<Record<string, string>>("gs-route-types", () => ({
+    "Livraison": "#FF1F5B",
+    "Doléances": "#0071FF", 
+    "Marchands": "#FFC61E", 
+    "Labeur": "#00D34E", 
+    "Tout": "#AF58BA"
+  }));
   const gameStatus = useState<GameStatus>("gs-game-status", () => ({
     status: "not_started",
     current_player: null,
@@ -45,7 +51,6 @@ export const useGameState = () => {
       players.value = data.value.players.map((p) => GamePlayer.from(p));
       squares.value = data.value.squares;
       routes.value = data.value.routes.map((r) => GameRoute.from(r));
-      routeTypes.value = data.value.route_colors;
       routeTypeAll.value = data.value.route_type_all;
       calendar.value = data.value.calendar;
       gameStatus.value = data.value.game_status;
@@ -129,29 +134,6 @@ export const useGameDayTypes = () => {
   return { dayTypes: state.dayTypes };
 };
 
-export const useGameRouteTypes = () => {
-  const state = useGameState();
-
-  const addRouteType = async (name: string) => {
-    await commonUploader("/routes/types", "POST", { name }, "Erreur lors de l'ajout du type de route");
-  };
-
-  const modifyRouteType = async (oldName: string, newName: string) => {
-    await commonUploader("/routes/types", "PUT", { old_name: oldName, new_name: newName }, "Erreur lors de la modification du type de route");
-  };
-
-  const deleteRouteType = async (name: string) => {
-    await commonUploader("/routes/types", "DELETE", { name }, "Erreur lors de la suppression du type de route");
-  };
-
-  return {
-    routeTypes: state.routeTypes,
-    routeTypeAll: state.routeTypeAll,
-    addRouteType,
-    modifyRouteType,
-    deleteRouteType,
-  };
-};
 
 export const useGamePlayers = () => {
   const state = useGameState();
@@ -192,7 +174,7 @@ export const useGameRoutes = () => {
     );
   };
 
-  return { routes: state.routes, addRoute, deleteRoute };
+  return { routes: state.routes, addRoute, deleteRoute, routeTypes: state.routeTypes, routeTypeAll: state.routeTypeAll };
 };
 
 export const useGameControl = () => {

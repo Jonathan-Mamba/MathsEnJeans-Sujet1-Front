@@ -4,9 +4,17 @@
   import diagramStyle from "~/assets/map_diagram.json";
 
   const { squares } = useGameSquares();
-  const { routes } = useGameRoutes();
+  const { routes, routeTypes } = useGameRoutes();
   const { players } = useGamePlayers();
-  const { routeTypes } = useGameRouteTypes();
+
+  const mapSVG: Ref<SVGSVGElement | null> = ref(null);
+  const { width, height } = useElementSize(mapSVG);
+  
+  const emit = defineEmits(["select"])
+  const props = defineProps<{
+    selectedSquare1: string,
+    selectedSquare2: string,
+  }>();
 
   const clamp = (num: number, min: number, max: number) => Math.min(Math.max(num, min), max);
 
@@ -55,7 +63,7 @@
       const curved = route.firstEnd === route.secondEnd;
       return new DrawnRoute(firstEnd!.copy(), secondEnd!.copy(), color!, curved);
     }
-    public setCircleCenter(mapCenter: Vector2, circleRadius: number, squareSize: Vector2, offset: number = 0, bannerHeight: number = 0): Vector2 {
+    public setCircleCenter(mapCenter: Vector2, circleRadius: number, squareSize: Vector2, offset: number = 0): Vector2 {
       if (!this.curved) {
         throw Error("route is not curved");
       }
@@ -67,7 +75,7 @@
       } else if (dx < 0 && dx < dy) { // left
         circleVector.x = -squareSize.x / 2 - circleRadius - offset;
       } else if (dy < 0 && dy < dx) { // up
-        circleVector.y = -squareSize.y / 2 - circleRadius - offset - bannerHeight;
+        circleVector.y = -squareSize.y / 2 - circleRadius - offset;
       } else { // down
         circleVector.y = squareSize.y / 2 + circleRadius + offset;
       }
@@ -76,14 +84,6 @@
       return this.firstEnd.add(circleVector);
     }
   }
-  const mapSVG: Ref<SVGSVGElement | null> = ref(null);
-  const { width, height } = useElementSize(mapSVG);
-  
-  const emit = defineEmits(["select"])
-  const props = defineProps<{
-    selectedSquare1: string,
-    selectedSquare2: string,
-  }>();
 
   const squareSize: Ref<Vector2> = computed(() => {
     const stepRange = diagramStyle.maxSizeThreshold - diagramStyle.minSizeThreshold;
@@ -101,6 +101,8 @@
       clamp(heightValue * height.value, diagramStyle.minSquareFactor[1]! * height.value, diagramStyle.maxSquareFactor[1]! * height.value)
     );
   });
+
+  const squareFontSize = computed(() => diagramStyle.squareFontSize * Math.hypot(squareSize.value.x, squareSize.value.y))
   const center = computed(() => (new Vector2(width.value * 0.5, height.value * 0.5)));
 
   const squarePositions: Ref<Vector2[]> = computed(() => {
@@ -136,7 +138,7 @@
         const drawnRoute = DrawnRoute.fromRoute(routeGroup[i]!, squarePositions.value);
         let { x: dx, y: dy } = drawnRoute.firstEnd.sub(drawnRoute.secondEnd);
         if (drawnRoute.curved) {
-          drawnRoute.setCircleCenter(center.value, circleRadius, squareSize.value, diagramStyle.circleCenterOffset, bannerHeight.value);
+          drawnRoute.setCircleCenter(center.value, circleRadius, squareSize.value, diagramStyle.circleCenterOffset);
           drawnRoute.circleRadius = circleRadius + lineOffset * i;
         } else if (-1 < dy / dx && dy / dx < 1) { // vertical
           drawnRoute.firstEnd.y += lineOffset * i;
@@ -151,32 +153,27 @@
     return result;
   });
 
-  const bannerHeight: Ref<number> = computed(() => {
-    return squareSize.value.y * diagramStyle.bannerHeight;
-  });
-
   const getPlayersInSquare = (squareName: string) => {
-    return players.value.filter((p: GamePlayer) => p.position === squareName);
+    return players.value.filter((p) => p.position === squareName);
   };
 </script>
 
 <template>
   <div class="map">
-    <ClientOnly>
-    <svg ref="mapSVG">
+    <svg ref="mapSVG" class="map-svg">
       <line 
         v-for="route in drawnRoutes.filter(r => !r.curved)"
         :x1="Math.round(route.firstEnd.x)" 
-        :y1="Math.round(route.firstEnd.y + bannerHeight)" 
+        :y1="Math.round(route.firstEnd.y)" 
         :x2="Math.round(route.secondEnd.x)" 
-        :y2="Math.round(route.secondEnd.y + bannerHeight)" 
+        :y2="Math.round(route.secondEnd.y)" 
         :stroke="route.color" 
         :stroke-width="diagramStyle.lineWidth"
       />
       <circle 
         v-for="route in drawnRoutes.filter(r => r.curved)"
         :cx="Math.round(route.circleCenter.x)" 
-        :cy="Math.round(route.circleCenter.y + bannerHeight)" 
+        :cy="Math.round(route.circleCenter.y)" 
         :r="Math.round(route.circleRadius)" 
         :stroke="route.color" 
         :stroke-width="diagramStyle.lineWidth" 
@@ -185,37 +182,27 @@
     </svg>
     <div class="text-overlay">
       <div 
-        class="square-text-rect rect centered"
+        class="square-text-rect centered"
         v-for="[index, square] in squares.entries()" 
         :key="'text-' + index"
-        @click="emit('select', square)"
         :class="{selected: props.selectedSquare1 === square || props.selectedSquare2 === square}"
         :style="{
           left: Math.round(squarePositions[index]!.x - squareSize.x / 2) + 'px',
           top: Math.round(squarePositions[index]!.y - squareSize.y / 2) + 'px',
           width: Math.round(squareSize.x) + 'px',
           height: Math.round(squareSize.y) + 'px',
-          'padding-top': Math.round(bannerHeight) + 'px'
+          'font-size': Math.round(squareFontSize) + 'px' 
         }"
       >
-        <span :style="{'font-size': 1 + 'em'}">{{ square }}</span>
-      </div>
-
-      <div 
-      v-for="[index, square] in squares.entries()" 
-      :key="'banner-' + index" class="banner-overlay rect"
-      :class="{selected: props.selectedSquare1 === square || props.selectedSquare2 === square}"
-      :style="{
-        width: Math.round(squareSize.x) + 'px', 
-        height: Math.round(bannerHeight) + 'px',
-        left: Math.round(squarePositions[index]!.x - squareSize.x / 2) + 'px', 
-        top: Math.round(squarePositions[index]!.y - squareSize.y / 2) + 'px'
-      }">
-        <div/> <!-- empty div to create gap between square and banner -->
-        <hr v-for="player in getPlayersInSquare(square)" :key="player.id" :style="{'background-color': player.color}">
+        <span @click="emit('select', square)">{{ square }}</span>
+        <button :style="{'font-size': Math.round(squareFontSize) + 'px'}">
+          <div style="flex: 1;"/>
+          <Icon name="lucide:users" class="icon"/>
+          {{ getPlayersInSquare(square).length }}
+          <div style="flex: 1;"/>
+        </button>
       </div>
     </div>
-    </ClientOnly>
   </div>
 </template>
 
@@ -224,11 +211,11 @@ div.map {
   width: 90%;
   aspect-ratio: 1 / 1;
   background-color: #fff;
-  border-radius: 30px;
+  border-radius: var(--radius4);
   margin-bottom: 25px;
   position: relative;
 }
-div.text-overlay, svg {
+div.text-overlay, svg.map-svg {
   position: absolute;
   top: 0;
   left: 0;
@@ -236,43 +223,41 @@ div.text-overlay, svg {
   height: 100%;
   pointer-events: none;
 }
-div.rect {
+div.square-text-rect {
+  flex-direction: row;
   position: absolute;
   color: #000;
   background-color: var(--gray12);
   border: #000 solid 2px;
   pointer-events: auto;
-}
-div.square-text-rect {
   cursor: pointer;
-  border-radius: var(--radius);
+  border-radius: var(--radius2);
+  overflow: hidden;
   & span {
     text-align: center;
     text-overflow: ellipsis;
     overflow: hidden;
     font-family: var(--rfont);
+    width: 90%;
+  }
+  & button {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25em;
+    height: 70%;
+    margin-right: 2%;
+    overflow: hidden;
+    flex-shrink: 0;
+    flex-grow: 1;
+  }
+  & .icon {
+    width: 1.2em;
+    height: 1.2em;
+    flex-shrink: 0;
   }
 }
 div.square-text-rect.selected {
   border-color: var(--red);
-}
-div.banner-overlay {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  overflow-x: scroll;
-  gap: 5px;
-  align-items: center;
-  border-radius: var(--radius) var(--radius) 0 0;
-  & hr {
-    width: 20%;
-    height: 75%;
-    border: none;
-    margin: 0;
-    border-radius: 9999vh;
-  }
-}
-div.banner-overlay.selected {
-  border-bottom-color: var(--red);
 }
 </style>

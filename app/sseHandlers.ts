@@ -15,19 +15,22 @@ export const setupSSE = (source: EventSource, gameId: string | null) => {
     },
 
     "game.route.added": async (data: Record<string, any>) => {
+      const addedRoute = GameRoute.from(data.route)
       state.routes.value.push(GameRoute.from(data.route));
+      const routesOfSameEnds = state.routes.value.filter((route) => {
+        return route.firstEnd == addedRoute.firstEnd && route.secondEnd == addedRoute.secondEnd
+      })
+      if (routesOfSameEnds.length === state.dayTypes.value.length) {
+        state.routes.value = state.routes.value.filter((route) => {
+          return route.firstEnd !== addedRoute.firstEnd || route.secondEnd !== addedRoute.secondEnd
+        })
+        addedRoute.type = state.routeTypeAll.value
+        state.routes.value.push(addedRoute)
+      }
     },
     "game.route.removed": async (data: Record<string, any>) => {
       const routeToRemove = GameRoute.from(data.route);
       state.routes.value = state.routes.value.filter((route) => !GameRoute.equals(route, routeToRemove));
-    },
-    "game.route.type.added": async (data: Record<string, any>) => {
-      state.routeTypes.value[data.name] = data.color;
-    },
-    "game.route.type.removed": async (data: Record<string, any>) => {
-      delete state.routeTypes.value[data.name];
-      state.routes.value = data.routes.map((routeData: Record<string, any>) => GameRoute.from(routeData));
-      state.calendar.value = data.calendar;
     },
 
     "game.square.added": async (data: Record<string, any>) => {

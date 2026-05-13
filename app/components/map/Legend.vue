@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 const { gameRunning } = useGameStatus();
-const { routeTypes } = useGameRouteTypes();
+const { routeTypes } = useGameRoutes();
 const emit = defineEmits(["select", "modechange"]);
 const selectedRouteType = ref<string>("")
 </script>
@@ -25,7 +25,7 @@ const selectedRouteType = ref<string>("")
     </div>
     <div class="legend-element" v-if="!gameRunning">
       <label>
-        <input type="radio" name="a" @input="emit('modechange', 'add')" placeholder="true">
+        <input type="radio" name="a" @input="emit('modechange', 'add')">
         Ajouter une route
       </label>
     </div>  
@@ -42,7 +42,7 @@ div.legend {
   width: 90%;
   flex: 1 0 auto;
   background-color: var(--gray1);
-  border-radius: 30px;
+  border-radius: var(--radius4);
   min-height: 200px;
   padding-top: 20px;
   padding-bottom: 20px;

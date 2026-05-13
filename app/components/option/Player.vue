@@ -25,7 +25,6 @@
           <span class="first-row">
             <label>Nom</label>
             <label>Position</label>
-            <label>Couleur</label>
           </span>
           <button style="visibility: hidden;" class="edit"><Icon name="lucide:edit"/></button>
           <button style="visibility: hidden;" class="delete"><Icon name="lucide:trash-2"/></button>
@@ -35,7 +34,6 @@
           <span>
             <label>{{player.name}}</label>
             <label>{{player.position}}</label>
-            <label :style="{backgroundColor: player.color}">{{ player.color }}</label>
           </span>
           <button @click="setModifiedPlayer(player)" class="edit"><Icon name="lucide:edit"/></button>
           <button @click="deletePlayer(player.id)" class="delete"><Icon name="lucide:trash-2"/></button>

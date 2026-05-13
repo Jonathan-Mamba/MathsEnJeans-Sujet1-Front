@@ -11,15 +11,13 @@ export class GamePlayer {
   name: string;
   position: string;
   id: string;
-  color: string;
-  constructor(name: string, position: string, id: string, color: string) {
+  constructor(name: string, position: string, id: string) {
     this.name = name;
     this.position = position;
     this.id = id;
-    this.color = color;
   }
   public static from(data: Record<string, any>): GamePlayer {
-    return new GamePlayer(data.name, data.position, data.id, data.color);
+    return new GamePlayer(data.name, data.position, data.id);
   }
 }
 
