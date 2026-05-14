@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { MenuEditMode } from "~/util";
+import { MenuEditMode, commonUploader } from "~/util";
 
+// --- New Imports & Refs for Import ---
+const fileInput = ref<HTMLInputElement | null>(null);
 
 const navItems = [
   { id: MenuEditMode.SQUARE, icon: 'lucide:layers', label: 'Configurer les cases' },
@@ -10,19 +12,58 @@ const navItems = [
   { id: MenuEditMode.GAME, icon: 'lucide:play', label: 'Jouer' },
   { id: MenuEditMode.MAP, icon: 'lucide:map', label: 'Voir la carte'}
 ];
-const bottomItems = [
-  { icon: 'lucide:upload', label: "Importer des données de jeu", callback: async () => {} },
-  { icon: 'lucide:download', label: "Exporter les données de jeu", callback: async () => {} },
-  { icon: 'lucide:upload', label: "Importer des données de jeu", callback: async () => {} },
-]
 
 const selectItem = (itemId: MenuEditMode) => {
   useLayout().editMode.value = itemId;
 };
+
+// --- Updated Import Logic ---
+const triggerImport = () => {
+  fileInput.value?.click();
+};
+
+const handleImport = async (event: Event) => {
+const target = event.target as HTMLInputElement;
+  const file = target.files?.[0];
+  if (!file) return;
+
+  try {
+    const jsonData = JSON.parse(await file.text());
+
+    const response = await commonUploader("/import", "POST", jsonData, "Erreur lors de l'import des données");
+    if (response) {
+      useToast().add({title: "Import de données", description: "Données importées avec succès.", id: 1123456789})
+    }
+  } catch (error) {
+    console.error("Erreur de lecture :", error);
+    useToast().add({title: "Erreur de lecture", "description": "Le fichier n'est pas un JSON valide.", "color": "error", "id": 123456789})
+  } finally {
+    if (fileInput.value) fileInput.value.value = '';
+  }
+};
+
+const exportData = async () => {
+    const response = await commonUploader("/export", "GET", {}, "Erreur lors de l'export des données");
+    if (response === null) return;
+    
+    const jsonString = JSON.stringify(response, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    
+    link.href = url;
+    link.download = 'game-data.json';
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+}
 </script>
 
 <template>
   <aside class="menu-container">
+    <input type="file" ref="fileInput" accept=".json" style="display: none;" @change="handleImport"/>
     <div 
       v-for="item in navItems" 
       :key="item.id"
@@ -33,15 +74,27 @@ const selectItem = (itemId: MenuEditMode) => {
       <Icon :name="item.icon" class="icon"/>
       <div class="label">{{ item.label }}</div>
     </div>
+
     <div class="spacer"></div>
-    <div 
-    class="nav-item centered bottom"></div>
+
+    <div class="nav-item centered bottom" @click="triggerImport">
+      <Icon name="lucide:upload" />
+      <div class="label">Importer les données de jeu</div>
+    </div>
+
+    <div class="nav-item centered bottom" @click="exportData">
+      <Icon name="lucide:download" />
+      <div class="label">Exporter les données de jeu</div>
+    </div>
   </aside>
 </template>
 
 <style scoped>
 div.spacer {
-  flex: 1
+  height: 1px;
+  background-color: white;
+  margin: 5px 0;
+  width: 80%;
 }
 
 aside.menu-container {
@@ -62,19 +115,20 @@ div.nav-item {
   cursor: pointer;
   position: relative;
   box-sizing: border-box;
+  display: flex; /* Ensure centered works */
+  justify-content: center;
+  align-items: center;
   border: 1px solid transparent;
   border-radius: var(--radius);
   &:hover {
     border: 1px solid var(--blue);
     & .label {
       opacity: 1;
+      visibility: visible;
       transform: translateX(0);
     }
   }
-  &.active {
-    background-color: var(--gray1);
-  }
-  &.bottom:active {
+  &.active, &.bottom:active {
     background-color: var(--gray1);
   }
   &.map {

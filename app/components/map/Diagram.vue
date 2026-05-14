@@ -1,186 +1,186 @@
 <script setup lang="ts">
-  import { GameRoute, clamp } from "~/util";
-  import { useElementSize } from "@vueuse/core";
-  import diagramStyle from "~/assets/map_diagram.json";
+import { GameRoute, clamp } from "~/util";
+import { useElementSize } from "@vueuse/core";
+import diagramStyle from "~/assets/map_diagram.json";
 
-  const { squares } = useGameSquares();
-  const { routes, routeTypes } = useGameRoutes();
-  const { players } = useGamePlayers();
+const { squares } = useGameSquares();
+const { routes, routeTypes } = useGameRoutes();
+const { players } = useGamePlayers();
 
-  const mapSVG: Ref<SVGSVGElement | null> = ref(null);
-  const openDropdown = ref<string>("")
-  const { width, height } = useElementSize(mapSVG);
-  
-  const emit = defineEmits(["select"])
-  const props = defineProps<{
-    selectedSquare1: string,
-    selectedSquare2: string,
-  }>();
+const mapSVG: Ref<SVGSVGElement | null> = ref(null);
+const openDropdown = ref<string>("")
+const { width, height } = useElementSize(mapSVG);
 
-  const getPlayersInSquare = (squareName: string) => (players.value.filter((p) => p.position === squareName));
+const emit = defineEmits(["select"])
+const props = defineProps<{
+  selectedSquare1: string,
+  selectedSquare2: string,
+}>();
 
-  const toggleDropdown = (squareName: string) => {
-    openDropdown.value = openDropdown.value === squareName ? "" : squareName;
-  };
+const getPlayersInSquare = (squareName: string) => (players.value.filter((p) => p.position === squareName));
 
-  class Vector2 {
-    x: number;
-    y: number;
-    constructor(x: number = 0, y: number = 0) {
-      this.x = x;
-      this.y = y;
-    }
-    public add(other: Vector2): Vector2 {
-      return new Vector2(this.x + other.x, this.y + other.y);
-    } 
-    public sub(other: Vector2): Vector2 {
-      return new Vector2(this.x - other.x, this.y - other.y)
-    }
-    public rotate(angle: number): Vector2 {
-      const cos = Math.cos(angle);
-      const sin = Math.sin(angle);
-      return new Vector2(
-        this.x * cos - this.y * sin,
-        this.x * sin + this.y * cos
-      );
-    }
-    public copy(): Vector2 {
-      return new Vector2(this.x, this.y);
-    }
+const toggleDropdown = (squareName: string) => {
+  openDropdown.value = openDropdown.value === squareName ? "" : squareName;
+};
+
+class Vector2 {
+  x: number;
+  y: number;
+  constructor(x: number = 0, y: number = 0) {
+    this.x = x;
+    this.y = y;
   }
-  class DrawnRoute {
-    firstEnd: Vector2;
-    secondEnd: Vector2;
-    color: string;
-    curved: boolean = false;
-    circleCenter: Vector2 = new Vector2();
-    circleRadius: number = 0;
-    constructor(first_end: Vector2, second_end: Vector2, color: string, curved: boolean = false) {
-      this.firstEnd = first_end;
-      this.secondEnd = second_end;
-      this.color = color;
-      this.curved = curved;
-    }
-    public static fromRoute(route: GameRoute, squarePositions: Vector2[]): DrawnRoute {
-      const firstEnd = squarePositions[squares.value.indexOf(route.firstEnd)];
-      const secondEnd = squarePositions[squares.value.indexOf(route.secondEnd)];
-      const color = routeTypes.value[route.type];
-      const curved = route.firstEnd === route.secondEnd;
-      return new DrawnRoute(firstEnd!.copy(), secondEnd!.copy(), color!, curved);
-    }
-    public setCircleCenter(mapCenter: Vector2, circleRadius: number, squareSize: Vector2, offset: number = 0): Vector2 {
-      if (!this.curved) {
-        throw Error("route is not curved");
-      }
-      const dx = this.firstEnd.x - mapCenter.x;
-      const dy = this.firstEnd.y - mapCenter.y;
-      const circleVector = new Vector2();
-      if (dx > 0 && dx > dy) { // right
-        circleVector.x = squareSize.x / 2 + circleRadius + offset;
-      } else if (dx < 0 && dx < dy) { // left
-        circleVector.x = -squareSize.x / 2 - circleRadius - offset;
-      } else if (dy < 0 && dy < dx) { // up
-        circleVector.y = -squareSize.y / 2 - circleRadius - offset;
-      } else { // down
-        circleVector.y = squareSize.y / 2 + circleRadius + offset;
-      }
-      this.circleCenter = this.firstEnd.add(circleVector);
-      this.circleRadius = circleRadius;
-      return this.firstEnd.add(circleVector);
-    }
+  public add(other: Vector2): Vector2 {
+    return new Vector2(this.x + other.x, this.y + other.y);
+  } 
+  public sub(other: Vector2): Vector2 {
+    return new Vector2(this.x - other.x, this.y - other.y)
   }
-
-  const squareSize: Ref<Vector2> = computed(() => {
-    const stepRange = diagramStyle.maxSizeThreshold - diagramStyle.minSizeThreshold;
-    
-    const widthFactor = (diagramStyle.maxSquareFactor[0]! - diagramStyle.minSquareFactor[0]!) / stepRange;
-    const widthB = diagramStyle.maxSquareFactor[0]! - widthFactor * diagramStyle.maxSizeThreshold
-    const widthValue = widthB + widthFactor * squares.value.length;
-    
-    const heightFactor = (diagramStyle.maxSquareFactor[1]! - diagramStyle.minSquareFactor[1]!) / stepRange;
-    const heightB = diagramStyle.maxSquareFactor[1]! - heightFactor * diagramStyle.maxSizeThreshold
-    const heightValue = heightB + heightFactor * squares.value.length;
-
+  public rotate(angle: number): Vector2 {
+    const cos = Math.cos(angle);
+    const sin = Math.sin(angle);
     return new Vector2(
-      clamp(widthValue * width.value, diagramStyle.minSquareFactor[0]! * width.value, diagramStyle.maxSquareFactor[0]! * width.value),  
-      clamp(heightValue * height.value, diagramStyle.minSquareFactor[1]! * height.value, diagramStyle.maxSquareFactor[1]! * height.value)
+      this.x * cos - this.y * sin,
+      this.x * sin + this.y * cos
     );
-  });
-
-  const squareFontSize = computed(() => diagramStyle.squareFontSize * Math.hypot(squareSize.value.x, squareSize.value.y))
-  const center = computed(() => (new Vector2(width.value * 0.5, height.value * 0.5)));
-
-  const squarePositions: Ref<Vector2[]> = computed(() => {
-    const result: Vector2[] = [];
-    const radiusVector = new Vector2(0, -diagramStyle.diagramRadius * height.value);
-    const angle = 2 * Math.PI / squares.value.length;
-
-    if (squares.value.length === 1) {
-      return [center.value];
+  }
+  public copy(): Vector2 {
+    return new Vector2(this.x, this.y);
+  }
+}
+class DrawnRoute {
+  firstEnd: Vector2;
+  secondEnd: Vector2;
+  color: string;
+  curved: boolean = false;
+  circleCenter: Vector2 = new Vector2();
+  circleRadius: number = 0;
+  constructor(first_end: Vector2, second_end: Vector2, color: string, curved: boolean = false) {
+    this.firstEnd = first_end;
+    this.secondEnd = second_end;
+    this.color = color;
+    this.curved = curved;
+  }
+  public static fromRoute(route: GameRoute, squarePositions: Vector2[]): DrawnRoute {
+    const firstEnd = squarePositions[squares.value.indexOf(route.firstEnd)];
+    const secondEnd = squarePositions[squares.value.indexOf(route.secondEnd)];
+    const color = routeTypes.value[route.type];
+    const curved = route.firstEnd === route.secondEnd;
+    return new DrawnRoute(firstEnd!.copy(), secondEnd!.copy(), color!, curved);
+  }
+  public setCircleCenter(mapCenter: Vector2, circleRadius: number, squareSize: Vector2, offset: number = 0): Vector2 {
+    if (!this.curved) {
+      throw Error("route is not curved");
     }
-
-    for (let i = 0; i < squares.value.length; i++) {
-      const position = center.value.add(radiusVector.rotate(angle * i));
-      result.push(position);
+    const dx = this.firstEnd.x - mapCenter.x;
+    const dy = this.firstEnd.y - mapCenter.y;
+    const circleVector = new Vector2();
+    if (dx > 0 && dx > dy) { // right
+      circleVector.x = squareSize.x / 2 + circleRadius + offset;
+    } else if (dx < 0 && dx < dy) { // left
+      circleVector.x = -squareSize.x / 2 - circleRadius - offset;
+    } else if (dy < 0 && dy < dx) { // up
+      circleVector.y = -squareSize.y / 2 - circleRadius - offset;
+    } else { // down
+      circleVector.y = squareSize.y / 2 + circleRadius + offset;
     }
-    return result;
-  });
-  const drawnRoutes: Ref<DrawnRoute[]> = computed(() => {
-    const result: DrawnRoute[] = [];
-    const routeMap: Map<string, GameRoute[]> = new Map();
-    const lineOffset = diagramStyle.lineWidth * 2;
-    const circleRadius = diagramStyle.circleRouteRadius;
+    this.circleCenter = this.firstEnd.add(circleVector);
+    this.circleRadius = circleRadius;
+    return this.firstEnd.add(circleVector);
+  }
+}
 
-    for (const route of routes.value) {
-      const key = [route.firstEnd, route.secondEnd].sort().join(":::");
-      if (!routeMap.has(key)) {
-        routeMap.set(key, []);
+const squareSize: Ref<Vector2> = computed(() => {
+  const stepRange = diagramStyle.maxSizeThreshold - diagramStyle.minSizeThreshold;
+  
+  const widthFactor = (diagramStyle.maxSquareFactor[0]! - diagramStyle.minSquareFactor[0]!) / stepRange;
+  const widthB = diagramStyle.maxSquareFactor[0]! - widthFactor * diagramStyle.maxSizeThreshold
+  const widthValue = widthB + widthFactor * squares.value.length;
+  
+  const heightFactor = (diagramStyle.maxSquareFactor[1]! - diagramStyle.minSquareFactor[1]!) / stepRange;
+  const heightB = diagramStyle.maxSquareFactor[1]! - heightFactor * diagramStyle.maxSizeThreshold
+  const heightValue = heightB + heightFactor * squares.value.length;
+
+  return new Vector2(
+    clamp(widthValue * width.value, diagramStyle.minSquareFactor[0]! * width.value, diagramStyle.maxSquareFactor[0]! * width.value),  
+    clamp(heightValue * height.value, diagramStyle.minSquareFactor[1]! * height.value, diagramStyle.maxSquareFactor[1]! * height.value)
+  );
+});
+
+const squareFontSize = computed(() => diagramStyle.squareFontSize * Math.hypot(squareSize.value.x, squareSize.value.y))
+const center = computed(() => (new Vector2(width.value * 0.5, height.value * 0.5)));
+
+const squarePositions: Ref<Vector2[]> = computed(() => {
+  const result: Vector2[] = [];
+  const radiusVector = new Vector2(0, -diagramStyle.diagramRadius * height.value);
+  const angle = 2 * Math.PI / squares.value.length;
+
+  if (squares.value.length === 1) {
+    return [center.value];
+  }
+
+  for (let i = 0; i < squares.value.length; i++) {
+    const position = center.value.add(radiusVector.rotate(angle * i));
+    result.push(position);
+  }
+  return result;
+});
+const drawnRoutes: Ref<DrawnRoute[]> = computed(() => {
+  const result: DrawnRoute[] = [];
+  const routeMap: Map<string, GameRoute[]> = new Map();
+  const lineOffset = diagramStyle.lineWidth * 2;
+  const circleRadius = diagramStyle.circleRouteRadius;
+
+  for (const route of routes.value) {
+    const key = [route.firstEnd, route.secondEnd].sort().join(":::");
+    if (!routeMap.has(key)) {
+      routeMap.set(key, []);
+    }
+    routeMap.get(key)!.push(route);
+  }
+  for (const routeGroup of routeMap.values()) {
+    for (let i = 0; i < routeGroup.length; i++) {
+      const drawnRoute = DrawnRoute.fromRoute(routeGroup[i]!, squarePositions.value);
+      let { x: dx, y: dy } = drawnRoute.firstEnd.sub(drawnRoute.secondEnd);
+      if (drawnRoute.curved) {
+        drawnRoute.setCircleCenter(center.value, circleRadius, squareSize.value, diagramStyle.circleCenterOffset);
+        drawnRoute.circleRadius = circleRadius + lineOffset * i;
+      } else if (-1 < dy / dx && dy / dx < 1) { // vertical
+        drawnRoute.firstEnd.y += lineOffset * i;
+        drawnRoute.secondEnd.y += lineOffset * i;
+      } else { // horizontal
+        drawnRoute.firstEnd.x += lineOffset * i;
+        drawnRoute.secondEnd.x += lineOffset * i;
       }
-      routeMap.get(key)!.push(route);
+      result.push(drawnRoute);
     }
-    for (const routeGroup of routeMap.values()) {
-      for (let i = 0; i < routeGroup.length; i++) {
-        const drawnRoute = DrawnRoute.fromRoute(routeGroup[i]!, squarePositions.value);
-        let { x: dx, y: dy } = drawnRoute.firstEnd.sub(drawnRoute.secondEnd);
-        if (drawnRoute.curved) {
-          drawnRoute.setCircleCenter(center.value, circleRadius, squareSize.value, diagramStyle.circleCenterOffset);
-          drawnRoute.circleRadius = circleRadius + lineOffset * i;
-        } else if (-1 < dy / dx && dy / dx < 1) { // vertical
-          drawnRoute.firstEnd.y += lineOffset * i;
-          drawnRoute.secondEnd.y += lineOffset * i;
-        } else { // horizontal
-          drawnRoute.firstEnd.x += lineOffset * i;
-          drawnRoute.secondEnd.x += lineOffset * i;
-        }
-        result.push(drawnRoute);
-      }
-    }
-    return result;
-  });
+  }
+  return result;
+});
 
 const getDropdownStyle = (index: number) => {
-  const pos = squarePositions.value[index]!;
-  const sqW = squareSize.value.x;
-  const sqH = squareSize.value.y;
+const pos = squarePositions.value[index]!;
+const sqW = squareSize.value.x;
+const sqH = squareSize.value.y;
 
-  // Estimate dropdown size
-  const dropdownW = diagramStyle.dropdownSize[0]! * width.value;
-  const dropdownH = diagramStyle.dropdownSize[1]! * height.value;
+// Estimate dropdown size
+const dropdownW = diagramStyle.dropdownSize[0]! * width.value;
+const dropdownH = diagramStyle.dropdownSize[1]! * height.value;
 
-  const nearBottom = pos.y + sqH / 2 + dropdownH > height.value;
-  const nearRight  = pos.x + sqW / 2 + dropdownW > width.value;
+const nearBottom = pos.y + sqH / 2 + dropdownH > height.value;
+const nearRight  = pos.x + sqW / 2 + dropdownW > width.value;
 
-  return {
-    width: Math.round(dropdownW) + 'px',
-    height: Math.round(dropdownH) + 'px',
-    // Horizontal: align to left edge of square, flip to right-align if near right edge
-    left:  nearRight ? 'auto' : Math.round(pos.x - sqW / 2) + 'px',
-    right: nearRight ? Math.round(width.value - (pos.x + sqW / 2)) + 'px' : 'auto',
-    // Vertical: open below square, flip above if near bottom
-    top:    nearBottom ? 'auto' : Math.round(pos.y + sqH / 2) + 'px',
-    bottom: nearBottom ? Math.round(height.value - (pos.y - sqH / 2)) + 'px' : 'auto',
-    'font-size': Math.round(squareFontSize.value * 0.8) + 'px'
-  };
+return {
+  width: Math.round(dropdownW) + 'px',
+  height: Math.round(dropdownH) + 'px',
+  // Horizontal: align to left edge of square, flip to right-align if near right edge
+  left:  nearRight ? 'auto' : Math.round(pos.x - sqW / 2) + 'px',
+  right: nearRight ? Math.round(width.value - (pos.x + sqW / 2)) + 'px' : 'auto',
+  // Vertical: open below square, flip above if near bottom
+  top:    nearBottom ? 'auto' : Math.round(pos.y + sqH / 2) + 'px',
+  bottom: nearBottom ? Math.round(height.value - (pos.y - sqH / 2)) + 'px' : 'auto',
+  'font-size': Math.round(squareFontSize.value * 0.8) + 'px'
+};
 };
 </script>
 
@@ -234,6 +234,7 @@ const getDropdownStyle = (index: number) => {
         :style="getDropdownStyle(index)"
         >
           <li v-for="player in getPlayersInSquare(square)">⦁ {{ player.name }}</li>
+          <li v-if="getPlayersInSquare(square).length === 0">Aucun joueur présent.</li>
         </ul>
       </TransitionGroup>
     </div>

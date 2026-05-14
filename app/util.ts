@@ -55,8 +55,12 @@ type HTTPMethod = "GET" | "HEAD" | "PATCH" | "POST" | "PUT" | "DELETE" | "CONNEC
 export const commonUploader = async (endpoint: string, method: HTTPMethod | typeof undefined = undefined, body: Record<string, any> = {}, errorMessage: string = "Erreur"): Promise<any | null> => {
   const toast = useToast();
   try {
+    if (method === "GET" || method === "get") {
+      return await $fetch(new URL(endpoint, backendOrigin).href, { method });
+    }
     return await $fetch(new URL(endpoint, backendOrigin).href, { method, body });
   } catch (err) {
+    console.log(err)
     const detail = err?.data?.detail || err?.response?.data?.detail || errorMessage;
     toast.add({ title: errorMessage, description: String(detail), color: "error", id: String(detail) });
     return null;
