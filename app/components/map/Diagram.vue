@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { GameRoute, GamePlayer } from "~/util";
+  import { GameRoute } from "~/util";
   import { useElementSize } from "@vueuse/core";
   import diagramStyle from "~/assets/map_diagram.json";
 
@@ -8,6 +8,7 @@
   const { players } = useGamePlayers();
 
   const mapSVG: Ref<SVGSVGElement | null> = ref(null);
+  const openDropdown = ref<string>("")
   const { width, height } = useElementSize(mapSVG);
   
   const emit = defineEmits(["select"])
@@ -17,6 +18,12 @@
   }>();
 
   const clamp = (num: number, min: number, max: number) => Math.min(Math.max(num, min), max);
+
+  const getPlayersInSquare = (squareName: string) => (players.value.filter((p) => p.position === squareName));
+
+  const toggleDropdown = (squareName: string) => {
+    openDropdown.value = openDropdown.value === squareName ? "" : squareName;
+  };
 
   class Vector2 {
     x: number;
@@ -153,9 +160,30 @@
     return result;
   });
 
-  const getPlayersInSquare = (squareName: string) => {
-    return players.value.filter((p) => p.position === squareName);
+const getDropdownStyle = (index: number) => {
+  const pos = squarePositions.value[index]!;
+  const sqW = squareSize.value.x;
+  const sqH = squareSize.value.y;
+
+  // Estimate dropdown size
+  const dropdownH = 0.12 * height.value;
+  const dropdownW = sqW;
+
+  const nearBottom = pos.y + sqH / 2 + dropdownH > height.value;
+  const nearRight  = pos.x + sqW / 2 + dropdownW > width.value;
+
+  return {
+    width: Math.round(sqW) + 'px',
+    height: dropdownH + 'px',
+    // Horizontal: align to left edge of square, flip to right-align if near right edge
+    left:  nearRight ? 'auto' : Math.round(pos.x - sqW / 2) + 'px',
+    right: nearRight ? Math.round(width.value - (pos.x + sqW / 2)) + 'px' : 'auto',
+    // Vertical: open below square, flip above if near bottom
+    top:    nearBottom ? 'auto' : Math.round(pos.y + sqH / 2) + 'px',
+    bottom: nearBottom ? Math.round(height.value - (pos.y - sqH / 2)) + 'px' : 'auto',
+    'font-size': Math.round(squareFontSize.value * 0.8) + 'px'
   };
+};
 </script>
 
 <template>
@@ -183,9 +211,10 @@
     <div class="text-overlay">
       <div 
         class="square-text-rect centered"
+        :class="{selected: props.selectedSquare1 === square || props.selectedSquare2 === square}"
+        @click="emit('select', square)"
         v-for="[index, square] in squares.entries()" 
         :key="'text-' + index"
-        :class="{selected: props.selectedSquare1 === square || props.selectedSquare2 === square}"
         :style="{
           left: Math.round(squarePositions[index]!.x - squareSize.x / 2) + 'px',
           top: Math.round(squarePositions[index]!.y - squareSize.y / 2) + 'px',
@@ -194,14 +223,21 @@
           'font-size': Math.round(squareFontSize) + 'px' 
         }"
       >
-        <span @click="emit('select', square)">{{ square }}</span>
-        <button :style="{'font-size': Math.round(squareFontSize) + 'px'}">
-          <div style="flex: 1;"/>
+        <span >{{ square }}</span>
+        <button :style="{'font-size': Math.round(squareFontSize) + 'px'}" @click.stop="toggleDropdown(square)">
           <Icon name="lucide:users" class="icon"/>
           {{ getPlayersInSquare(square).length }}
-          <div style="flex: 1;"/>
         </button>
       </div>
+      <TransitionGroup name="slide-in">
+        <ul
+        v-for="[index, square] in squares.entries().filter((value) => value[1] === openDropdown)"
+        :key="'dropdown-' + index"
+        :style="getDropdownStyle(index)"
+        >
+          <li v-for="player in getPlayersInSquare(square)">{{ player.name }}</li>
+        </ul>
+      </TransitionGroup>
     </div>
   </div>
 </template>
@@ -241,20 +277,38 @@ div.square-text-rect {
     width: 90%;
   }
   & button {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.25em;
     height: 70%;
     margin-right: 2%;
-    overflow: hidden;
-    flex-shrink: 0;
-    flex-grow: 1;
+    flex: 1 0 auto
   }
   & .icon {
     width: 1.2em;
     height: 1.2em;
     flex-shrink: 0;
+  }
+}
+ul {
+  position: absolute;
+  background-color: var(--gray2);
+  border: 1px solid var(--gray4);
+  border-radius: var(--radius);
+  padding: 4px 0;
+  margin: 0;
+  list-style: none;
+  overflow-y: auto;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  pointer-events: auto;
+  & li {
+    color: white;
+    font-family: var(--rfont);
+    padding: 5px 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    &:hover {
+      background-color: var(--gray3);
+      color: #fff;
+    }
   }
 }
 div.square-text-rect.selected {

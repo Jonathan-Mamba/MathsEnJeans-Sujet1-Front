@@ -129,3 +129,14 @@ ol[data-slot="viewport"] li [data-slot="indicator"] {
     background-color: var(--blue) !important;
     background-image: linear-gradient(90deg, var(--blue), var(--lightblue)) !important;
 }
+
+.slide-in-enter-active,
+.slide-in-leave-active {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.slide-in-enter-from,
+.slide-in-leave-to {
+  transform: translateX(12px);
+  opacity: 0;
+}

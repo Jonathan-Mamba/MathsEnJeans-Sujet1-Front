@@ -68,7 +68,6 @@ div.nav-item {
     border: 1px solid var(--blue);
     & .label {
       opacity: 1;
-      visibility: visible;
       transform: translateX(0);
     }
   }

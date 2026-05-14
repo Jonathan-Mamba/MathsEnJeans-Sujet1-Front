@@ -64,6 +64,7 @@ ul.data-list {
     font-size: calc(var(--rfsize) + 2px);
     min-height: 35px;
     height: fit-content;
+    transition: all linear 0.5s;
     & span {
       background-color: var(--gray5);
       border-radius: var(--radius);
