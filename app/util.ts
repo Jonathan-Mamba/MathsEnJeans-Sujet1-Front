@@ -62,3 +62,5 @@ export const commonUploader = async (endpoint: string, method: HTTPMethod | type
     return null;
   }
 };
+
+export const clamp = (num: number, min: number, max: number) => Math.min(Math.max(num, min), max);

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { MenuEditMode, backendOrigin } from "~/util";
+import { MenuEditMode, backendOrigin, clamp } from "~/util";
 import { setupSSE } from "~/sseHandlers";
-import { useEventListener, useWindowSize } from "@vueuse/core";
+import { useElementSize, useWindowSize, useEventListener } from "@vueuse/core";
 
 useHead({
   title: "Math en Jeans - Conception d'un jeu de role diabolique (éditeur de jeu)",
@@ -26,6 +26,11 @@ const isResizing = ref(false);
 const resizeStartX = ref(0);
 const resizeStartWidth = ref(0);
 const appContainerRef = ref<HTMLElement | null>(null);
+const gameMenuRef = ref<HTMLElement | null>(null)
+const splitterRef = ref<HTMLElement | null>(null)
+const { width: containerWidth } = useElementSize(appContainerRef)
+const { width: menuWidth } = useElementSize(gameMenuRef);
+const { width: splitterWidth } = useElementSize(splitterRef);
 
 function startResize(e: MouseEvent) {
   isResizing.value = true;
@@ -33,22 +38,17 @@ function startResize(e: MouseEvent) {
   resizeStartWidth.value = optionWidth.value;
 }
 
-useEventListener(document, "mousemove", (e: MouseEvent) => {
-  if (!isResizing.value) return;
-  const container = appContainerRef.value;
-  if (!container) return;
-  const containerWidth = container.clientWidth;
-  const gameMenuWidth = containerWidth * 0.1;
-  const availableWidth = containerWidth - gameMenuWidth;
+const modifyWidth = (e: MouseEvent) => {
+  if (!isResizing.value || !containerWidth || !gameMenuRef.value) return;
+
+  const availableWidth = containerWidth.value - menuWidth.value - splitterWidth.value;
   const delta = e.clientX - resizeStartX.value;
   let newWidth = resizeStartWidth.value + (delta / availableWidth) * 100;
-  newWidth = Math.max(10, Math.min(90, newWidth));
+  newWidth = clamp(newWidth, 0, availableWidth / containerWidth.value * 100)
   optionWidth.value = newWidth;
-});
+}
 
-useEventListener(document, "mouseup", () => {
-  isResizing.value = false;
-});
+document.addEventListener("mouseup", () => isResizing.value = false)
 
 const { editMode, tabletLayoutThreshold } = useLayout();
 const { width: windowWidth } = useWindowSize();
@@ -61,10 +61,10 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div ref="appContainerRef" class="app-container" :class="{ resizing: isResizing }">
-    <GameMenu class="game-menu"/>
+  <div ref="appContainerRef" class="app-container" :class="{ resizing: isResizing }" @mousemove="modifyWidth">
+    <GameMenu class="game-menu" ref="gameMenuRef"/>
     <OptionContainer v-if="editMode !== MenuEditMode.MAP || windowWidth > tabletLayoutThreshold" :style="{ flex: `0 0 ${optionWidth}%` }"/>
-    <div class="splitter" @mousedown="startResize" />
+    <div class="splitter" @mousedown="startResize" ref="splitterRef"/>
     <MapContainer v-if="editMode === MenuEditMode.MAP || windowWidth > tabletLayoutThreshold" class="map-panel"/>
   </div>
 </template>
@@ -80,7 +80,7 @@ div.app-container.resizing {
   user-select: none;
 }
 .game-menu {
-  flex: 0 0 auto;
+  flex: 0 0 var(--menu-width);
 }
 .map-panel {
   flex: 1 1 0;

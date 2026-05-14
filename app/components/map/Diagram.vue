@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { GameRoute } from "~/util";
+  import { GameRoute, clamp } from "~/util";
   import { useElementSize } from "@vueuse/core";
   import diagramStyle from "~/assets/map_diagram.json";
 
@@ -16,8 +16,6 @@
     selectedSquare1: string,
     selectedSquare2: string,
   }>();
-
-  const clamp = (num: number, min: number, max: number) => Math.min(Math.max(num, min), max);
 
   const getPlayersInSquare = (squareName: string) => (players.value.filter((p) => p.position === squareName));
 
@@ -166,15 +164,15 @@ const getDropdownStyle = (index: number) => {
   const sqH = squareSize.value.y;
 
   // Estimate dropdown size
-  const dropdownH = 0.12 * height.value;
-  const dropdownW = sqW;
+  const dropdownW = diagramStyle.dropdownSize[0]! * width.value;
+  const dropdownH = diagramStyle.dropdownSize[1]! * height.value;
 
   const nearBottom = pos.y + sqH / 2 + dropdownH > height.value;
   const nearRight  = pos.x + sqW / 2 + dropdownW > width.value;
 
   return {
-    width: Math.round(sqW) + 'px',
-    height: dropdownH + 'px',
+    width: Math.round(dropdownW) + 'px',
+    height: Math.round(dropdownH) + 'px',
     // Horizontal: align to left edge of square, flip to right-align if near right edge
     left:  nearRight ? 'auto' : Math.round(pos.x - sqW / 2) + 'px',
     right: nearRight ? Math.round(width.value - (pos.x + sqW / 2)) + 'px' : 'auto',
@@ -235,7 +233,7 @@ const getDropdownStyle = (index: number) => {
         :key="'dropdown-' + index"
         :style="getDropdownStyle(index)"
         >
-          <li v-for="player in getPlayersInSquare(square)">{{ player.name }}</li>
+          <li v-for="player in getPlayersInSquare(square)">⦁ {{ player.name }}</li>
         </ul>
       </TransitionGroup>
     </div>
@@ -246,7 +244,7 @@ const getDropdownStyle = (index: number) => {
 div.map {
   width: 90%;
   aspect-ratio: 1 / 1;
-  background-color: #fff;
+  background-color:aliceblue;
   border-radius: var(--radius4);
   margin-bottom: 25px;
   position: relative;
@@ -279,7 +277,7 @@ div.square-text-rect {
   & button {
     height: 70%;
     margin-right: 2%;
-    flex: 1 0 auto
+    flex: 1 0 auto;
   }
   & .icon {
     width: 1.2em;
@@ -289,14 +287,14 @@ div.square-text-rect {
 }
 ul {
   position: absolute;
-  background-color: var(--gray2);
-  border: 1px solid var(--gray4);
+  background-color: var(--gray5);
+  border: 1px solid var(--gray3);
   border-radius: var(--radius);
   padding: 4px 0;
   margin: 0;
   list-style: none;
   overflow-y: auto;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
   pointer-events: auto;
   & li {
     color: white;
@@ -306,7 +304,7 @@ ul {
     overflow: hidden;
     text-overflow: ellipsis;
     &:hover {
-      background-color: var(--gray3);
+      background-color: var(--gray4);
       color: #fff;
     }
   }

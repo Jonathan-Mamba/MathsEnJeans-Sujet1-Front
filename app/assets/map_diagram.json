@@ -11,7 +11,7 @@
         "minSizeThreshold": "number - minimum number of squares before using the maximum size",
         "squareFontSize": "number (percent of square size) - size of the font used for the text in the squares"
     },
-    "maxSquareFactor": [0.28, 0.14],
+    "maxSquareFactor": [0.26, 0.13],
     "maxSizeThreshold": 5,
     "minSquareFactor": [0.12, 0.08],
     "minSizeThreshold": 12,
@@ -19,5 +19,6 @@
     "lineWidth": 4,
     "circleRouteRadius": 20,
     "circleCenterOffset": -10,
-    "squareFontSize": 0.1
+    "squareFontSize": 0.1,
+    "dropdownSize": [0.3, 0.12]
 }
