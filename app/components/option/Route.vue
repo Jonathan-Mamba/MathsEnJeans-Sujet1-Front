@@ -26,25 +26,18 @@ function sortRoutes(route1: GameRoute, route2: GameRoute): number {
 <template>
   <div class="option-menu">
     <p class="title">Routes</p>
-    <ul class="data-list dashboard">
-      <li>
-        <span class="first-row">
+    <OptionDataList empty-text="Aucune route n'est définie pour le moment." :items="routes.sort(sortRoutes)" @delete="deleteRoute">
+      <template #header>
           <label>Premier point</label>
           <label>Deuxième point</label>
           <label>Type de route</label>
-        </span>
-        <button class="delete" style="visibility: hidden;"><Icon name="lucide:trash-2"/></button>
-      </li> 
-      <p class="empty" v-if="routes.length === 0">Aucune route n'est définie pour le moment</p>
-      <li v-for="route in routes.sort(sortRoutes)" :key="route.firstEnd + route.secondEnd + route.type">
-        <span>
+      </template>
+      <template #row="{ item: route }">
           <label>{{route.firstEnd}}</label>
           <label>{{route.secondEnd}}</label>
           <label>{{route.type}}</label>
-        </span>
-        <button @click="deleteRoute(route)" class="delete"><Icon name="lucide:trash-2"/></button>
-      </li>
-    </ul>
+      </template>
+    </OptionDataList>
     <form @submit.prevent="addRoute(addedRouteFirstEnd, addedRouteSecondEnd, addedRouteType)" class="centered">
       <OptionFormEntry type="select" :options="squares" label="Premier point" v-model="addedRouteFirstEnd"/>
       <OptionFormEntry type="select" :options="squares" label="Deuximème point" v-model="addedRouteSecondEnd"/>

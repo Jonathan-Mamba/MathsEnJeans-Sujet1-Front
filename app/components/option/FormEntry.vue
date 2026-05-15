@@ -45,6 +45,7 @@ div.input-form-container {
     font-size: var(--rfsize);
   }
   & select, & input, & span {
+    color: white;
     max-width: 50%;
     border-radius: 0 var(--radius) var(--radius) 0;
     border: var(--gray5) solid 1px;

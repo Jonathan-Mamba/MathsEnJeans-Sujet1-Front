@@ -9,14 +9,9 @@ const addedSquare = ref<string>("");
   <div class="dialog-parent">
     <div :class="{'blurred': modifiedSquare !== '', 'content': true, 'centered': true, 'option-menu': true}">
       <p class="title">Cases</p>
-      <ul class="data-list">
-        <p v-if="squares.length === 0" class="empty">La liste des cases est vide</p>
-        <li v-for="square in squares" :key="square">
-          <span>{{square}}</span>
-          <button class="edit" @click="modifiedSquare = square"><Icon name="lucide:edit"/></button>
-          <button class="delete" @click="deleteSquare(square)"><Icon name="lucide:trash-2"/></button>
-        </li>
-      </ul>
+      <OptionDataList empty-text="Aucune case définie pour le moment." @edit="(square, _) => {modifiedSquare = square}" :items="squares" @delete="deleteSquare" has-edit>
+        <template #row="{ item: square}">{{ square }}</template>
+      </OptionDataList>
       <form class="centered" @submit.prevent="addSquare(addedSquare)">
         <OptionFormEntry label="Nom de la case" type="input" placeholder="Entrez le nom de la case" v-model="addedSquare"/>
         <button type="submit" class="blue">Ajouter à la liste</button>
@@ -24,7 +19,7 @@ const addedSquare = ref<string>("");
     </div>
     <Dialog v-if="modifiedSquare !== ''" title="Modifier la case" @confirm="modifySquare(modifiedSquare, modifiedSquareName); modifiedSquare = ''" @cancel="modifiedSquare = ''">
       <div class="centered">
-        <OptionFormEntry label="Nom de la case" type="input" placeholder="Entrez le nom de la case" v-model="addedSquare"/>
+        <OptionFormEntry label="Nom de la case" type="input" placeholder="Entrez le nom de la case" v-model="modifiedSquareName"/>
       </div>
     </Dialog>
   </div>

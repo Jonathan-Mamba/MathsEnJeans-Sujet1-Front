@@ -17,15 +17,9 @@ const setModifiedDay = (index: number) => {
   <div class="option-menu dialog-parent">
     <div :class="{'blurred': modifiedDay > 0, 'content': true, 'centered': true}">
       <p class="title">Calendrier</p>
-      <ul class="data-list">
-        <p v-if="calendar.length === 0" class="empty">Le calendrier est vide</p>
-        <li v-for="[index, day] in calendar.entries()" :key="day">
-          <label>{{index+1}} - </label>
-          <span>{{day}}</span>
-          <button class="edit" @click="setModifiedDay(index + 1)"><Icon name="lucide:edit"/></button>
-          <button @click="removeDay(index + 1)" class="delete"><Icon name="lucide:trash-2"/></button>
-        </li>
-      </ul>
+      <OptionDataList :items="calendar" empty-text="Le calendrier est vide." @edit="(_, index) => setModifiedDay(index)" @delete="(_, index) => removeDay(index + 1)" has-edit numbered>
+        <template #row="{ item: day }">{{ day }}</template>
+      </OptionDataList>
       <form class="centered" @submit.prevent="addDay(addedDayType)">
         <OptionFormEntry type="select" :options="dayTypes" label="Type de jour" v-model="addedDayType" @update:model-value="addDay(addedDayType)"/>
         <button type="submit" class="blue">Ajouter au calendrier</button>
@@ -41,14 +35,6 @@ const setModifiedDay = (index: number) => {
 
 <style scoped>
 @import "~/assets/option_menu.css";
-li label {
-  margin-right: 5px;
-}
-p.empty {
-  text-align: center;
-  font-family: var(--rfont);
-  font-style: italic;
-}
 div.dialog {
   min-width: 60%;
   border-radius: var(--radius2);

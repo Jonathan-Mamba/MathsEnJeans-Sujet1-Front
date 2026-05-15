@@ -132,12 +132,13 @@ button.red {
   opacity: 0;
 }
 
-.fade-in-enter-active,
+.fade-in-enter-active {
+  transition: opacity 0.2s ease-in-out;
+}
 .fade-in-leave-active {
-  transition: opacity 0.2s ease;
+    transition: opacitiy 1ms linear;
 }
 
-.fade-in-enter-from,
-.fade-in-leave-to {
+.fade-in-enter-from, .fade-in-leave-to {
   opacity: 0;
 }
