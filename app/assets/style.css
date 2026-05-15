@@ -123,7 +123,7 @@ button.red {
 
 .slide-in-enter-active,
 .slide-in-leave-active {
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease !important;
 }
 
 .slide-in-enter-from,

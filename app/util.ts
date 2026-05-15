@@ -60,7 +60,7 @@ export const commonUploader = async (endpoint: string, method: HTTPMethod | type
     }
     return await $fetch(new URL(endpoint, backendOrigin).href, { method, body });
   } catch (err: any) {
-    const detail = err?.data?.detail || err?.response?.data?.detail || errorMessage;
+    const detail = err?.data?.detail || err?.response?.data?.detail || "";
     toast.add({ 
       title: errorMessage, 
       description: String(detail), 

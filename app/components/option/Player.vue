@@ -20,7 +20,7 @@ const setModifiedPlayer = (player: GamePlayer) => {
   <div class="dialog-parent">
     <div :class="{blurred: modifiedPlayerId !== null, content: true, 'option-menu': true}">
       <p class="title">Joueurs</p>
-      <OptionDataList :items="players" empty-text="Aucun joueur présent pour le moment." @edit="setModifiedPlayer" @delete="(player, _) => deletePlayer(player.id)" has-edit>
+      <OptionDataList :items="players" empty-text="Aucun joueur présent pour le moment." @edit="setModifiedPlayer" @delete="(player, _) => deletePlayer(player.id)" :get-key="(p) => p.id" has-edit>
         <template #header>
           <label>Nom</label>
           <label>Position</label>

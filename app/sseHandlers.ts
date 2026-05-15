@@ -8,7 +8,7 @@ export const setupSSE = (source: EventSource, gameId: string | null) => {
       state.calendar.value.push(data.type);
     },
     "game.calendar.removed": async (data: Record<string, any>) => {
-      state.calendar.value = state.calendar.value.filter((item, index) => index + 1 !== data.number);
+      state.calendar.value = state.calendar.value.filter((_, index) => index + 1 !== data.number);
     }, 
     "game.calendar.modified": async (data: Record<string, any>) => {
       state.calendar.value[data.number - 1] = data.type;
@@ -18,9 +18,9 @@ export const setupSSE = (source: EventSource, gameId: string | null) => {
       const addedRoute = GameRoute.from(data.route)
       state.routes.value.push(GameRoute.from(data.route));
       const routesOfSameEnds = state.routes.value.filter((route) => {
-        return route.firstEnd == addedRoute.firstEnd && route.secondEnd == addedRoute.secondEnd
+        return (route.firstEnd == addedRoute.firstEnd && route.secondEnd == addedRoute.secondEnd) || (route.firstEnd == addedRoute.secondEnd && route.secondEnd == addedRoute.firstEnd)
       })
-      if (routesOfSameEnds.length === state.dayTypes.value.length) {
+      if (routesOfSameEnds.length === state.dayTypes.value.length || addedRoute.type == state.routeTypeAll.value) {
         state.routes.value = state.routes.value.filter((route) => {
           return route.firstEnd !== addedRoute.firstEnd || route.secondEnd !== addedRoute.secondEnd
         })

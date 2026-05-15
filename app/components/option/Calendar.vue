@@ -17,9 +17,14 @@ const setModifiedDay = (index: number) => {
   <div class="option-menu dialog-parent">
     <div :class="{'blurred': modifiedDay > 0, 'content': true, 'centered': true}">
       <p class="title">Calendrier</p>
-      <OptionDataList :items="calendar" empty-text="Le calendrier est vide." @edit="(_, index) => setModifiedDay(index)" @delete="(_, index) => removeDay(index + 1)" has-edit numbered>
-        <template #row="{ item: day }">{{ day }}</template>
-      </OptionDataList>
+      <OptionDataList 
+      :items="calendar" 
+      empty-text="Le calendrier est vide." 
+      @edit="(_, index) => setModifiedDay(index)" 
+      @delete="(_, index) => removeDay(index + 1)" 
+      :get-key="(day) => day" 
+      has-edit numbered
+      />
       <form class="centered" @submit.prevent="addDay(addedDayType)">
         <OptionFormEntry type="select" :options="dayTypes" label="Type de jour" v-model="addedDayType" @update:model-value="addDay(addedDayType)"/>
         <button type="submit" class="blue">Ajouter au calendrier</button>

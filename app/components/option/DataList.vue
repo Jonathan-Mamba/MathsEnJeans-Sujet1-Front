@@ -1,6 +1,6 @@
 <!-- OptionDataList.vue -->
 <script setup lang="ts" generic="T">
-const props = defineProps<{ items: T[], emptyText: string, hasEdit?: boolean, numbered?: boolean }>();
+const props = withDefaults(defineProps<{ items: T[], emptyText: string, hasEdit?: boolean, numbered?: boolean, getKey?: (item: T, index: number) => any}>(), {getKey: (_, i) => i})
 defineEmits<{ edit: [item: T, index: number], delete: [item: T, index : number] }>();
 </script>
 
@@ -14,14 +14,17 @@ defineEmits<{ edit: [item: T, index: number], delete: [item: T, index : number] 
       <button class="delete" style="visibility: hidden;"><Icon name="lucide:trash-2"/></button>
     </li>
     <p v-if="items.length === 0" class="empty">{{ emptyText }}</p>
-    <li v-for="(item, index) in items" :key="index">
-      <label v-if="numbered">{{ index + 1}} -</label>
-      <span>
-        <slot name="row" :item="item" />
-      </span>
-      <button v-if="hasEdit" class="edit centered" @click="$emit('edit', item, index)"><Icon name="lucide:edit"/></button>
-      <button class="delete centered" @click="$emit('delete', item, index)"><Icon name="lucide:trash-2"/></button>
-    </li>
+    <TransitionGroup name="slide-in">
+      <li v-for="(item, index) in items" :key="getKey(item, index)">
+        <label v-if="numbered">{{ index + 1}} -</label>
+        <span v-if="$slots.row">
+          <slot name="row" :item="item" />
+        </span>
+        <span v-else>{{ item }}</span>
+        <button v-if="hasEdit" class="edit centered" @click="$emit('edit', item, index)"><Icon name="lucide:edit"/></button>
+        <button class="delete centered" @click="$emit('delete', item, index)"><Icon name="lucide:trash-2"/></button>
+      </li>
+    </TransitionGroup>
   </ul>
 </template>
 
@@ -43,6 +46,7 @@ ul.data-list {
     font-size: calc(var(--rfsize) + 2px);
     min-height: 35px;
     height: fit-content;
+    transition: all ease-in 1s;
     & span {
       background-color: var(--gray5);
       border-radius: var(--radius);

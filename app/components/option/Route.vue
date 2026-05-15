@@ -26,16 +26,16 @@ function sortRoutes(route1: GameRoute, route2: GameRoute): number {
 <template>
   <div class="option-menu">
     <p class="title">Routes</p>
-    <OptionDataList empty-text="Aucune route n'est définie pour le moment." :items="routes.sort(sortRoutes)" @delete="deleteRoute">
+    <OptionDataList empty-text="Aucune route n'est définie pour le moment." :items="routes.sort(sortRoutes)" @delete="deleteRoute" :get-key="(r) => `${r.firstEnd}:::${r.secondEnd}:::${r.type}`">
       <template #header>
         <label>Premier point</label>
         <label>Deuxième point</label>
         <label>Type de route</label>
       </template>
       <template #row="{ item: route }">
-          <label>{{route.firstEnd}}</label>
-          <label>{{route.secondEnd}}</label>
-          <label>{{route.type}}</label>
+        <label>{{route.firstEnd}}</label>
+        <label>{{route.secondEnd}}</label>
+        <label>{{route.type}}</label>
       </template>
     </OptionDataList>
     <form @submit.prevent="addRoute(addedRouteFirstEnd, addedRouteSecondEnd, addedRouteType)" class="centered">
