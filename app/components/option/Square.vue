@@ -18,19 +18,13 @@ const addedSquare = ref<string>("");
         </li>
       </ul>
       <form class="centered" @submit.prevent="addSquare(addedSquare)">
-         <div class="input-form-container centered">
-          <label for="square_name">Nom de la case</label>
-          <input type="text" v-model="addedSquare" placeholder="Entrez le nom de la case">
-         </div>
+        <OptionFormEntry label="Nom de la case" type="input" placeholder="Entrez le nom de la case" v-model="addedSquare"/>
         <button type="submit" class="blue">Ajouter à la liste</button>
       </form>
     </div>
     <Dialog v-if="modifiedSquare !== ''" title="Modifier la case" @confirm="modifySquare(modifiedSquare, modifiedSquareName); modifiedSquare = ''" @cancel="modifiedSquare = ''">
       <div class="centered">
-        <div class="input-form-container centered">
-          <label for="new_square_name">Nom de la case</label>
-          <input name="new_square_name" type="text" v-model="modifiedSquareName" placeholder="Entrez le nom de la case">
-         </div>
+        <OptionFormEntry label="Nom de la case" type="input" placeholder="Entrez le nom de la case" v-model="addedSquare"/>
       </div>
     </Dialog>
   </div>

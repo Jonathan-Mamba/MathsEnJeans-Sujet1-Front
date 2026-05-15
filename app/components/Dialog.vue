@@ -42,7 +42,7 @@ div.dialog {
   border-radius: var(--radius);
   & p.title {
     font-size: var(--stfsize);
-    background-color: var(--lightblue);
+    background-color: var(--blue);
     color: white;
     text-align: center;
     margin-top: 0px;
@@ -51,14 +51,14 @@ div.dialog {
   }
   & div.content {
     flex: 1;
-    padding: 0 10px 0 10px;
+    padding: 10px;
   }
   & div.footer {
     display: flex;
     flex-direction: row-reverse;
     width: 100%;
     gap: 5px;
-    margin: 10px 10px 5px 0;
+    margin: 0 10px 5px 0;
     & button {
       border: none;
       border-radius: var(--radius);

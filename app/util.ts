@@ -59,10 +59,20 @@ export const commonUploader = async (endpoint: string, method: HTTPMethod | type
       return await $fetch(new URL(endpoint, backendOrigin).href, { method });
     }
     return await $fetch(new URL(endpoint, backendOrigin).href, { method, body });
-  } catch (err) {
-    console.log(err)
+  } catch (err: any) {
     const detail = err?.data?.detail || err?.response?.data?.detail || errorMessage;
-    toast.add({ title: errorMessage, description: String(detail), color: "error", id: String(detail) });
+    toast.add({ 
+      title: errorMessage, 
+      description: String(detail), 
+      color: "error", 
+      id: String(detail), 
+      ui: {
+        title: "toast-title",
+        root: "toast-root",
+        description: "toast-description",
+        wrapper: "toast-wrapper",
+        progress: "toast-progress"
+    }});
     return null;
   }
 };

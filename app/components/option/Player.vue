@@ -40,16 +40,8 @@
         </li>
       </ul>
       <form class="centered" @submit.prevent="addPlayer(newPlayerName, newPlayerPosition); newPlayerName = ''; newPlayerPosition = ''">
-        <div class="input-form-container centered">
-          <label for="name">Nom du joueur </label>
-          <input id="name" v-model="newPlayerName" type="text" required>
-        </div>
-        <div class="input-form-container centered">
-          <label for="position">Position du joueur</label>
-          <select id="position" v-model="newPlayerPosition">
-            <option v-for="value in squares" :key="value">{{ value }}</option>
-          </select>
-        </div>
+        <OptionFormEntry type="input" label="Nom du joueur" v-model="newPlayerName"/>
+        <OptionFormEntry type="select" label="Position du joueur" v-model="newPlayerPosition" :options="squares"/>
         <button type="submit" class="blue">Ajouter un joueur</button>
       </form>
     </div>
@@ -59,16 +51,8 @@
       @confirm="modifyPlayer(modifiedPlayerId, modifiedPlayerName, modifiedPlayerPosition); modifiedPlayerId = null" 
       @cancel="modifiedPlayerId = null" 
     >
-      <div class="input-form-container centered" style="margin-bottom: 5px;">
-        <label for="name">Nom du joueur </label>
-        <input id="name" v-model="modifiedPlayerName" type="text" required>
-      </div>
-      <div class="input-form-container centered">
-        <label for="position">Position du joueur</label>
-        <select id="position" v-model="modifiedPlayerPosition">
-          <option v-for="value in squares" :key="value">{{ value }}</option>
-        </select>
-      </div>
+      <OptionFormEntry type="input" label="Nom du joueur" v-model="modifiedPlayerName"/>
+      <OptionFormEntry type="select" label="Position du joueur" v-model="modifiedPlayerPosition" :options="squares"/>
     </Dialog>
   </div>
 </template>

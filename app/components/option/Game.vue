@@ -20,29 +20,12 @@ const newPlayerPosition = ref<string>("");
   </form>
 
   <form v-else class="centered" @submit.prevent="movePlayer(newPlayerPosition, gameStatus.current_player!.id)">
-    <div class="info-form-container">
-      <label>Tour numéro</label>
-      <span>{{ gameStatus.day_count }}</span>
-    </div>
-    <div class="info-form-container">
-      <label>Type de jour</label>
-      <span>{{ gameStatus.current_day_type }}</span>
-    </div>
-    <div class="info-form-container">
-      <label>Nom du joueur</label>
-      <span>{{ gameStatus.current_player!.name }}</span>
-    </div>
-    <div class="info-form-container">
-      <label>Position du joueur</label>
-      <span>{{ gameStatus.current_player!.position }}</span>
-    </div>
+    <OptionFormEntry type="info" label="Tour numéro" :data="gameStatus.day_count"/>
+    <OptionFormEntry type="info" label="Type de jour" :data="gameStatus.current_day_type"/>
+    <OptionFormEntry type="info" label="Nom du joueur" :data="gameStatus.current_player!.name"/>
+    <OptionFormEntry type="info" label="Position du joueur" :data="gameStatus.current_player!.position"/>
     <hr>
-    <div class="input-form-container">
-      <label>Nouvelle position</label>
-      <select v-model="newPlayerPosition">
-        <option v-for="square in squares" :value="square">{{square}}</option>
-      </select>
-    </div>
+    <OptionFormEntry type="select" label="Nouvelle position" :options="squares" v-model="newPlayerPosition"/>
     <button type="submit" class="blue">Déplacer le joueur</button>
   </form>
   <button v-if="gameRunning" @click="stopGame()" class="red">Arrêter la partie</button>
@@ -72,39 +55,8 @@ button.red {
 button.blue {
   margin-bottom: 5px;
 }
-div.info-form-container {
-  display: flex;
-  flex-direction: row;
-  background-color: var(--gray5);
-  border-radius: var(--radius);
-  overflow: hidden;
-  & label {
-    border-radius: var(--radius) 0 0 var(--radius);
-    background-color: var(--gray3);
-    height: 100%;
-    flex: 1;
-    text-align: center;
-    font-size: var(--rfsize);
-    text-overflow: ellipsis;
-  }
-  & span {
-    max-width: 50%;
-    border-radius: 0 var(--radius) var(--radius) 0;
-    border: var(--gray5) solid 1px;
-    flex: 1;
-    background-color: var(--gray5);
-    height: 100%;
-    box-sizing: border-box;
-    font-size: var(--rfsize);
-    margin: 0;
-    padding-left: 2px;
-    padding-bottom: 5px;
-    max-height: 1.15em;
-    text-overflow: ellipsis;
-    text-align: center;
-  }
-}
 hr {
   width: 75%;
+  margin-bottom: 5px;
 }
 </style>

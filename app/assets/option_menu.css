@@ -91,42 +91,6 @@ ul.data-list {
   }
 }
 
-div.input-form-container {
-  display: flex;
-  flex-direction: row;
-  border: 1px solid var(--gray3);
-  background-color: var(--gray3);
-  border-radius: var(--radius);
-  overflow: hidden;
-  &:hover {
-    border: var(--blue) solid 1px;
-  }
-  & label {
-    border-radius: var(--radius) 0 0 var(--radius);
-    background-color: var(--gray3);
-    height: 100%;
-    flex: 1;
-    text-align: center;
-    font-size: var(--rfsize);
-  }
-  & select, & input, & span {
-    max-width: 50%;
-    border-radius: 0 var(--radius) var(--radius) 0;
-    border: var(--gray5) solid 1px;
-    flex: 1;
-    background-color: var(--gray5);
-    height: 100%;
-    box-sizing: border-box;
-    font-size: var(--rfsize);
-    margin: 0;
-    padding: 0 0 0 2px;
-  }
-  & input:focus {
-    outline: none;
-    border: var(--blue) solid 1px;
-  }
-}
-
 form {
   display: flex;
   flex-direction: column;

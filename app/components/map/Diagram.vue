@@ -55,18 +55,21 @@ class DrawnRoute {
   curved: boolean = false;
   circleCenter: Vector2 = new Vector2();
   circleRadius: number = 0;
-  constructor(first_end: Vector2, second_end: Vector2, color: string, curved: boolean = false) {
-    this.firstEnd = first_end;
-    this.secondEnd = second_end;
+  id: string
+  constructor(firstEnd: Vector2, secondEnd: Vector2, color: string, curved: boolean = false, id: string) {
+    this.firstEnd = firstEnd;
+    this.secondEnd = secondEnd;
     this.color = color;
     this.curved = curved;
+    this.id = id
   }
   public static fromRoute(route: GameRoute, squarePositions: Vector2[]): DrawnRoute {
     const firstEnd = squarePositions[squares.value.indexOf(route.firstEnd)];
     const secondEnd = squarePositions[squares.value.indexOf(route.secondEnd)];
     const color = routeTypes.value[route.type];
     const curved = route.firstEnd === route.secondEnd;
-    return new DrawnRoute(firstEnd!.copy(), secondEnd!.copy(), color!, curved);
+    const id = `${route.firstEnd}:::${route.secondEnd}:::${route.type}`
+    return new DrawnRoute(firstEnd!.copy(), secondEnd!.copy(), color!, curved, id);
   }
   public setCircleCenter(mapCenter: Vector2, circleRadius: number, squareSize: Vector2, offset: number = 0): Vector2 {
     if (!this.curved) {
@@ -187,14 +190,14 @@ return {
 <template>
   <div class="map">
     <svg ref="mapSVG" class="map-svg">
-      <line 
+      <TransitionGroup name="fade-in">
+        <path
         v-for="route in drawnRoutes.filter(r => !r.curved)"
-        :x1="Math.round(route.firstEnd.x)" 
-        :y1="Math.round(route.firstEnd.y)" 
-        :x2="Math.round(route.secondEnd.x)" 
-        :y2="Math.round(route.secondEnd.y)" 
-        :stroke="route.color" 
+        :key="route.id"
+        :d="`M ${Math.round(route.firstEnd.x)} ${Math.round(route.firstEnd.y)} L ${Math.round(route.secondEnd.x)} ${Math.round(route.secondEnd.y)}`"
+        :stroke="route.color"
         :stroke-width="diagramStyle.lineWidth"
+        fill="none"
       />
       <circle 
         v-for="route in drawnRoutes.filter(r => r.curved)"
@@ -202,31 +205,35 @@ return {
         :cy="Math.round(route.circleCenter.y)" 
         :r="Math.round(route.circleRadius)" 
         :stroke="route.color" 
-        :stroke-width="diagramStyle.lineWidth" 
+        :stroke-width="diagramStyle.lineWidth"
+        :key="route.id"
         fill="none"
       />
+      </TransitionGroup>
     </svg>
     <div class="text-overlay">
-      <div 
-        class="square-text-rect centered"
-        :class="{selected: props.selectedSquare1 === square || props.selectedSquare2 === square}"
-        @click="emit('select', square)"
-        v-for="[index, square] in squares.entries()" 
-        :key="'text-' + index"
-        :style="{
-          left: Math.round(squarePositions[index]!.x - squareSize.x / 2) + 'px',
-          top: Math.round(squarePositions[index]!.y - squareSize.y / 2) + 'px',
-          width: Math.round(squareSize.x) + 'px',
-          height: Math.round(squareSize.y) + 'px',
-          'font-size': Math.round(squareFontSize) + 'px' 
-        }"
-      >
-        <span >{{ square }}</span>
-        <button :style="{'font-size': Math.round(squareFontSize) + 'px'}" @click.stop="toggleDropdown(square)">
-          <Icon name="lucide:users" class="icon"/>
-          {{ getPlayersInSquare(square).length }}
-        </button>
-      </div>
+      <TransitionGroup name="fade-in">
+        <div 
+          class="square-text-rect centered"
+          :class="{selected: props.selectedSquare1 === square || props.selectedSquare2 === square}"
+          @click="emit('select', square)"
+          v-for="[index, square] in squares.entries()" 
+          :key="'text-' + index"
+          :style="{
+            left: Math.round(squarePositions[index]!.x - squareSize.x / 2) + 'px',
+            top: Math.round(squarePositions[index]!.y - squareSize.y / 2) + 'px',
+            width: Math.round(squareSize.x) + 'px',
+            height: Math.round(squareSize.y) + 'px',
+            'font-size': Math.round(squareFontSize) + 'px' 
+          }"
+        >
+          <span >{{ square }}</span>
+          <button :style="{'font-size': Math.round(squareFontSize) + 'px'}" @click.stop="toggleDropdown(square)">
+            <Icon name="lucide:users" class="icon"/>
+            {{ getPlayersInSquare(square).length }}
+          </button>
+        </div>
+      </TransitionGroup>
       <TransitionGroup name="slide-in">
         <ul
         v-for="[index, square] in squares.entries().filter((value) => value[1] === openDropdown)"
@@ -249,6 +256,7 @@ div.map {
   border-radius: var(--radius4);
   margin-bottom: 25px;
   position: relative;
+  overflow: hidden;
 }
 div.text-overlay, svg.map-svg {
   position: absolute;
@@ -257,6 +265,9 @@ div.text-overlay, svg.map-svg {
   width: 100%;
   height: 100%;
   pointer-events: none;
+}
+path, circle, div.square-text-rect, ul {
+  transition: all ease-in-out 0.3s;
 }
 div.square-text-rect {
   flex-direction: row;

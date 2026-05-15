@@ -27,23 +27,13 @@ const setModifiedDay = (index: number) => {
         </li>
       </ul>
       <form class="centered" @submit.prevent="addDay(addedDayType)">
-         <div class="input-form-container centered">
-          <label for="day_type">Type de jour</label>
-          <select v-model="addedDayType" @change="addDay(addedDayType)">
-            <option v-for="dayType in dayTypes" :value="dayType">{{dayType}}</option>
-          </select>
-         </div>
+        <OptionFormEntry type="select" :options="dayTypes" label="Type de jour" v-model="addedDayType" @update:model-value="addDay(addedDayType)"/>
         <button type="submit" class="blue">Ajouter au calendrier</button>
       </form>
     </div>
     <Dialog title="Modifier le jour" @confirm="modifyDay(modifiedDay, modifiedDayType); modifiedDay = 0" @cancel="modifiedDay = 0" v-if="modifiedDay > 0">
        <div class="centered">
-         <div class="input-form-container centered">
-           <label for="new_day_type">Type de jour</label>
-           <select v-model="modifiedDayType" name="new_day_type">
-             <option v-for="dayType in dayTypes" :value="dayType">{{dayType}}</option>
-           </select>
-         </div>
+        <OptionFormEntry type="select" :options="dayTypes" label="Type de jour" v-model="modifiedDayType"/>
        </div>
     </Dialog>
   </div>
@@ -61,9 +51,7 @@ p.empty {
 }
 div.dialog {
   min-width: 60%;
-  min-height: 15%;
-  max-height: 60%;
-  border-radius: calc(var(--radius) + 5px);
+  border-radius: var(--radius2);
 }
 div.content {
   width: 100%;

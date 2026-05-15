@@ -46,24 +46,9 @@ function sortRoutes(route1: GameRoute, route2: GameRoute): number {
       </li>
     </ul>
     <form @submit.prevent="addRoute(addedRouteFirstEnd, addedRouteSecondEnd, addedRouteType)" class="centered">
-      <div class="input-form-container centered">
-        <label for="premier_point">Premier point</label>
-        <select name="premier_point" id="premier_point" v-model="addedRouteFirstEnd">
-          <option v-for="square in squares" :value="square">{{square}}</option>
-        </select>
-      </div>
-      <div class="input-form-container centered">
-        <label for="deuxieme_point">Deuxième point</label>
-        <select name="deuxieme_point" id="deuxieme_point" v-model="addedRouteSecondEnd">
-          <option v-for="square in squares" :value="square">{{square}}</option>
-        </select>
-      </div>
-      <div class="input-form-container centered">
-        <label for="route_type">Type de route</label>
-        <select name="route_type" id="route_type" v-model="addedRouteType">
-          <option v-for="type in Object.keys(routeTypes)" :value="type">{{type}}</option>
-        </select>
-      </div>
+      <OptionFormEntry type="select" :options="squares" label="Premier point" v-model="addedRouteFirstEnd"/>
+      <OptionFormEntry type="select" :options="squares" label="Deuximème point" v-model="addedRouteSecondEnd"/>
+      <OptionFormEntry type="select" :options="Object.keys(routeTypes)" label="Type de route" v-model="addedRouteType"/>
       <button type="submit" class="blue">Ajouter la nouvelle route</button>
     </form>
   </div>

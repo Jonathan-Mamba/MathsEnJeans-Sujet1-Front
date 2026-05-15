@@ -105,29 +105,23 @@ button.red {
 }
 
 /* Toast Styling - Nuxt UI v4 */
-ol[data-slot="viewport"] {
-    --toast-bg: var(--gray2);
-    --toast-title: var(--lightblue);
-    --toast-text: var(--gray12);
-    --toast-progress: var(--blue);
+.toast-root {
+    background-color: var(--gray2);
 }
 
-ol[data-slot="viewport"] li[data-slot="base"] {
-    background-color: var(--gray2) !important;
-    background-image: none !important;
+.toast-title {
+    color: var(--lightblue);
+    font-size: calc(var(--stfsize) * 0.85);
 }
 
-ol[data-slot="viewport"] li [data-slot="title"] {
-    color: var(--lightblue) !important;
+.toast-description {
+    color: var(--gray12);
+    font-size: calc(var(--rfsize) * 0.85);
 }
 
-ol[data-slot="viewport"] li [data-slot="description"] {
-    color: var(--gray12) !important;
-}
-
-ol[data-slot="viewport"] li [data-slot="indicator"] {
-    background-color: var(--blue) !important;
-    background-image: linear-gradient(90deg, var(--blue), var(--lightblue)) !important;
+.toast-progress {
+    background-color: var(--blue);
+    background-image: linear-gradient(90deg, var(--blue), var(--lightblue));
 }
 
 .slide-in-enter-active,
@@ -138,5 +132,15 @@ ol[data-slot="viewport"] li [data-slot="indicator"] {
 .slide-in-enter-from,
 .slide-in-leave-to {
   transform: translateX(12px);
+  opacity: 0;
+}
+
+.fade-in-enter-active,
+.fade-in-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-in-enter-from,
+.fade-in-leave-to {
   opacity: 0;
 }
