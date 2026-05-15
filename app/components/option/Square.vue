@@ -25,8 +25,4 @@ const addedSquare = ref<string>("");
 
 <style scoped>
 @import "~/assets/option_menu.css";
-span {
-  padding: 3px 0px 2px 0px;
-  flex: 1;
-}
 </style>

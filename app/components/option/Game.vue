@@ -34,14 +34,6 @@ const newPlayerPosition = ref<string>("");
  
 <style scoped>
 @import "~/assets/option_menu.css";
-div.footer {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    flex: 1;
-    margin-top: auto;
-    margin-bottom: 5px;
-}
 button.start {
     padding: 10px 20px;
     cursor: pointer;

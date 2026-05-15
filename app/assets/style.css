@@ -142,3 +142,22 @@ button.red {
 .fade-in-enter-from, .fade-in-leave-to {
   opacity: 0;
 }
+
+*::-webkit-scrollbar {
+  width: clamp(8px, 0.45vw, 40px);
+  height: clamp(8px, 0.45vw, 40px);
+}
+*::-webkit-scrollbar-thumb:hover, *::-webkit-scrollbar-thumb:active {
+  background-color: var(--lightblue);
+}
+*::-webkit-scrollbar-thumb {
+  background-color: var(--gray10);
+  border-radius: var(--radius);
+}
+*::-webkit-scrollbar-track {
+  background-color: var(--gray5);
+}
+
+:focus-visible {
+  outline: unset;
+}

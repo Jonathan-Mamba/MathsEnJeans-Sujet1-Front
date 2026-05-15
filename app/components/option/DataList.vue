@@ -32,9 +32,8 @@ defineEmits<{ edit: [item: T, index: number], delete: [item: T, index : number] 
 ul.data-list {
   background-color: var(--gray3);
   border-radius: var(--radius);
-  padding: 10px;
   width: 80%;
-  padding-left: 0px;
+  padding: 10px 10px 10px 0px;
   height: 25%;
   overflow-y: scroll; 
   & li {

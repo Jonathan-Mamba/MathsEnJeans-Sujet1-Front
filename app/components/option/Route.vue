@@ -49,21 +49,4 @@ function sortRoutes(route1: GameRoute, route2: GameRoute): number {
 
 <style scoped>
 @import "~/assets/option_menu.css";
-form {
-  display: flex;
-  flex-direction: column;
-  width: 90%;
-  background-color: var(--gray2);
-  padding-top: 10px;
-  padding-bottom: 10px;
-  margin-top: 15px;
-  border-radius: var(--radius);
-  & button {
-    width: 70%;
-  }
-  & .input-form-container {
-    margin-bottom: 5px;
-    min-width: 55%;
-  }
-}
 </style>
