@@ -5,7 +5,7 @@ defineEmits<{ edit: [item: T, index: number], delete: [item: T, index : number] 
 </script>
 
 <template>
-<ul :class="{'data-list': true, 'dashboard': $slots.header}">
+  <ul :class="{'data-list': true, 'dashboard': $slots.header}">
     <li v-if="$slots.header" class="header">
       <span class="first-row">
         <slot name="header" />
@@ -19,10 +19,10 @@ defineEmits<{ edit: [item: T, index: number], delete: [item: T, index : number] 
       <span>
         <slot name="row" :item="item" />
       </span>
-      <button v-if="hasEdit" class="edit" @click="$emit('edit', item, index)"><Icon name="lucide:edit"/></button>
-      <button class="delete" @click="$emit('delete', item, index)"><Icon name="lucide:trash-2"/></button>
+      <button v-if="hasEdit" class="edit centered" @click="$emit('edit', item, index)"><Icon name="lucide:edit"/></button>
+      <button class="delete centered" @click="$emit('delete', item, index)"><Icon name="lucide:trash-2"/></button>
     </li>
-</ul>
+  </ul>
 </template>
 
 <style scoped>
@@ -35,8 +35,6 @@ ul.data-list {
   height: 25%;
   overflow-y: scroll; 
   & li {
-    list-style:decimal;
-    list-style-type:decimal;
     padding-left: 10px;
     font-family: var(--rfont);
     margin-top: 3px;
@@ -79,7 +77,7 @@ ul.dashboard {
   & span {
     display: flex;
     justify-content: center;
-    & label {
+    & :deep(label) {
       padding: 3px 5px 3px 5px;
       flex: 1;
       text-align: center;
@@ -94,7 +92,7 @@ ul.dashboard {
 	    justify-content: center; 
 	    align-items: center;
     }
-    &.first-row label {
+    &.first-row :deep(label) {
       background-color: var(--gray6);
       font-weight: normal;
       font-size: var(--stfsize);

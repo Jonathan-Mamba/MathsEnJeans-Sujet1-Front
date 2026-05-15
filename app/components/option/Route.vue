@@ -28,9 +28,9 @@ function sortRoutes(route1: GameRoute, route2: GameRoute): number {
     <p class="title">Routes</p>
     <OptionDataList empty-text="Aucune route n'est définie pour le moment." :items="routes.sort(sortRoutes)" @delete="deleteRoute">
       <template #header>
-          <label>Premier point</label>
-          <label>Deuxième point</label>
-          <label>Type de route</label>
+        <label>Premier point</label>
+        <label>Deuxième point</label>
+        <label>Type de route</label>
       </template>
       <template #row="{ item: route }">
           <label>{{route.firstEnd}}</label>
