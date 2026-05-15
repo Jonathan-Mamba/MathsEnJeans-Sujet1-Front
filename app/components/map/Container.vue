@@ -54,8 +54,5 @@ div.map-container {
   gap: 25px;
   background-color: var(--gray5);
   overflow: auto scroll;
-  min-height: 100%;        /* at least fill the panel */
-  min-width: fit-content;  /* don't squish below map's natural size */
-  height: auto;            /* let it grow beyond the panel height */
 }
 </style>

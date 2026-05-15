@@ -7,5 +7,5 @@ export default defineNuxtConfig({
   ssr: false,
   icon: {
     mode: 'svg',
-  }
+  },
 })

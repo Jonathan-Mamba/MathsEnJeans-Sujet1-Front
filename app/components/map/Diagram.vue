@@ -257,7 +257,6 @@ div.map {
   border-radius: var(--radius4);
   margin-bottom: 25px;
   position: relative;
-  overflow: hidden;
 }
 div.text-overlay, svg.map-svg {
   position: absolute;
@@ -266,6 +265,7 @@ div.text-overlay, svg.map-svg {
   width: 100%;
   height: 100%;
   pointer-events: none;
+  overflow: hidden;
 }
 path, circle, div.square-text-rect, ul {
   transition: all ease-in-out 0.3s;
@@ -288,6 +288,8 @@ div.square-text-rect {
     width: 90%;
   }
   & button {
+    display: flex;
+    flex-direction: column;
     height: 70%;
     margin-right: 2%;
     flex: 1 0 auto;
