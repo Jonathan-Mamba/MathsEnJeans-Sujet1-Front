@@ -88,7 +88,7 @@ div.app-container.resizing {
 }
 .map-panel {
   flex: 1 1 0;
-  min-width: 0;
+  overflow: hidden; /* add this — lets map-container scroll inside it */
 }
 div.splitter {
   width: 4px;
