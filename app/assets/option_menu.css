@@ -12,23 +12,21 @@ p.title {
 
 * {
   color: white;
+  font-family: var(--rfont);
 }
 
 div.option-menu {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   background-color: var(--gray1);
   height: 100%;
   width: 100%;
-  color: white;
-  font-family: var(--rfont);
-  justify-content: center;
 }
 
 p.empty {
   text-align: center;
-  font-family: var(--rfont);
   font-style: italic;
 }
 

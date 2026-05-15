@@ -15,7 +15,11 @@ useHead({
 
 const { pending, error, loadInitialData } = useGameState();
 
-await loadInitialData();
+try {
+  await loadInitialData();
+} catch (e) {
+  console.error(e)
+}
 
 onMounted(() => {
   setupSSE(new EventSource(new URL("/events", backendOrigin).href), "1");

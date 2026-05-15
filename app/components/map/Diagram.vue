@@ -128,6 +128,7 @@ const squarePositions: Ref<Vector2[]> = computed(() => {
   }
   return result;
 });
+
 const drawnRoutes: Ref<DrawnRoute[]> = computed(() => {
   const result: DrawnRoute[] = [];
   const routeMap: Map<string, GameRoute[]> = new Map();
