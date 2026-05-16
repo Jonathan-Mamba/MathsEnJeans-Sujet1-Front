@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { MenuEditMode, commonUploader } from "~/util";
+import { toast } from 'vue3-toastify'
 
 // --- New Imports & Refs for Import ---
 const fileInput = ref<HTMLInputElement | null>(null);
@@ -34,11 +35,11 @@ const target = event.target as HTMLInputElement;
 
     const response = await commonUploader("/import", "POST", jsonData, "Erreur lors de l'import des données");
     if (response) {
-      useToast().add({title: "Import de données", description: "Données importées avec succès.", id: 1123456789})
+      toast.success("Données importées avec succès.")
     }
   } catch (error) {
     console.error("Erreur de lecture :", error);
-    useToast().add({title: "Erreur de lecture", "description": "Le fichier n'est pas un JSON valide.", "color": "error", "id": 123456789})
+    toast.error("Le fichier n'est pas un JSON valide.")
   } finally {
     if (fileInput.value) fileInput.value.value = '';
   }

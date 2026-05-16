@@ -102,24 +102,6 @@ button.red {
 }
 
 /* Toast Styling - Nuxt UI v4 */
-.toast-root {
-    background-color: var(--gray2);
-}
-
-.toast-title {
-    color: var(--lightblue);
-    font-size: calc(var(--stfsize) * 0.85);
-}
-
-.toast-description {
-    color: var(--gray12);
-    font-size: calc(var(--rfsize) * 0.85);
-}
-
-.toast-progress {
-    background-color: var(--blue);
-    background-image: linear-gradient(90deg, var(--blue), var(--lightblue));
-}
 
 .slide-in-enter-active,
 .slide-in-leave-active {

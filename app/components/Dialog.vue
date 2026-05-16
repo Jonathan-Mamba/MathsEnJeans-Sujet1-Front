@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 const props = withDefaults(defineProps<{
   title: string
-  confirm_text?: string
-  cancel_text?: string
+  confirmText?: string
+  cancelText?: string
 }>(), {
-  confirm_text: "Appliquer",
-  cancel_text: "Annuler"
+  confirmText: "Appliquer",
+  cancelText: "Annuler"
 })
 const emit = defineEmits<{
   (e: 'confirm'): void
@@ -20,8 +20,8 @@ const emit = defineEmits<{
       <slot></slot>
     </div>
     <div class="footer">
-      <button class="blue" @click="emit('confirm')">{{ props.confirm_text }}</button>
-      <button class="red" @click="emit('cancel')">{{ props.cancel_text }}</button>
+      <button class="blue" @click="emit('confirm')">{{ props.confirmText }}</button>
+      <button class="red" @click="emit('cancel')">{{ props.cancelText }}</button>
     </div>
   </div>
 </template>

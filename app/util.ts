@@ -1,3 +1,5 @@
+import { toast } from 'vue3-toastify'
+
 export enum MenuEditMode {
   PLAYER = "player",
   SQUARE = "square",
@@ -55,7 +57,6 @@ export const SSEEndpoint = new URL("/events", backendOrigin + "/").href;
 type HTTPMethod = "GET" | "HEAD" | "PATCH" | "POST" | "PUT" | "DELETE" | "CONNECT" | "OPTIONS" | "TRACE" | "get" | "head" | "patch" | "post" | "put" | "delete" | "connect" | "options" | "trace";
 
 export const commonUploader = async (endpoint: string, method: HTTPMethod | typeof undefined = undefined, body: Record<string, any> = {}, errorMessage: string = "Erreur"): Promise<any | null> => {
-  const toast = useToast();
   try {
     if (method === "GET" || method === "get") {
       return await $fetch(new URL(endpoint, backendOrigin).href, { method });
@@ -63,18 +64,7 @@ export const commonUploader = async (endpoint: string, method: HTTPMethod | type
     return await $fetch(new URL(endpoint, backendOrigin).href, { method, body });
   } catch (err: any) {
     const detail = err?.data?.detail || err?.response?.data?.detail || "";
-    toast.add({ 
-      title: errorMessage, 
-      description: String(detail), 
-      color: "error", 
-      id: String(detail), 
-      ui: {
-        title: "toast-title",
-        root: "toast-root",
-        description: "toast-description",
-        wrapper: "toast-wrapper",
-        progress: "toast-progress"
-    }});
+    toast.error(String(detail));
     return null;
   }
 };
