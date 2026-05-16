@@ -5,6 +5,8 @@ export enum MenuEditMode {
   CALENDAR = "calendar",
   GAME = "game",
   MAP = "map",
+  HISTORY = "history",
+  MATRICES = "matrices"
 }
 
 export class GamePlayer {

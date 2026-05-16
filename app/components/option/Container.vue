@@ -12,6 +12,8 @@
   <OptionCalendar v-else-if="mode === MenuEditMode.CALENDAR"/>
   <OptionPlayer v-else-if="mode === MenuEditMode.PLAYER"/>
   <OptionGame v-else-if="mode === MenuEditMode.GAME"/>
+  <OptionHistory v-else-if="mode === MenuEditMode.HISTORY"/>
+  <OptionMatrices v-else-if="mode === MenuEditMode.MATRICES"/>
 </div>
 </template>
 
