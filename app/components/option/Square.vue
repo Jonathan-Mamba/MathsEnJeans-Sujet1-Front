@@ -7,9 +7,9 @@ const addedSquare = ref<string>("");
 
 <template>
   <div class="dialog-parent">
-    <div :class="{'blurred': modifiedSquare !== '', 'content': true, 'centered': true, 'option-menu': true}">
+    <div :class="{'blurred': modifiedSquare !== ''}" class="option-menu">
       <p class="title">Cases</p>
-      <OptionDataList empty-text="Aucune case définie pour le moment." @edit="(square, _) => {modifiedSquare = square}" :items="squares" @delete="deleteSquare" has-edit/>
+      <OptionDataList empty-text="Aucune case définie pour le moment." @edit="(square) => {modifiedSquare = square}" :items="squares" @delete="deleteSquare" has-edit has-delete/>
       <form class="centered" @submit.prevent="addSquare(addedSquare)">
         <OptionFormEntry label="Nom de la case" type="input" placeholder="Entrez le nom de la case" v-model="addedSquare"/>
         <button type="submit" class="blue">Ajouter à la liste</button>

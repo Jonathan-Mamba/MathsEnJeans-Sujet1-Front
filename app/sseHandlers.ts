@@ -5,13 +5,14 @@ export const setupSSE = (source: EventSource, gameId: string | null) => {
 
   const gameListeners: Record<string, (data: Record<string, any>) => void> = {
     "game.calendar.added": async (data: Record<string, any>) => {
-      state.calendar.value.push(data.type);
+      state.calendar.value.push({type: data.type, id: Math.random()});
     },
     "game.calendar.removed": async (data: Record<string, any>) => {
       state.calendar.value = state.calendar.value.filter((_, index) => index + 1 !== data.number);
     }, 
     "game.calendar.modified": async (data: Record<string, any>) => {
-      state.calendar.value[data.number - 1] = data.type;
+      const modified = state.calendar.value[data.number - 1]
+      if (modified) modified.type = data.type
     },
 
     "game.route.added": async (data: Record<string, any>) => {

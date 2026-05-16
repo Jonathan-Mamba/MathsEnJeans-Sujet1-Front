@@ -26,7 +26,7 @@ function sortRoutes(route1: GameRoute, route2: GameRoute): number {
 <template>
   <div class="option-menu">
     <p class="title">Routes</p>
-    <OptionDataList empty-text="Aucune route n'est définie pour le moment." :items="routes.sort(sortRoutes)" @delete="deleteRoute" :get-key="(r) => `${r.firstEnd}:::${r.secondEnd}:::${r.type}`">
+    <OptionDataList empty-text="Aucune route n'est définie pour le moment." :items="routes.sort(sortRoutes)" @delete="deleteRoute" :get-key="(r) => `${r.firstEnd}:::${r.secondEnd}:::${r.type}`" has-delete>
       <template #header>
         <label>Premier point</label>
         <label>Deuxième point</label>

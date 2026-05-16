@@ -18,7 +18,7 @@ export const useGameState = () => {
   const squares = useState<string[]>("gs-squares", () => []);
   const routes = useState<GameRoute[]>("gs-routes", () => []);
   const routeTypeAll = useState<string>("gs-route-type-all", () => "Tout");
-  const calendar = useState<string[]>("gs-calendar", () => []);
+  const calendar = useState<{type: string, id: number}[]>("gs-calendar", () => []);
   const routeTypes = useState<Record<string, string>>("gs-route-types", () => ({
     "Livraison": "#FF1F5B",
     "Doléances": "#0071FF", 
@@ -52,7 +52,7 @@ export const useGameState = () => {
       squares.value = data.value.squares;
       routes.value = data.value.routes.map((r) => GameRoute.from(r));
       routeTypeAll.value = data.value.route_type_all;
-      calendar.value = data.value.calendar;
+      calendar.value = data.value.calendar.map((day) => ({type: day, id: Math.random()}));
       gameStatus.value = data.value.game_status;
       gameHistory.value = data.value.game_history;
     }

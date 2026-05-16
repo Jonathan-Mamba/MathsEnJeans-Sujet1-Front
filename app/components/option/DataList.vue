@@ -1,6 +1,6 @@
 <!-- OptionDataList.vue -->
 <script setup lang="ts" generic="T">
-const props = withDefaults(defineProps<{ items: T[], emptyText: string, hasEdit?: boolean, numbered?: boolean, getKey?: (item: T, index: number) => any}>(), {getKey: (_, i) => i})
+const props = withDefaults(defineProps<{ items: T[], emptyText: string, hasEdit?: boolean, hasDelete?: boolean, numbered?: boolean, getKey?: (item: T, index: number) => any}>(), {getKey: (_, i) => i})
 defineEmits<{ edit: [item: T, index: number], delete: [item: T, index : number] }>();
 </script>
 
@@ -11,7 +11,7 @@ defineEmits<{ edit: [item: T, index: number], delete: [item: T, index : number] 
         <slot name="header" />
       </span>
       <button v-if="hasEdit" class="edit" style="visibility: hidden;"><Icon name="lucide:edit"/></button>
-      <button class="delete" style="visibility: hidden;"><Icon name="lucide:trash-2"/></button>
+      <button v-if="hasDelete" class="delete" style="visibility: hidden;"><Icon name="lucide:trash-2"/></button>
     </li>
     <p v-if="items.length === 0" class="empty">{{ emptyText }}</p>
     <TransitionGroup name="slide-in">
@@ -22,7 +22,7 @@ defineEmits<{ edit: [item: T, index: number], delete: [item: T, index : number] 
         </span>
         <span v-else>{{ item }}</span>
         <button v-if="hasEdit" class="edit centered" @click="$emit('edit', item, index)"><Icon name="lucide:edit"/></button>
-        <button class="delete centered" @click="$emit('delete', item, index)"><Icon name="lucide:trash-2"/></button>
+        <button v-if="hasDelete" class="delete centered" @click="$emit('delete', item, index)"><Icon name="lucide:trash-2"/></button>
       </li>
     </TransitionGroup>
   </ul>

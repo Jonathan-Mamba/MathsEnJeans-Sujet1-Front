@@ -17,8 +17,8 @@ const model = defineModel()
 <template>
   <div class="input-form-container centered">
     <label>{{ label }}</label>
-    <input v-if="props.type === 'input'" v-model="model" pl>
-    <select v-if="props.type === 'select'" :placeholder="props.placeholder" v-model="model">
+    <input v-if="props.type === 'input'" v-model="model" required>
+    <select v-if="props.type === 'select'" :placeholder="props.placeholder" v-model="model" required>
         <option v-for="option in props.options" :value="option">{{ option }}</option>
     </select>
     <span v-if="props.type === 'info'">{{ data }}</span>
