@@ -55,7 +55,7 @@ ul.data-list {
       text-align: center;
     }
     & > label {
-        margin-right: 5px;
+      margin-right: 5px;
     }
     & button {
       flex: 0 0 auto;
@@ -63,13 +63,12 @@ ul.data-list {
       min-height: 35px;
       aspect-ratio: 1 / 1;
       stroke-width: 1;
+      &.edit { color: white; }
+      &.delete { color: var(--red); }
       & * {
         width: 90%;
         height: 90%;
       }
-    }
-    & button.delete * {
-      color: var(--red);
     }
   }
 }

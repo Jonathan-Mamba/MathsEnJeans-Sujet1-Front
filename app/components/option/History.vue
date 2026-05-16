@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 const { gameHistory } = useGameHistory()
 const { players } = useGamePlayers()
 
@@ -23,23 +22,14 @@ const renderedHistory = computed<[string, string, string, string, string][]>(() 
 
   return result
 }) 
-
 </script>
 
 <template>
 <div class="option-menu">
   <p class="title">Historique</p>
-  <OptionDataList 
-  :items="renderedHistory" 
-  :empty-text="`L'historique est vide.`"
-  :get-key="(item) => item.join(':::')"
-  >
+  <OptionDataList :items="renderedHistory" empty-text="L'historique est vide." :get-key="(item) => item.join(':::')">
     <template #header>
-      <label>Numéro du jour</label>
-      <label>Type de jour</label>
-      <label>Nom du joueur</label>
-      <label>Case initiale</label>
-      <label>Case finale</label>
+      <label v-for="value in ['Numéro du jour', 'Type de jour', 'Nom du joueur', 'Case initiale', 'Case finale']">{{ value }}</label>
     </template>
     <template #row="{ item: entry }">
       <label v-for="item in entry">{{ item }}</label>
