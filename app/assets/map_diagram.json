@@ -13,7 +13,7 @@
     },
     "maxSquareFactor": [0.26, 0.13],
     "maxSizeThreshold": 5,
-    "minSquareFactor": [0.12, 0.08],
+    "minSquareFactor": [0.13, 0.08],
     "minSizeThreshold": 12,
     "diagramRadius": 0.35,
     "lineWidth": 4,

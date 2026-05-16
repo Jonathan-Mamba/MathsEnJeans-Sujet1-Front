@@ -279,6 +279,7 @@ div.square-text-rect {
   cursor: pointer;
   border-radius: var(--radius2);
   overflow: hidden;
+  box-sizing: border-box;
   & span {
     text-align: center;
     text-overflow: ellipsis;

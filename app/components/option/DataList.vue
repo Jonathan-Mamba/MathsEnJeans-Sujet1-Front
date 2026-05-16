@@ -1,6 +1,16 @@
 <!-- OptionDataList.vue -->
 <script setup lang="ts" generic="T">
-const props = withDefaults(defineProps<{ items: T[], emptyText: string, hasEdit?: boolean, hasDelete?: boolean, numbered?: boolean, getKey?: (item: T, index: number) => any}>(), {getKey: (_, i) => i})
+const props = withDefaults(defineProps<{
+   items: T[], 
+   emptyText: string, 
+   hasEdit?: boolean, 
+   hasDelete?: boolean, 
+   numbered?: boolean, 
+   getKey?: (item: T, index: number) => any
+  }>(), 
+   {
+    getKey: (_, i) => i
+  })
 defineEmits<{ edit: [item: T, index: number], delete: [item: T, index : number] }>();
 </script>
 
