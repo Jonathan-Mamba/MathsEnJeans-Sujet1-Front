@@ -43,7 +43,7 @@ function startResize(e: MouseEvent) {
 }
 
 const modifyWidth = (e: MouseEvent) => {
-  if (!isResizing.value || !containerWidth || !gameMenuRef.value) return;
+  if (!isResizing.value) return;
 
   const availableWidth = containerWidth.value - menuWidth.value - splitterWidth.value;
   const delta = e.clientX - resizeStartX.value;

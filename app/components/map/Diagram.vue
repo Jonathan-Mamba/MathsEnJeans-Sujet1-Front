@@ -198,9 +198,8 @@ return {
         :d="`M ${Math.round(route.firstEnd.x)} ${Math.round(route.firstEnd.y)} L ${Math.round(route.secondEnd.x)} ${Math.round(route.secondEnd.y)}`"
         :stroke="route.color"
         :stroke-width="diagramStyle.lineWidth"
-        fill="none"
-      />
-      <circle 
+        />
+        <circle 
         v-for="route in drawnRoutes.filter(r => r.curved)"
         :cx="Math.round(route.circleCenter.x)" 
         :cy="Math.round(route.circleCenter.y)" 
@@ -209,7 +208,7 @@ return {
         :stroke-width="diagramStyle.lineWidth"
         :key="route.id"
         fill="none"
-      />
+        />
       </TransitionGroup>
     </svg>
     <div class="text-overlay">

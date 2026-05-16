@@ -43,9 +43,8 @@ ul.data-list {
     display: flex;
     justify-content: space-between;
     font-size: calc(var(--rfsize) + 2px);
-    min-height: 35px;
+    height: 35px;
     height: fit-content;
-    transition: all ease-in 1s;
     & span {
       background-color: var(--gray5);
       border-radius: var(--radius);
@@ -58,7 +57,7 @@ ul.data-list {
     & > label {
         margin-right: 5px;
     }
-    & button.delete, & button.edit {
+    & button {
       flex: 0 0 auto;
       align-self: stretch;
       min-height: 35px;
@@ -102,6 +101,18 @@ ul.dashboard {
       font-style: normal;
       text-decoration: underline;
     }
+  }
+}
+
+@media (max-width: 800px) {
+  ul.dashboard span :deep(label) {
+    min-width: 25vw;
+  }
+  ul.data-list li {
+    height: 28px;
+  }
+  ul.data-list li button {
+    min-height: fit-content;
   }
 }
 

@@ -12,6 +12,11 @@ type ExportData = {
   game_history: any[];
 };
 
+type GameHistoryEntry = {
+  day_type: string
+  moves: [string, string, string][] // player id, from square, to square
+}
+
 
 export const useGameState = () => {
   const players = useState<GamePlayer[]>("gs-players", () => []);
@@ -32,7 +37,7 @@ export const useGameState = () => {
     day_count: 0,
     current_day_type: null,
   }));
-  const gameHistory = useState<any[]>("gs-game-history", () => []);
+  const gameHistory = useState<GameHistoryEntry[]>("gs-game-history", () => []);
 
   const dayTypes = computed(() =>
     Object.keys(routeTypes.value).filter((key) => key !== routeTypeAll.value)

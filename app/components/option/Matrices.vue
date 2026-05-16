@@ -4,7 +4,7 @@
 
 <template>
 <div class="option-menu">
-    <p class="title">Tester les matrices</p>
+    <p class="title">Matrices</p>
 </div>
 </template>
 
