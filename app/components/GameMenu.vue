@@ -10,10 +10,10 @@ const navItems = [
   { id: MenuEditMode.ROUTE, icon: 'lucide:route', label: 'Configurer les routes' },
   { id: MenuEditMode.CALENDAR, icon: 'lucide:calendar', label: 'Configurer le calendrier' },
   { id: MenuEditMode.PLAYER, icon: 'lucide:user', label: 'Gérer les joueurs' },
-  { id: MenuEditMode.HISTORY, icon: 'lucide:history', label: 'Voir l\'historique de jeu'},
-  { id: MenuEditMode.MATRICES, icon: 'lucide:calculator', label: 'Tester des matrices'},
   { id: MenuEditMode.MAP, icon: 'lucide:map', label: 'Voir la carte'},
+  { id: MenuEditMode.MATRICES, icon: 'lucide:calculator', label: 'Tester des matrices'},
   { id: MenuEditMode.GAME, icon: 'lucide:play', label: 'Jouer' },
+  { id: MenuEditMode.HISTORY, icon: 'lucide:history', label: 'Voir l\'historique de jeu'},
 ];
 
 const selectItem = (itemId: MenuEditMode) => {

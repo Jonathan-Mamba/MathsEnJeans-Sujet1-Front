@@ -10,6 +10,7 @@ type ExportData = {
   calendar: string[];
   game_status: any;
   game_history: any[];
+  castle_square: string
 };
 
 type GameHistoryEntry = {
@@ -21,6 +22,7 @@ type GameHistoryEntry = {
 export const useGameState = () => {
   const players = useState<GamePlayer[]>("gs-players", () => []);
   const squares = useState<string[]>("gs-squares", () => []);
+  const castleSquare = useState<string>("gs-castler-square", () => "Palais")
   const routes = useState<GameRoute[]>("gs-routes", () => []);
   const routeTypeAll = useState<string>("gs-route-type-all", () => "Tout");
   const calendar = useState<{type: string, id: number}[]>("gs-calendar", () => []);
@@ -60,6 +62,7 @@ export const useGameState = () => {
       calendar.value = data.value.calendar.map((day) => ({type: day, id: Math.random()}));
       gameStatus.value = data.value.game_status;
       gameHistory.value = data.value.game_history;
+      castleSquare.value = data.value.castle_square
     }
   };
 
@@ -78,6 +81,7 @@ export const useGameState = () => {
     gameCompleted,
     pending,
     error,
+    castleSquare,
     loadInitialData
   };
 };
@@ -131,7 +135,7 @@ export const useGameSquares = () => {
     await commonUploader("/squares", "DELETE", { name }, "Erreur lors de la suppression de la case");
   };
 
-  return { squares: state.squares, addSquare, modifySquare, deleteSquare };
+  return { squares: state.squares, castleSquare: state.castleSquare, addSquare, modifySquare, deleteSquare };
 };
 
 export const useGameDayTypes = () => {

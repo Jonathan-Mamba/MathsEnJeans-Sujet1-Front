@@ -38,6 +38,9 @@ export const setupSSE = (source: EventSource, gameId: string | null) => {
       state.squares.value.push(data.name);
     },
     "game.square.modified": async (data: Record<string, any>) => {
+      if (data.old_name === state.castleSquare.value) {
+        state.castleSquare.value = data.new_name
+      }
       state.squares.value = state.squares.value.map((square) =>
         square === data.old_name ? data.new_name : square
       );
