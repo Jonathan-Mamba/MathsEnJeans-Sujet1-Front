@@ -17,6 +17,7 @@ const emit = defineEmits(["select"])
 const props = defineProps<{
   selectedSquare1: string,
   selectedSquare2: string,
+  disableGrayRoutes: boolean
 }>();
 
 const isRouteGray = (route: DrawnRoute): boolean => {
@@ -211,7 +212,7 @@ return {
         :d="`M ${Math.round(route.firstEnd.x)} ${Math.round(route.firstEnd.y)} L ${Math.round(route.secondEnd.x)} ${Math.round(route.secondEnd.y)}`"
         :stroke="route.color"
         :stroke-width="diagramStyle.lineWidth"
-        :class="{ gray: isRouteGray(route) }"
+        :class="{ gray: disableGrayRoutes ? false : isRouteGray(route) }"
         />
         <circle 
         v-for="route in drawnRoutes.filter(r => r.curved)"
@@ -220,7 +221,7 @@ return {
         :r="Math.round(route.circleRadius)" 
         :stroke="route.color" 
         :stroke-width="diagramStyle.lineWidth"
-        :class="{ gray: isRouteGray(route) }"
+        :class="{ gray: disableGrayRoutes ? false : isRouteGray(route) }"
         :key="route.id"
         fill="none"
         />

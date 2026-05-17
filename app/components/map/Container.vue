@@ -7,6 +7,7 @@ const selectedFirstSquare: Ref<string> = ref("");
 const selectedSecondSquare: Ref<string> = ref("");
 const selectedRouteType: Ref<string> = ref("");
 const mode: Ref<string> = ref("add");
+const disableGrayRoutes = ref<boolean>(false)
 
 const addSelectedSquare = (square: string) => {
   if (selectedFirstSquare.value === "") {
@@ -38,11 +39,14 @@ watch(gameRunning, () => { selectedFirstSquare.value = ''; selectedSecondSquare.
     <MapLegend 
     @select="(routeType) => {selectedFirstSquare = ''; selectedSecondSquare = ''; selectedRouteType = routeType}" 
     @modechange="(m) => {mode = m}"
+    @checkbox="disableGrayRoutes = !disableGrayRoutes"
+    :disable-gray-routes
     />
     <MapDiagram 
     @select="(square) => addSelectedSquare(square)" 
     :selected-square1="selectedFirstSquare" 
     :selected-square2="selectedSecondSquare"
+    :disable-gray-routes
     />
   </div>
 
