@@ -46,6 +46,7 @@ div.dialog {
     color: white;
     text-align: center;
     margin-top: 0px;
+    margin-bottom: 2px;
     padding-bottom: 2px;
     order: -2;
   }

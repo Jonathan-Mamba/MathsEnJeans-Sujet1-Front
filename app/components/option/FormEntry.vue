@@ -15,7 +15,7 @@ const model = defineModel()
 
 
 <template>
-  <div class="input-form-container centered">
+  <div class="input-form-container centered" :class="{ info: props.type === 'info'}">
     <label>{{ label }}</label>
     <input v-if="props.type === 'input'" v-model="model" required>
     <select v-if="props.type === 'select'" :placeholder="props.placeholder" v-model="model" required>
@@ -76,5 +76,8 @@ div.input-form-container {
     text-overflow: ellipsis;
     text-align: center;
   }
+}
+div.info:hover {
+  border: 1px solid var(--gray3);;
 }
 </style>

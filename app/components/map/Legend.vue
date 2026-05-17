@@ -1,7 +1,14 @@
 <script lang="ts" setup>
 const { gameRunning } = useGameStatus();
 const { routeTypes } = useGameRoutes();
-const emit = defineEmits(["select", "modechange"]);
+const emit = defineEmits<{ 
+  select: [type: string], 
+  modechange: [mode: 'add' | 'delete'],
+  checkbox: []
+}>();
+const props = defineProps<{
+  disableGrayRoutes: boolean
+}>()
 const selectedRouteType = ref<string>("")
 </script>
 
@@ -16,7 +23,7 @@ const selectedRouteType = ref<string>("")
       <hr :style="{'background-color': color, border:0}" class="route-color">
       <span>{{routeType}}</span>
     </div>
-    <hr class="part-separator" v-if="!gameRunning">
+    <hr class="part-separator">
     <div class="legend-element" v-if="!gameRunning">
       <label>
         <input type="radio" name="a" @input="emit('modechange', 'delete')">
@@ -27,6 +34,12 @@ const selectedRouteType = ref<string>("")
       <label>
         <input type="radio" name="a" @input="emit('modechange', 'add')">
         Ajouter une route
+      </label>
+    </div>  
+    <div class="legend-element" v-if="gameRunning">
+      <label>
+        <input type='checkbox' name="b" v-model="props.disableGrayRoutes" @input="emit('checkbox')">
+        Désactiver le grisage des routes
       </label>
     </div>  
   </div>

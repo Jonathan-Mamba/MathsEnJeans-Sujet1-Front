@@ -86,6 +86,7 @@ export const setupSSE = (source: EventSource, gameId: string | null) => {
     "game.simulated": async (data: Record<string, any>) => {
       state.gameStatus.value = data.status;
       state.gameHistory.value = data.history;
+      state.players.value = data.players
     },
     "game.data.import": async (data: Record<string, any>) => {
       await state.loadInitialData()
