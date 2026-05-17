@@ -44,7 +44,10 @@ export class GameRoute {
   public static from(data: Record<string, any>): GameRoute {
     return new GameRoute(data.first_end, data.second_end, data.type);
   }
-  public static equals(route1: GameRoute, route2: GameRoute): boolean {
+  public static equals(route1: GameRoute, route2: GameRoute, typeAll: string | null = null): boolean {
+    if (typeAll) {
+      return((route1.firstEnd === route2.firstEnd && route1.secondEnd === route2.secondEnd) || (route1.firstEnd === route2.secondEnd && route1.secondEnd === route2.firstEnd)) && (route1.type === route2.type || route1.type === typeAll || route2.type === typeAll);
+    }
     return ((route1.firstEnd === route2.firstEnd && route1.secondEnd === route2.secondEnd) || (route1.firstEnd === route2.secondEnd && route1.secondEnd === route2.firstEnd)) && route1.type === route2.type;
   }
 }

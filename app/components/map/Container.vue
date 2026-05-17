@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { GameRoute } from "~/util";
+const { gameRunning } = useGameState()
 const { addRoute, deleteRoute } = useGameRoutes();
 
 const selectedFirstSquare: Ref<string> = ref("");
@@ -29,6 +30,7 @@ const addSelectedSquare = (square: string) => {
     selectedSecondSquare.value = "";
   }
 }
+watch(gameRunning, () => { selectedFirstSquare.value = ''; selectedSecondSquare.value = '' })
 </script>
 
 <template>

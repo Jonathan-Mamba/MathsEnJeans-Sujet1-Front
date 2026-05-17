@@ -1,11 +1,42 @@
 <script setup lang="ts">
+import { GameRoute } from '~/util';
+import { toast } from 'vue3-toastify';
 
 const { gameStatus, gameNotStarted, gameRunning } = useGameStatus();
 const { startGame, stopGame, simulateGame, movePlayer } = useGameControl();
 const { squares } = useGameSquares();
+const { routes, routeTypeAll } = useGameRoutes();
 
 const newPlayerPosition = ref<string>("");
 
+const availableSquares = computed<string[]>(() => {
+  const currentPlayerPosition = gameStatus.value.current_player?.position ?? "";
+  const currentDayType = gameStatus.value.current_day_type ?? "";
+  const result: string[] = []
+
+  for (const square of squares.value) {
+    const testedRoute = new GameRoute(currentPlayerPosition, square, currentDayType)
+    const routeExists = routes.value.some((route) => GameRoute.equals(testedRoute, route, routeTypeAll.value))
+    if (routeExists) {
+      result.push(square)
+    }
+  }
+  return result
+}) 
+
+const isMoving = ref<boolean>(false)
+
+const handleMovePlayer = async () => {
+  isMoving.value = true;
+  try {
+    const movedPlayer = gameStatus.value.current_player!
+    await movePlayer(newPlayerPosition.value, gameStatus.value.current_player!.id);
+    toast.success(`${movedPlayer.name} a été déplacé vers ${newPlayerPosition.value}`)
+    newPlayerPosition.value = "";
+  } finally {
+    isMoving.value = false;
+  }
+}
 </script>
 
 <template>
@@ -19,14 +50,14 @@ const newPlayerPosition = ref<string>("");
     <button @click="(async () => {await startGame(); await simulateGame()})()" class="start blue">Simuler la partie</button>  
   </form>
 
-  <form v-else class="centered" @submit.prevent="movePlayer(newPlayerPosition, gameStatus.current_player!.id)">
-    <OptionFormEntry type="info" label="Tour numéro" :data="gameStatus.day_count"/>
+  <form v-else class="centered" @submit.prevent="handleMovePlayer()">
+    <OptionFormEntry type="info" label="Jour numéro" :data="gameStatus.day_count"/>
     <OptionFormEntry type="info" label="Type de jour" :data="gameStatus.current_day_type"/>
     <OptionFormEntry type="info" label="Nom du joueur" :data="gameStatus.current_player!.name"/>
     <OptionFormEntry type="info" label="Position du joueur" :data="gameStatus.current_player!.position"/>
     <hr>
-    <OptionFormEntry type="select" label="Nouvelle position" :options="squares" v-model="newPlayerPosition"/>
-    <button type="submit" class="blue">Déplacer le joueur</button>
+    <OptionFormEntry type="select" label="Nouvelle position" :options="availableSquares" v-model="newPlayerPosition"/>
+    <button type="submit" class="blue" :disabled="isMoving">Déplacer le joueur</button>
   </form>
   <button v-if="gameRunning" @click="stopGame()" class="red">Arrêter la partie</button>
 </div>

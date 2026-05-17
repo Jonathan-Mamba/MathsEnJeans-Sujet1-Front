@@ -42,7 +42,7 @@ const setModifiedPlayer = (player: GamePlayer) => {
       @confirm="modifyPlayer(modifiedPlayerId, modifiedPlayerName, modifiedPlayerPosition); modifiedPlayerId = null" 
       @cancel="modifiedPlayerId = null" 
     >
-      <OptionFormEntry type="input" label="Nom du joueur" v-model="modifiedPlayerName"/>
+      <OptionFormEntry type="input" label="Nom du joueur" v-model="modifiedPlayerName" style="margin-bottom: 5px;"/>
       <OptionFormEntry type="select" label="Position du joueur" v-model="modifiedPlayerPosition" :options="squares"/>
     </Dialog>
   </div>

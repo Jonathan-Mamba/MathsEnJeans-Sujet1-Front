@@ -2,21 +2,16 @@
 const { gameHistory } = useGameHistory()
 const { players } = useGamePlayers()
 
-const getPlayerNameById = (id: string): string | null => {
-  for (const player of players.value) {
-    if (player.id === id) {
-      return player.name
-    }
-  }
-  return null
+const getPlayerNameById = (id: string): string => {
+  return players.value.filter((p) => p.id === id)[0]?.name ?? ""
 }
 
-const renderedHistory = computed<[string, string, string, string, string][]>(() => {
-  const result: [string, string, string, string, string][] = []
+const renderedHistory = computed<string[][]>(() => {
+  const result: string[][] = []
   
   for (const [index, entry] of gameHistory.value.entries()) {
     for (const move of entry.moves) {
-      result.push([String(index + 1), entry.day_type, getPlayerNameById(move[0]) ?? "", move[1], move[2]])
+      result.push([String(index + 1), entry.day_type, getPlayerNameById(move[0]), move[1], move[2]])
     }
   }
 
@@ -31,8 +26,8 @@ const renderedHistory = computed<[string, string, string, string, string][]>(() 
     <template #header>
       <label v-for="value in ['Numéro du jour', 'Type de jour', 'Nom du joueur', 'Case initiale', 'Case finale']">{{ value }}</label>
     </template>
-    <template #row="{ item: entry }">
-      <label v-for="item in entry">{{ item }}</label>
+    <template #row="{ item }">
+      <label v-for="column in item">{{ column }}</label>
     </template>
   </OptionDataList>
 </div>

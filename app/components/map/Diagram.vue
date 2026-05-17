@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { GameRoute, clamp } from "~/util";
+import { GameRoute, clamp, MenuEditMode } from "~/util";
 import { useElementSize } from "@vueuse/core";
 import diagramStyle from "~/assets/map_diagram.json";
 
 const { squares } = useGameSquares();
-const { routes, routeTypes } = useGameRoutes();
+const { routes, routeTypes, routeTypeAll } = useGameRoutes();
 const { players } = useGamePlayers();
+const { editMode } = useLayout()
+const { gameRunning, gameStatus } = useGameState()
 
 const mapSVG: Ref<SVGSVGElement | null> = ref(null);
 const openDropdown = ref<string>("")
@@ -16,6 +18,15 @@ const props = defineProps<{
   selectedSquare1: string,
   selectedSquare2: string,
 }>();
+
+const isRouteGray = (route: DrawnRoute): boolean => {
+  if (editMode.value !== MenuEditMode.GAME || !gameRunning.value) return false
+  if ([route.regularRoute.firstEnd, route.regularRoute.secondEnd].every((end) => end !== gameStatus.value.current_player!.position)) {
+    return true
+  }
+  return [gameStatus.value.current_day_type ?? "", routeTypeAll.value].every((t) => t !== route.regularRoute.type)
+}
+
 
 const getPlayersInSquare = (squareName: string) => (players.value.filter((p) => p.position === squareName));
 
@@ -55,13 +66,15 @@ class DrawnRoute {
   curved: boolean = false;
   circleCenter: Vector2 = new Vector2();
   circleRadius: number = 0;
-  id: string
-  constructor(firstEnd: Vector2, secondEnd: Vector2, color: string, curved: boolean = false, id: string) {
+  id: string;
+  regularRoute: GameRoute
+  constructor(firstEnd: Vector2, secondEnd: Vector2, color: string, curved: boolean = false, id: string, regularRoute: GameRoute) {
     this.firstEnd = firstEnd;
     this.secondEnd = secondEnd;
     this.color = color;
     this.curved = curved;
     this.id = id
+    this.regularRoute = regularRoute
   }
   public static fromRoute(route: GameRoute, squarePositions: Vector2[]): DrawnRoute {
     const firstEnd = squarePositions[squares.value.indexOf(route.firstEnd)];
@@ -69,7 +82,7 @@ class DrawnRoute {
     const color = routeTypes.value[route.type];
     const curved = route.firstEnd === route.secondEnd;
     const id = `${route.firstEnd}:::${route.secondEnd}:::${route.type}`
-    return new DrawnRoute(firstEnd!.copy(), secondEnd!.copy(), color!, curved, id);
+    return new DrawnRoute(firstEnd!.copy(), secondEnd!.copy(), color!, curved, id, route);
   }
   public setCircleCenter(mapCenter: Vector2, circleRadius: number, squareSize: Vector2, offset: number = 0): Vector2 {
     if (!this.curved) {
@@ -198,6 +211,7 @@ return {
         :d="`M ${Math.round(route.firstEnd.x)} ${Math.round(route.firstEnd.y)} L ${Math.round(route.secondEnd.x)} ${Math.round(route.secondEnd.y)}`"
         :stroke="route.color"
         :stroke-width="diagramStyle.lineWidth"
+        :class="{ gray: isRouteGray(route) }"
         />
         <circle 
         v-for="route in drawnRoutes.filter(r => r.curved)"
@@ -206,6 +220,7 @@ return {
         :r="Math.round(route.circleRadius)" 
         :stroke="route.color" 
         :stroke-width="diagramStyle.lineWidth"
+        :class="{ gray: isRouteGray(route) }"
         :key="route.id"
         fill="none"
         />
@@ -215,8 +230,11 @@ return {
       <TransitionGroup name="fade-in">
         <div 
           class="square-text-rect centered"
-          :class="{selected: props.selectedSquare1 === square || props.selectedSquare2 === square}"
-          @click="emit('select', square)"
+          :class="{
+            selected: props.selectedSquare1 === square || props.selectedSquare2 === square, 
+            outlined: gameStatus.current_player?.position === square
+          }"
+          @click="!gameRunning ? emit('select', square) : null"
           v-for="[index, square] in squares.entries()" 
           :key="'text-' + index"
           :style="{
@@ -269,6 +287,12 @@ div.text-overlay, svg.map-svg {
 path, circle, div.square-text-rect, ul {
   transition: all ease-in-out 0.3s;
 }
+path.gray, circle.gray {
+  stroke: #555;
+  opacity: 0.7;
+  stroke-dashoffset: 2px;
+  stroke-dasharray: 10px;
+}
 div.square-text-rect {
   flex-direction: row;
   position: absolute;
@@ -280,6 +304,16 @@ div.square-text-rect {
   border-radius: var(--radius2);
   overflow: hidden;
   box-sizing: border-box;
+  &.selected {
+    border-color: var(--darkblue);
+  }
+  &.outlined {
+    border-color: var(--red);
+    & span {
+      color: var(--red);
+      text-decoration: underline var(--red);
+    }
+  }
   & span {
     text-align: center;
     text-overflow: ellipsis;
@@ -323,8 +357,5 @@ ul {
       color: #fff;
     }
   }
-}
-div.square-text-rect.selected {
-  border-color: var(--red);
 }
 </style>
