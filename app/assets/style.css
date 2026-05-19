@@ -39,7 +39,7 @@
   --menu-width: 50px;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
 	:root {
 		--rfsize: clamp(12px, 1.6vw, 18px);
 		--stfsize: clamp(14px, 2vw, 20px);

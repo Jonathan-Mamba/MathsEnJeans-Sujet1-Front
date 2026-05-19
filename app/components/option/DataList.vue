@@ -113,7 +113,7 @@ ul.dashboard {
   }
 }
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
   ul.dashboard span :deep(label) {
     min-width: 25vw;
   }

@@ -139,7 +139,7 @@ div.nav-item {
   }
 }
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
   div.nav-item.map {
     display: flex;
   }

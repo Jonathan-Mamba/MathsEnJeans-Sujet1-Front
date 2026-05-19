@@ -109,7 +109,7 @@ div.splitter:hover, div.app-container.resizing div.splitter {
   background: #888;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
   div.splitter {
     display: none;
   }
