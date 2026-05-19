@@ -177,28 +177,28 @@ const drawnRoutes: Ref<DrawnRoute[]> = computed(() => {
 });
 
 const getDropdownStyle = (index: number) => {
-const pos = squarePositions.value[index]!;
-const sqW = squareSize.value.x;
-const sqH = squareSize.value.y;
+  const pos = squarePositions.value[index]!;
+  const sqW = squareSize.value.x;
+  const sqH = squareSize.value.y;
 
-// Estimate dropdown size
-const dropdownW = diagramStyle.dropdownSize[0]! * width.value;
-const dropdownH = diagramStyle.dropdownSize[1]! * height.value;
+  // Estimate dropdown size
+  const dropdownW = diagramStyle.dropdownSize[0]! * width.value;
+  const dropdownH = diagramStyle.dropdownSize[1]! * height.value;
 
-const nearBottom = pos.y + sqH / 2 + dropdownH > height.value;
-const nearRight  = pos.x + sqW / 2 + dropdownW > width.value;
+  const nearBottom = pos.y + sqH / 2 + dropdownH > height.value;
+  const nearRight  = pos.x + sqW / 2 + dropdownW > width.value;
 
-return {
-  width: Math.round(dropdownW) + 'px',
-  height: Math.round(dropdownH) + 'px',
-  // Horizontal: align to left edge of square, flip to right-align if near right edge
-  left:  nearRight ? 'auto' : Math.round(pos.x - sqW / 2) + 'px',
-  right: nearRight ? Math.round(width.value - (pos.x + sqW / 2)) + 'px' : 'auto',
-  // Vertical: open below square, flip above if near bottom
-  top:    nearBottom ? 'auto' : Math.round(pos.y + sqH / 2) + 'px',
-  bottom: nearBottom ? Math.round(height.value - (pos.y - sqH / 2)) + 'px' : 'auto',
-  'font-size': Math.round(squareFontSize.value * 0.8) + 'px'
-};
+  return {
+    width: Math.round(dropdownW) + 'px',
+    height: Math.round(dropdownH) + 'px',
+    // Horizontal: align to left edge of square, flip to right-align if near right edge
+    left:  nearRight ? 'auto' : Math.round(pos.x - sqW / 2) + 'px',
+    right: nearRight ? Math.round(width.value - (pos.x + sqW / 2)) + 'px' : 'auto',
+    // Vertical: open below square, flip above if near bottom
+    top:    nearBottom ? 'auto' : Math.round(pos.y + sqH / 2) + 'px',
+    bottom: nearBottom ? Math.round(height.value - (pos.y - sqH / 2)) + 'px' : 'auto',
+    'font-size': Math.round(squareFontSize.value * 0.8) + 'px'
+  };
 };
 </script>
 
@@ -230,21 +230,21 @@ return {
     <div class="text-overlay">
       <TransitionGroup name="fade-in">
         <div 
-          class="square-text-rect centered"
-          :class="{
-            selected: props.selectedSquare1 === square || props.selectedSquare2 === square, 
-            outlined: gameStatus.current_player?.position === square
-          }"
-          @click="!gameRunning ? emit('select', square) : null"
-          v-for="[index, square] in squares.entries()" 
-          :key="'text-' + index"
-          :style="{
-            left: Math.round(squarePositions[index]!.x - squareSize.x / 2) + 'px',
-            top: Math.round(squarePositions[index]!.y - squareSize.y / 2) + 'px',
-            width: Math.round(squareSize.x) + 'px',
-            height: Math.round(squareSize.y) + 'px',
-            'font-size': Math.round(squareFontSize) + 'px' 
-          }"
+        v-for="[index, square] in squares.entries()" 
+        class="square-text-rect centered"
+        :class="{
+          selected: props.selectedSquare1 === square || props.selectedSquare2 === square, 
+          outlined: gameStatus.current_player?.position === square
+        }"
+        @click="!gameRunning ? emit('select', square) : null"
+        :key="'text-' + index"
+        :style="{
+          left: Math.round(squarePositions[index]!.x - squareSize.x / 2) + 'px',
+          top: Math.round(squarePositions[index]!.y - squareSize.y / 2) + 'px',
+          width: Math.round(squareSize.x) + 'px',
+          height: Math.round(squareSize.y) + 'px',
+          'font-size': Math.round(squareFontSize) + 'px' 
+        }"
         >
           <span >{{ square }}</span>
           <button :style="{'font-size': Math.round(squareFontSize) + 'px'}" @click.stop="toggleDropdown(square)">
@@ -253,16 +253,12 @@ return {
           </button>
         </div>
       </TransitionGroup>
-      <TransitionGroup name="slide-in">
-        <ul
-        v-for="[index, square] in squares.entries().filter((value) => value[1] === openDropdown)"
-        :key="'dropdown-' + index"
-        :style="getDropdownStyle(index)"
-        >
-          <li v-for="player in getPlayersInSquare(square)">⦁ {{ player.name }}</li>
-          <li v-if="getPlayersInSquare(square).length === 0">Aucun joueur présent.</li>
+      <Transition name="slide-in">
+        <ul v-if="openDropdown" :style="getDropdownStyle(squares.indexOf(openDropdown))">
+          <li v-for="player in getPlayersInSquare(openDropdown)">⦁ {{ player.name }}</li>
+          <li v-if="getPlayersInSquare(openDropdown).length === 0">Aucun joueur présent.</li>
         </ul>
-      </TransitionGroup>
+      </Transition>
     </div>
   </div>
 </template>
@@ -271,7 +267,7 @@ return {
 div.map {
   width: 90%;
   aspect-ratio: 1 / 1;
-  background-color:aliceblue;
+  background-color: white;
   border-radius: var(--radius4);
   margin-bottom: 25px;
   position: relative;

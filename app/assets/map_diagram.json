@@ -2,7 +2,6 @@
     "$schema": {
         "diagramRadius": "number (percent of diagram width)",
         "lineWidth": "number (in px)",
-        "lineOffset": "number (in px) - distance between two routes going to the same squares",
         "circleRouteRadius": "number (in px) - radius of the circle used to draw curved routes",
         "circleCenterOffset": "number (in px) - distance added from the end of a square",
         "maxSquareFactor": "array of 2 numbers (percent of diagram width and height) - maximum siz28 of a4 square",
@@ -11,9 +10,9 @@
         "minSizeThreshold": "number - minimum number of squares before using the maximum size",
         "squareFontSize": "number (percent of square size) - size of the font used for the text in the squares"
     },
-    "maxSquareFactor": [0.26, 0.13],
+    "maxSquareFactor": [0.24, 0.12],
     "maxSizeThreshold": 5,
-    "minSquareFactor": [0.13, 0.08],
+    "minSquareFactor": [0.12, 0.08],
     "minSizeThreshold": 12,
     "diagramRadius": 0.35,
     "lineWidth": 4,

@@ -78,6 +78,6 @@ div.input-form-container {
   }
 }
 div.info:hover {
-  border: 1px solid var(--gray3);;
+  border: 1px solid var(--gray3);
 }
 </style>
