@@ -30,7 +30,7 @@ export const useGameState = () => {
     "Livraison": "#FF1F5B",
     "Doléances": "#0071FF", 
     "Marchands": "#FFC61E", 
-    "Labeur": "#00D34E", 
+    "Spécialisée": "#00D34E", 
     "Tout": "#AF58BA"
   }));
   const gameStatus = useState<GameStatus>("gs-game-status", () => ({
