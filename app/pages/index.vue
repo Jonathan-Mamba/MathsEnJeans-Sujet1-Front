@@ -36,23 +36,33 @@ const { width: containerWidth } = useElementSize(appContainerRef)
 const { width: menuWidth } = useElementSize(gameMenuRef);
 const { width: splitterWidth } = useElementSize(splitterRef);
 
-function startResize(e: MouseEvent) {
+function getClientX(e: MouseEvent | TouchEvent): number {
+  return e instanceof TouchEvent ? e.touches[0]!.clientX : e.clientX;
+}
+
+function startResize(e: MouseEvent | TouchEvent) {
   isResizing.value = true;
-  resizeStartX.value = e.clientX;
+  resizeStartX.value = getClientX(e);
   resizeStartWidth.value = optionWidth.value;
 }
 
-const modifyWidth = (e: MouseEvent) => {
+const modifyWidth = (e: MouseEvent | TouchEvent) => {
   if (!isResizing.value) return;
 
+  const clientX = getClientX(e);
   const availableWidth = containerWidth.value - menuWidth.value - splitterWidth.value;
-  const delta = e.clientX - resizeStartX.value;
+  const delta = clientX - resizeStartX.value;
   let newWidth = resizeStartWidth.value + (delta / availableWidth) * 100;
   newWidth = clamp(newWidth, 0, availableWidth / containerWidth.value * 100)
   optionWidth.value = newWidth;
 }
 
-document.addEventListener("mouseup", () => isResizing.value = false)
+function stopResize() {
+  isResizing.value = false;
+}
+
+document.addEventListener("mouseup", stopResize);
+document.addEventListener("touchend", stopResize);
 
 const { editMode, tabletLayoutThreshold } = useLayout();
 const { width: windowWidth } = useWindowSize();
@@ -65,10 +75,10 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div ref="appContainerRef" class="app-container" :class="{ resizing: isResizing }" @mousemove="modifyWidth">
+  <div ref="appContainerRef" class="app-container" :class="{ resizing: isResizing }" @mousemove="modifyWidth" @touchmove="modifyWidth">
     <GameMenu class="game-menu" ref="gameMenuRef"/>
     <OptionContainer v-if="editMode !== MenuEditMode.MAP || windowWidth > tabletLayoutThreshold" :style="{ flex: `0 0 ${optionWidth}%` }"/>
-    <div class="splitter" @mousedown="startResize" ref="splitterRef"/>
+    <div class="splitter" @mousedown="startResize" @touchstart="startResize" ref="splitterRef"/>
     <MapContainer v-if="editMode === MenuEditMode.MAP || windowWidth > tabletLayoutThreshold" class="map-panel"/>
   </div>
 </template>

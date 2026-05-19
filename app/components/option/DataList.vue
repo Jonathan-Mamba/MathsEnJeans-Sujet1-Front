@@ -118,7 +118,7 @@ ul.dashboard {
     min-width: 25vw;
   }
   ul.data-list li {
-    height: 28px;
+    min-height: 28px;
   }
   ul.data-list li button {
     min-height: fit-content;

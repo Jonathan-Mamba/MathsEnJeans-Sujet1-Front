@@ -271,7 +271,9 @@ div.map {
   border-radius: var(--radius4);
   margin-bottom: 25px;
   position: relative;
+  overflow: visible;
 }
+
 div.text-overlay, svg.map-svg {
   position: absolute;
   top: 0;
