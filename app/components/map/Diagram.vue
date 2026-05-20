@@ -21,7 +21,7 @@ const props = defineProps<{
 }>();
 
 const isRouteGray = (route: DrawnRoute): boolean => {
-  if (editMode.value !== MenuEditMode.GAME || !gameRunning.value) return false
+  if (!gameRunning.value) return false
   if ([route.regularRoute.firstEnd, route.regularRoute.secondEnd].every((end) => end !== gameStatus.value.current_player!.position)) {
     return true
   }
