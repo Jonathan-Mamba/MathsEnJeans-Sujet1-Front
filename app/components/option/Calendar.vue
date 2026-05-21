@@ -33,9 +33,9 @@ const setModifiedDay = (dayNumber: number) => {
       </form>
     </div>
     <Dialog title="Modifier le jour" @confirm="modifyDay(modifiedDay, modifiedDayType); modifiedDay = 0" @cancel="modifiedDay = 0" v-if="modifiedDay > 0" class="dialog">
-       <div class="centered">
+      <div class="centered">
         <OptionFormEntry type="select" :options="dayTypes" label="Type de jour" v-model="modifiedDayType" class="dialog-form-entry"/>
-       </div>
+      </div>
     </Dialog>
   </div>
 </template>

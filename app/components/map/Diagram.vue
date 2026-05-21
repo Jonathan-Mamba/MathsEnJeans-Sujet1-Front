@@ -6,7 +6,6 @@ import diagramStyle from "~/assets/map_diagram.json";
 const { squares } = useGameSquares();
 const { routes, routeTypes, routeTypeAll } = useGameRoutes();
 const { players } = useGamePlayers();
-const { editMode } = useLayout()
 const { gameRunning, gameStatus } = useGameState()
 
 const mapSVG: Ref<SVGSVGElement | null> = ref(null);
